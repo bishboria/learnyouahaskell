@@ -57,3 +57,5 @@ numberRange = [1..20]
 characterRange = ['k'..'z']
 steppedRange = [2,4..20]
 decreasingRange = [20,19..1]
+
+takeFromSteppedInfiniteRange = take 10 [13,26..]
