@@ -67,5 +67,5 @@ replicatedElement = replicate 3 10 -- 3 `replicate` 10
 dodgyFloatRange = [0.1, 0.3 .. 1]
 
 multiplesOfTwoComprehension = [x*2 | x <- [1..10]]
-multiplesOfTwoComprehensionGreaterThanTwelve = [x*2 | x <- [1..10], x*2 >= 12]
+comprehensionMultiplesTwoGreaterThanTwelve = [x*2 | x <- [1..10], x*2 >= 12]
 comprehensionMod = [x | x <- [50.100], x `mod` 7 == 3]
