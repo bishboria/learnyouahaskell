@@ -35,3 +35,5 @@ middleOfList = init (tail startList)
 middleOfList' = tail (init startList)
 
 lengthOfList = length [5,4,3,2,1]
+
+isNull = null [1,2,3]
