@@ -33,3 +33,5 @@ initOfList = init [5,4,3,2,1]
 startList = [5,4,3,2,1]
 middleOfList = init (tail startList)
 middleOfList' = tail (init startList)
+
+lengthOfList = length [5,4,3,2,1]
