@@ -45,3 +45,4 @@ takeFirst100 = take 100 [5,4,3,2,1]
 takeNone = take 0 [5,4,3,2,1]
 
 max = maximum [1,9,2,3,4]
+min = minimum [8,4,2,1,5,6]
