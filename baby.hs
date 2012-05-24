@@ -24,3 +24,5 @@ indexedList = listsInLists !! 1
 
 comparingLists = [3,2,1] > [2,1,0] -- determined element by element
 comparingLists' = [3,4,2] < [3,4,3]
+
+headOfList = head [5,4,3,2,1]
