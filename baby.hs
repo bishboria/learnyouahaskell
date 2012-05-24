@@ -26,3 +26,10 @@ comparingLists = [3,2,1] > [2,1,0] -- determined element by element
 comparingLists' = [3,4,2] < [3,4,3]
 
 headOfList = head [5,4,3,2,1]
+tailOfList = tail [5,4,3,2,1]
+lastInList = last [5,4,3,2,1]
+initOfList = init [5,4,3,2,1]
+
+startList = [5,4,3,2,1]
+middleOfList = init (tail startList)
+middleOfList' = tail (init startList)
