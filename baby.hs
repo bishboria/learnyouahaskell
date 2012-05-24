@@ -23,3 +23,4 @@ listsInLists = [[1,2,3,4],[5,3,3,3],[1,2,2,3,4]]
 indexedList = listsInLists !! 1
 
 comparingLists = [3,2,1] > [2,1,0] -- determined element by element
+comparingLists' = [3,4,2] < [3,4,3]
