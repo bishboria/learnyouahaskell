@@ -19,3 +19,7 @@ consNumbers' = 5:1:2:3:4:5:[]
 
 listIndexing = "Steve Buscemi" !! 6
 listIndexing' = [9.4,33.2,96.2,11.2] !! 1
+listsInLists = [[1,2,3,4],[5,3,3,3],[1,2,2,3,4]]
+indexedList = listsInLists !! 1
+
+comparingLists = [3,2,1] > [2,1,0] -- determined element by element
