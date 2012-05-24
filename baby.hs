@@ -75,3 +75,4 @@ boomBangs xs = [ if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]
 comprenhensionFilterNot = [x | x <- [10..20], x /= 13, x /= 15, x /= 19]
 
 comprehensionDrawMultipleList = [x+y | x <- [1,2,3], y <- [10,100,1000]]
+comprehensionDrawMultipleList' = [x*y | x <- [2,5,10], y <- [8,10,11]]
