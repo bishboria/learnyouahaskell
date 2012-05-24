@@ -104,4 +104,5 @@ zipListDifferentLength = zip [1..] ["i'm","a","turtle"]
 --   length of the three sides are all integers
 --   length of each side is less than or equal to 10
 --   triangle's perimeter is equal to 24
+--   no duplicates e.g. (1,3,5) == (3,5,1) == (5,3,1) etc
 triples = [ (a,b,c) | c <- [1..10], a <- [1..c], b <- [1..a], a^2 + b^2 == c^2, a+b+c == 24]
