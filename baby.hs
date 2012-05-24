@@ -46,3 +46,5 @@ takeNone = take 0 [5,4,3,2,1]
 
 max = maximum [1,9,2,3,4]
 min = minimum [8,4,2,1,5,6]
+
+sumList = sum [5,2,1,6,3,2,5,7]
