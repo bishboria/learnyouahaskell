@@ -97,3 +97,11 @@ first = fst (8, 11)
 second = snd (8, 11)
 
 zipList = zip [1,2,3,4,5] [5,5,5,5,5]
+zipList' = zip [1..5] ["one","two","three","four","five"]
+zipListDifferentLength = zip [1..] ["i'm","a","turtle"]
+
+-- Finding right angle triagles
+--   length of the three sides are all integers
+--   length of each side is less than or equal to 10
+--   triangle's perimeter is equal to 24
+triples = [ (a,b,c) | c <- [1..10], a <- [1..10], b <- [1..10]]
