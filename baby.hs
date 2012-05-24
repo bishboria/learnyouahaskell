@@ -55,7 +55,7 @@ inList' = 4 `elem` [3,4,5,6]
 
 rangeNumber = [1..20]
 rangeCharacter = ['k'..'z']
-steppedRange = [2,4..20]
+rangeStep = [2,4..20]
 decreasingRange = [20,19..1]
 
 takeFromSteppedInfiniteRange = take 10 [13,26..]
