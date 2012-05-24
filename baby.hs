@@ -84,4 +84,4 @@ descriptions = [adjective ++ " " ++ noun | adjective <- adjectives, noun <- noun
 
 length' xs = sum [1 | _ <- xs]
 
-removeNonUpperCase st [c | c  <- st, c `elem` ['A'..'Z']]
+removeNonUpperCase st = [c | c  <- st, c `elem` ['A'..'Z']]
