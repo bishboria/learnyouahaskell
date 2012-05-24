@@ -92,3 +92,8 @@ onlyEven = [ [x | x <- xs, even x] | xs <- xxs]
 pair = (1,3)
 triple = (3, 'a', "hello")
 tuple4 = (50, 50.4, "hello", 'b')
+
+first = fst (8, 11)
+second = snd (8, 11)
+
+zipList = zip [1,2,3,4,5] [5,5,5,5,5]
