@@ -77,3 +77,7 @@ comprenhensionFilterNot = [x | x <- [10..20], x /= 13, x /= 15, x /= 19]
 comprehensionDrawMultipleList = [x+y | x <- [1,2,3], y <- [10,100,1000]]
 comprehensionDrawMultipleList' = [x*y | x <- [2,5,10], y <- [8,10,11]]
 comprehensionDrawMultipleListFilter = [x*y | x <- [2,5,10], y <- [8,10,11], x*y > 50]
+
+nouns = ["hobo", "frog", "pope"]
+adjectives = ["lazy", "grouchy", "scheming"]
+descriptions = [adjective ++ " " ++ noun | adjective <- adjectives, noun <- nouns]
