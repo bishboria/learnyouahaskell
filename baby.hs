@@ -48,3 +48,4 @@ max = maximum [1,9,2,3,4]
 min = minimum [8,4,2,1,5,6]
 
 sumList = sum [5,2,1,6,3,2,5,7]
+productList = product [6,2,1,2]
