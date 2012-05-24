@@ -81,3 +81,5 @@ comprehensionDrawMultipleListFilter = [x*y | x <- [2,5,10], y <- [8,10,11], x*y 
 nouns = ["hobo", "frog", "pope"]
 adjectives = ["lazy", "grouchy", "scheming"]
 descriptions = [adjective ++ " " ++ noun | adjective <- adjectives, noun <- nouns]
+
+length' xs = sum [1 | _ <- xs]
