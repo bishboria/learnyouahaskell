@@ -59,3 +59,5 @@ steppedRange = [2,4..20]
 decreasingRange = [20,19..1]
 
 takeFromSteppedInfiniteRange = take 10 [13,26..]
+
+cycledList = cycle [1,2,3]
