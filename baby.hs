@@ -68,4 +68,4 @@ rangeFloatDodgy = [0.1, 0.3 .. 1]
 
 comprehensionMultiplesTwo = [x*2 | x <- [1..10]]
 comprehensionMultiplesTwoFilterMultiples = [x*2 | x <- [1..10], x*2 >= 12]
-comprehensionMod = [x | x <- [50.100], x `mod` 7 == 3]
+comprehensionFilterMod = [x | x <- [50.100], x `mod` 7 == 3]
