@@ -13,7 +13,7 @@ listConcatenate = [1,2,3,4] ++ [9,10,11,12] -- [a] ++ [a]
 stringConcatenate = "hello" ++ " " ++ "world"
 stringConcatenate' = ['w','0'] ++ ['0','t']
 
-consStrings = 'A':" SMALL CAT" -- a:[a]
+stringCons = 'A':" SMALL CAT" -- a:[a]
 consNumbers = 5:[1,2,3,4,5]
 consNumbers' = 5:1:2:3:4:5:[]
 
