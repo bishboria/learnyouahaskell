@@ -22,7 +22,7 @@ indexList = [9.4,33.2,96.2,11.2] !! 1
 listInList = [[1,2,3,4],[5,3,3,3],[1,2,2,3,4]]
 indexList' = listInList !! 1
 
-comparingLists = [3,2,1] > [2,1,0] -- determined element by element
+compareList = [3,2,1] > [2,1,0] -- determined element by element
 comparingLists' = [3,4,2] < [3,4,3]
 
 headOfList = head [5,4,3,2,1]
