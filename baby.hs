@@ -18,7 +18,7 @@ consNumbers = 5:[1,2,3,4,5]
 consNumbers' = 5:1:2:3:4:5:[]
 
 indexString = "Steve Buscemi" !! 6
-listIndexing' = [9.4,33.2,96.2,11.2] !! 1
+indexList = [9.4,33.2,96.2,11.2] !! 1
 listsInLists = [[1,2,3,4],[5,3,3,3],[1,2,2,3,4]]
 indexedList = listsInLists !! 1
 
