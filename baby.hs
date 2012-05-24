@@ -65,3 +65,5 @@ cycledList = take 10 (cycle [1,2,3])
 repeatedElement = take 10 (repeat 5)
 
 replicatedElement = replicate 3 10 -- 3 `replicate` 10
+
+dodgyFloatRange = [0.1, 0.3 .. 1]
