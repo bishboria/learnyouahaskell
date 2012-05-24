@@ -64,7 +64,7 @@ cycleListTake = take 10 (cycle [1,2,3])
 repeatElementTake = take 10 (repeat 5)
 replicateElement = replicate 3 10 -- 3 `replicate` 10
 
-dodgyFloatRange = [0.1, 0.3 .. 1]
+rangeFloatDodgy = [0.1, 0.3 .. 1]
 
 comprehensionMultiplesTwo = [x*2 | x <- [1..10]]
 comprehensionMultiplesTwoGreaterThanTwelve = [x*2 | x <- [1..10], x*2 >= 12]
