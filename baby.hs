@@ -21,3 +21,5 @@ concatenateStrings' = ['w','0'] ++ ['0','t']
 consStrings = 'A':" SMALL CAT"
 
 consNumbers = 5:[1,2,3,4,5]
+
+consNumbers' = 5:1:2:3:4:5:[]
