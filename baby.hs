@@ -17,3 +17,5 @@ concatenateLists = [1,2,3,4] ++ [9,10,11,12]
 concatenateStrings = "hello" ++ " " ++ "world"
 
 concatenateStrings' = ['w','0'] ++ ['0','t']
+
+consStrings = 'A':" SMALL CAT"
