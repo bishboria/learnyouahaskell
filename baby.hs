@@ -54,3 +54,4 @@ inList = elem 4 [3,4,5,6]
 inList' = 4 `elem` [3,4,5,6]
 
 numberRange = [1..20]
+characterRange = ['k'..'z']
