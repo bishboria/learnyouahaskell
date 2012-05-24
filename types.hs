@@ -12,3 +12,13 @@ removeNonUpperCase st = [c | c  <- st, c `elem` ['A'..'Z']]
 
 addThree :: Int -> Int -> Int -> Int -- Takes 3 Ints, Returns Int
 addThree x y z = x + y + z
+
+
+-- type variables. Quite like generics. But more powerful
+-- functions that use type variables are called
+--	 polymorphic functions
+:t head
+head :: [a] -> a -- a can be any type
+
+:t fst
+fst :: (a, b) -> a -- a, b could be any type.
