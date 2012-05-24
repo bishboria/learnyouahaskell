@@ -51,3 +51,6 @@ sumList = sum [5,2,1,6,3,2,5,7]
 productList = product [6,2,1,2]
 
 inList = elem 4 [3,4,5,6]
+inList' = 4 `elem` [3,4,5,6]
+
+numberRange = [1..20]
