@@ -89,6 +89,6 @@ removeNonUpperCase st = [c | c  <- st, c `elem` ['A'..'Z']]
 xxs = [[1,2,3,4,5],[9,8,7,6,5],[5,4,3,2,1]]
 onlyEven = [ [x | x <- xs, even x] | xs <- xxs]
 
-tuple2 = (1,3)
+pair = (1,3)
 tuple3 = (3, 'a', "hello")
 tuple4 = (50, 50.4, "hello", 'b')
