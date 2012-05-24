@@ -37,3 +37,11 @@ middleOfList' = tail (init startList)
 lengthOfList = length [5,4,3,2,1]
 
 isNull = null [1,2,3]
+
+reverseList = reverse [5,4,3,2,1]
+
+takeFirst3 = take 3 [5,4,3,2,1]
+takeFirst100 = take 100 [5,4,3,2,1]
+takeNone = take 0 [5,4,3,2,1]
+
+max = maximum [1,9,2,3,4]
