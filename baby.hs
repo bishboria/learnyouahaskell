@@ -23,3 +23,6 @@ consStrings = 'A':" SMALL CAT" -- a:[a]
 consNumbers = 5:[1,2,3,4,5]
 
 consNumbers' = 5:1:2:3:4:5:[]
+
+listIndexing = "Steve Buscemi" !! 6
+listIndexing' = [9.4,33.2,96.2,11.2] !! 1
