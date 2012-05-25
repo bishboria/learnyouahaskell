@@ -66,3 +66,4 @@ read "(3, 'a')" :: (Int, Char)
 
 ['a'..'e']
 [LT .. GT]
+succ 'B'
