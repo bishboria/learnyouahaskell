@@ -53,3 +53,6 @@ read "5" :: Float
 read "[1,2,3,4]" :: [Int]
 read "(3, 'a')" :: (Int, Char)
 [read "True", False, True, False]
+
+:t [1..3]
+[1..3] :: (Num t, Enum t) => [t]
