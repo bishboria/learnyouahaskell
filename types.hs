@@ -100,3 +100,8 @@ sin :: Floating a => a -> a
 -- Integral (Int and Integer)
 :t fromIntegral
 fromIntegral :: (Num b, Integral a) => a -> b
+
+:t length
+length :: [a] -> Int
+
+fromIntegral (length [1,2,3,4]) + 3.2
