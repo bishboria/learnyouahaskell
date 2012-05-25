@@ -39,6 +39,7 @@ fst :: (a, b) -> a -- a, b could be any type.
 -- Show
 :t show
 show :: Show a => a -> String
+
 show 3
 show 5.334
 show True
