@@ -93,4 +93,8 @@ maxBound :: (Bool, Int, Char)
 :t (*)
 (*) :: Num a => a -> a -> a
 
--- Floating
+-- Floating (Float and Double)
+:t sin
+sin :: Floating a => a -> a
+
+-- Integral
