@@ -143,4 +143,7 @@ theAnswer' = (let (a,b,c) = (1,2,3) in a+b+c) * 100
 
 -- let in list comprehensions
 calcBmis' :: [(Double, Double)] -> [Double]
-calcBmis' xs [bmi | (w, h) <- xs, let bmi = w / h^2]
+calcBmis' xs = [bmi | (w, h) <- xs, let bmi = w / h^2]
+
+fatPeople :: [(Double, Double)] -> [Double]
+fatPeople xs = [bmi | (w, h) <- xs, let bmi = w / h^2, bmi > 25.0]
