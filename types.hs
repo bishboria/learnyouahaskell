@@ -46,3 +46,5 @@ read "4" -- Ambiguous type variable 'a'.
 
 :t read
 read :: Read a => String -> a
+
+read "5" :: Int
