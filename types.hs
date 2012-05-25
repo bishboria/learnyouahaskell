@@ -1,4 +1,5 @@
 -- can't load this file
+
 'a' :: Char --  :: read as "has type of"
 True :: Bool
 "HELLO!" :: [Char]
@@ -70,3 +71,10 @@ read "(3, 'a')" :: (Int, Char)
 succ 'B'
 
 -- Bounded
+:t minBound
+minBound :: Bounded a => a
+
+minBound :: Int
+maxBound :: Int
+maxBound :: Char
+maxBound :: Bool
