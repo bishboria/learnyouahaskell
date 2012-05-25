@@ -66,3 +66,16 @@ badAdd (x:y:z:[]) = x + y + z
 firstLetter :: String -> String
 firstLetter "" = "Empty string, whoops!"
 firstLetter all@(x:xs) = "The first letter of " ++ all ++ " is " ++ [x]
+
+
+-- Guards
+bmiTell :: Double -> String
+bmiTell bmi
+    | bmi <= 18.5 = "You're underweight, you emo, you!"
+    | bmi <= 25.0 = "You're supposedly normal. Pfft, I bet you're ugly!"    	| bmi <= 30.0 = "You're fat! Lose some weight, fatty!"
+    | otherwise = "You're a whale, congratulations!"
+
+max' :: Ord a => a -> a -> a
+max' a b
+    | a <= b = b
+    | otherwise = a
