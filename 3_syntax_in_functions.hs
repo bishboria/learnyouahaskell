@@ -156,15 +156,26 @@ fatPeople xs = [bmi | (w, h) <- xs, let bmi = w / h^2, bmi > 25.0]
 -- case expressions
 
 -- the follwoing are equivalent
-head' :: [a] -> a
-head' [] = error "No head for empty lists!"
-head' (x:_) = x
-
 head'' :: [a] -> a
-head'' xs = case xs of [] -> error "No head for empty lists!"
-		       (x:_) -> x
+head'' [] = error "No head for empty lists!"
+head'' (x:_) = x
+
+head''' :: [a] -> a
+head''' xs = case xs of [] -> error "No head for empty list!"
+		        (x:_) -> x
 
 describeList :: [a] -> String
 describeList ls = "The list is " ++ case ls of [] -> "empty."
 					       [x] -> "a singleton list."
 					       xs -> "a longer list."
+
+describeList' :: [a] -> String
+describeList' ls = "The list is " ++ what ls
+    where what [] = "empty."
+	  what [x] = "a singleton list."
+	  what xs = "a longer list."
+
+describeList'' :: [a] -> String
+describeList'' [] = "The list is empty."
+describeList'' [x] = "The list is a singleton list."
+describeList'' xs = "The list is a longer list."
