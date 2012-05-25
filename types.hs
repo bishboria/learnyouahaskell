@@ -89,3 +89,6 @@ maxBound :: (Bool, Int, Char)
 20 :: Integer
 20 :: Float
 20 :: Double
+
+:t (*)
+(*) :: Num a => a -> a -> a
