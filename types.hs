@@ -79,3 +79,7 @@ maxBound :: Int
 maxBound :: Char
 maxBound :: Bool
 maxBound :: (Bool, Int, Char)
+
+-- Num
+:t 20
+20 :: (Num t) => t
