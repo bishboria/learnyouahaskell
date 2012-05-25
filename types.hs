@@ -50,3 +50,4 @@ read :: Read a => String -> a
 read "5" :: Int
 read "5" :: Float
 (read "5" :: Float) * 4
+read "[1,2,3,4]" :: [Int]
