@@ -85,3 +85,7 @@ maxBound :: (Bool, Int, Char)
 :t 20
 20 :: (Num t) => t            -- Could also be thought of as a
                               -- polymorphic constant
+20 :: Int
+20 :: Integer
+20 :: Float
+20 :: Double
