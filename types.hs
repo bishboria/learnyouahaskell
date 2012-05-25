@@ -72,7 +72,8 @@ succ 'B'
 
 -- Bounded
 :t minBound
-minBound :: Bounded a => a
+minBound :: Bounded a => a    -- Could be thought of as a
+                              -- polymorphic constant
 
 minBound :: Int
 maxBound :: Int
@@ -82,4 +83,5 @@ maxBound :: (Bool, Int, Char)
 
 -- Num
 :t 20
-20 :: (Num t) => t
+20 :: (Num t) => t            -- Could also be thought of as a
+                              -- polymorphic constant
