@@ -37,3 +37,7 @@ fst :: (a, b) -> a -- a, b could be any type.
 show 3
 show 5.334
 show True
+
+read "True" || False
+read "8.2" + 3.8
+read "5" - 2
