@@ -42,3 +42,7 @@ read "True" || False
 read "8.2" + 3.8
 read "5" - 2
 read "[1,2,3,4]" ++ [3]
+read "4" -- Ambiguous type variable 'a'.
+
+:t read
+read :: Read a => String -> a
