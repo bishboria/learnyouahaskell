@@ -13,3 +13,8 @@ sayMe x = "Not between 1 and 5"
 factorial :: Int -> Int
 factorial 0 = 1
 factorial n = n * factorial (n - 1)
+
+charName :: Char -> String
+charName 'a' = "Albert"
+charName 'b' = "Broseph"
+charName 'c' = "Cecil"
