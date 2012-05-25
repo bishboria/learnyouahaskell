@@ -33,3 +33,7 @@ fst :: (a, b) -> a -- a, b could be any type.
 
 "Abrakadabra" < "Zebra"
 ("Abrakadabra" `compare` "Zebra") == LT
+
+show 3
+show 5.334
+show True
