@@ -147,3 +147,24 @@ calcBmis' xs = [bmi | (w, h) <- xs, let bmi = w / h^2]
 
 fatPeople :: [(Double, Double)] -> [Double]
 fatPeople xs = [bmi | (w, h) <- xs, let bmi = w / h^2, bmi > 25.0]
+
+-- let in ghci
+-- if you don't use 'in' the let definition will stay around.
+-- if you use 'in' in the statement then the definition disappears
+
+
+-- case expressions
+
+-- the follwoing are equivalent
+head' :: [a] -> a
+head' [] = error "No head for empty lists!"
+head' (x:_) = x
+
+head'' :: [a] -> a
+head'' xs = case xs of [] -> error "No head for empty lists!"
+		       (x:_) -> x
+
+describeList :: [a] -> String
+describeList ls = "The list is " ++ case ls of [] -> "empty."
+					       [x] -> "a singleton list."
+					       xs -> "a longer list."
