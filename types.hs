@@ -97,4 +97,6 @@ maxBound :: (Bool, Int, Char)
 :t sin
 sin :: Floating a => a -> a
 
--- Integral
+-- Integral (Int and Integer)
+:t fromIntegral
+fromIntegral :: (Num b, Integral a) => a -> b
