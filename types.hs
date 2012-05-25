@@ -41,3 +41,4 @@ show True
 read "True" || False
 read "8.2" + 3.8
 read "5" - 2
+read "[1,2,3,4]" ++ [3]
