@@ -114,3 +114,10 @@ greet :: String -> String
 greet "Juan" = niceGreeting ++ " Juan"
 greet "Fernando" = niceGreeting ++ " Fernando"
 greet name = badGreeting ++ " " ++ name
+
+-- pattern matching with where
+initials :: String -> String -> String
+initials firstname lastname = [f] ++ ". " ++ [l] ++ "."
+    where (f:_) = firstname
+          (l:_) = lastname -- better to do this in function params
+			   -- but illustrated to show possible
