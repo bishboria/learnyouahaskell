@@ -48,3 +48,4 @@ read "4" -- Ambiguous type variable 'a'.
 read :: Read a => String -> a
 
 read "5" :: Int
+read "5" :: Float
