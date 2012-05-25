@@ -92,3 +92,5 @@ maxBound :: (Bool, Int, Char)
 
 :t (*)
 (*) :: Num a => a -> a -> a
+
+-- Floating
