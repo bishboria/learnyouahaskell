@@ -106,3 +106,11 @@ length :: [a] -> Int
 
 (length [1,2,3,4]) + 3.2 -- Boom
 fromIntegral (length [1,2,3,4]) + 3.2
+
+-- Type classes define an abstract interface
+-- One type can be an instance of many type classes
+-- Int is a Num and Eq, Ord, Show, Read, etc...
+
+-- Sometimes a type must first be an instance of one
+-- type class before being allowed to become an instance
+-- of another
