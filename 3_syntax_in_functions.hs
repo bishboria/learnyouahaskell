@@ -57,3 +57,6 @@ tell (x:y:_) = "This list is long. First two elements are: " ++ show x ++ " and 
 
 -- (x:[]) and (x:y:[]) could be rewritten as [x] and [x,y]
 -- (x:y:_) can't be rewritten like that though.
+
+badAdd :: (Num a) => [a] -> a
+badAdd (x:y:z:[]) = x + y + z
