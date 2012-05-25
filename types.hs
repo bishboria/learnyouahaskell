@@ -24,6 +24,7 @@ head :: [a] -> a -- a can be any type
 fst :: (a, b) -> a -- a, b could be any type.
 
 
+----------------
 -- type classes.
 
 -- Eq
@@ -67,3 +68,5 @@ read "(3, 'a')" :: (Int, Char)
 ['a'..'e']
 [LT .. GT]
 succ 'B'
+
+-- Bounded
