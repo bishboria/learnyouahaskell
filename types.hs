@@ -22,3 +22,9 @@ head :: [a] -> a -- a can be any type
 
 :t fst
 fst :: (a, b) -> a -- a, b could be any type.
+
+:t (==)
+(==) :: (Eq a) => a -> a -> Bool
+
+:t (>)
+(>) :: (Ord a) => a -> a -> Bool
