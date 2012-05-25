@@ -78,3 +78,4 @@ minBound :: Int
 maxBound :: Int
 maxBound :: Char
 maxBound :: Bool
+maxBound :: (Bool, Int, Char)
