@@ -55,3 +55,4 @@ flip' f y x = f x y
 
 zip [1,2,3,4,5] "hello"
 flip' zip [1,2,3,4,5] "hello"
+zipWith' div [2,2..] [10,8,5,4,2]
