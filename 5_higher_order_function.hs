@@ -12,3 +12,6 @@ max :: Ord a => a -> (a -> a)
 
 multThree :: Int -> Int -> Int -> Int
 multThree x y z = x * y * z
+
+multTwoWithNine = multThree 9
+multTwoWithNine 2 3
