@@ -15,3 +15,6 @@ multThree x y z = x * y * z
 
 multTwoWithNine = multThree 9
 multTwoWithNine 2 3
+
+compareWithHundred :: Int -> Ordering
+compareWithHundred x = compare 100 x
