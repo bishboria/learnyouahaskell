@@ -52,3 +52,6 @@ zipWith' (zipWith' (*)) [[1,2,3],[3,5,6],[2,3,4]] [[3,2,2],[3,4,5],[5,4,3]]
 
 flip' :: (a -> b -> c) -> (b -> a -> c)
 flip' f y x = f x y
+
+zip [1,2,3,4,5] "hello"
+flip' zip [1,2,3,4,5] "hello"
