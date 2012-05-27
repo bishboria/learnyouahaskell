@@ -20,3 +20,8 @@ reverse' (x:xs) = reverse' xs ++ [x]
 
 repeat' :: a -> [a]
 repeat' x = x : repeat' x
+
+zip' :: [a] -> [b] -> [(a,b)]
+zip' _ [] = []
+zip' [] _ = []
+zip' (x:xs) (y:ys) = (x,y) : zip' xs ys
