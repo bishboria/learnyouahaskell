@@ -21,3 +21,7 @@ compareWithHundred x = compare 100 x
 -- which is equivalent to
 compareWithHundred' :: Int -> Ordering
 compareWithHundred' = compare 100
+
+-- Sections
+divideByTen :: Floating a => a ->> a
+divideByTen = (/10)
