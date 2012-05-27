@@ -32,3 +32,8 @@ isUpperAlphanum = (`elem` ['A'..'Z'])
 -- higher orderism
 applyTwice :: (a -> a) -> a -> a
 applyTwice f x = f (f x)
+-- examples
+applyTwice (+3) 10
+applyTwice (++ " HAHA") "HEY"
+applyTwice ("HAHA " ++) "HEY"
+applyTwice (3:) [1]
