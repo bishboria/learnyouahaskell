@@ -18,3 +18,6 @@ multTwoWithNine 2 3
 
 compareWithHundred :: Int -> Ordering
 compareWithHundred x = compare 100 x
+-- which is equivalent to
+compareWithHundred' :: Int -> Ordering
+compareWithHundred' = compare 100
