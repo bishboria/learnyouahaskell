@@ -157,4 +157,4 @@ map' f xs = foldl (\acc x -> acc ++ [f x]) [] xs
 -- so foldr is usually used to build new lists from a list
 
 elem' :: (Eq a) => a -> [a] -> Bool
-elem' y ys = foldr (\x acc -> if x = y then True else acc) False ys
+elem' y ys = foldr (\x acc -> if x == y then True else acc) False ys
