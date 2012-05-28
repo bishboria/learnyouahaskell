@@ -139,3 +139,4 @@ map (flip subtract 20) [1,2,3,4]
 -- folding
 sum' :: Num a => [a] -> a
 sum' xs = foldl (\acc x -> acc + x) 0 xs
+sum' [3,5,2,1]
