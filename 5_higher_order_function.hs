@@ -231,3 +231,4 @@ f . g = \x -> f (g x)
 f . g = \x -> f $ g x
 
 map (\x -> negate (abs x)) [5,-3,-6,7,-3,2,-19,24]
+map (negate . abs) [5,-3,-6,7,-3,2,-19,24]
