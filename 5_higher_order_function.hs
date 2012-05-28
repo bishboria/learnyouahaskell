@@ -156,5 +156,8 @@ map' f xs = foldl (\acc x -> acc ++ [f x]) [] xs
 -- ++ is slower than :
 -- so foldr is usually used to build new lists from a list
 
-elem' :: (Eq a) => a -> [a] -> Bool
+elem' :: Eq a => a -> [a] -> Bool
 elem' y ys = foldr (\x acc -> if x == y then True else acc) False ys
+
+maximum' :: Ord a => [a] -> a
+maximum' = foldl1 max
