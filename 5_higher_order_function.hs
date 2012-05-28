@@ -206,3 +206,17 @@ sqrtSums = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1
 -- function application with $
 ($) :: (a -> b) -> a -> b
 f $ x = f x
+
+-- example usage
+sum (map sqrt [1..130])
+sum $ map sqrt [1..130]
+
+sqrt (3 + 4 + 9)
+sqrt $ 3 + 4 + 9
+
+sum (filter (> 10) (map (*2) [2..10]))
+sum $ filter (> 10) (map (*2) [2..10])
+sum $ filter (> 10) $ map (*2) [2..10]
+
+
+map ($ 3) [(4+), (10*), (^2), sqrt]
