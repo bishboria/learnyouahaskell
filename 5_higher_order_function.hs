@@ -133,3 +133,4 @@ flip'' :: (a -> b -> c) -> b -> a -> c
 flip'' f = \x y -> f y x
 
 zipWith (flip (++) ["love you", "love me"] ["i ", "you "]
+map (flip subtract 20) [1,2,3,4]
