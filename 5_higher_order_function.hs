@@ -73,3 +73,5 @@ filter' _ [] = []
 filter' p (x:xs)
     | p x = x : filter' p xs
     | otherwise = filter' p xs
+-- examples
+filter' (>3) [1,5,3,2,1,6,4,3,2,1]
