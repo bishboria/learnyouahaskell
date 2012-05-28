@@ -137,9 +137,18 @@ map (flip subtract 20) [1,2,3,4]
 
 
 -- folding
+
 sum' :: Num a => [a] -> a
 sum' xs = foldl (\acc x -> acc + x) 0 xs
 sum' [3,5,2,1]
-
+-- or
 sum'' :: Num a => [a] -> a
 sum'' = foldl (+) 0
+
+
+-- defining map with foldr
+map' :: (a -> b) -> [a] -> [b]
+map' f xs = foldr (\x acc -> f x : acc) [] xs
+-- or with foldl
+map' :: (a -> b) -> [a] -> [b]
+map' f xs = foldl (\acc x -> acc ++ [f x]) [] xs
