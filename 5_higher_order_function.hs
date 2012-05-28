@@ -179,3 +179,6 @@ last' = foldl1 (\_ x -> x)
 --       => f a (f b (f c (f d z)))
 -- foldl => f acc [a,b,c,d]
 --       => f (f (f (f acc a) b) c) d
+
+and' :: [Bool] -> Bool
+and' xs = foldr (&&) True xs
