@@ -114,3 +114,7 @@ numLongChains = length (filter isLong (map chain [1..100]))
 -- lambdas
 numLongChains' :: Int
 numLongChains' = length (filter (\xs -> length xs > 15) (map chain [1..100]))
+
+-- equivalent
+map (+3) [1,6,3,2]          -- better
+map (\x -> x + 3) [1,6,3,2]
