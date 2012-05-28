@@ -174,3 +174,8 @@ filter' p = foldr (\x acc -> if p x then x : acc else acc) []
 
 last' :: [a] -> a
 last' = foldl1 (\_ x -> x)
+
+-- foldr => f acc [a,b,c,d]
+--       => f a (f b (f c (f d z)))
+-- foldl => f acc [a,b,c,d]
+--       => f (f (f (f acc a) b) c) d
