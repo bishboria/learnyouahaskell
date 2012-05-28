@@ -193,3 +193,4 @@ and' xs = foldr (&&) True xs
 -- scans
 scanl (+) 0 [3,5,2,1] -- [0,3,8,10,11]
 scanr (+) 0 [3,5,2,1] -- [11,10,8,3,0]
+scanl1 (\acc x -> if x > acc then x else acc) [3,4,5,3,,9,2,1]
