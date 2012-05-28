@@ -131,3 +131,5 @@ addThree' = \x -> \y -> \z -> x + y + z
 
 flip'' :: (a -> b -> c) -> b -> a -> c
 flip'' f = \x y -> f y x
+
+zipWith (flip (++) ["love you", "love me"] ["i ", "you "]
