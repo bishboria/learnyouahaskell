@@ -183,7 +183,9 @@ last' = foldl1 (\_ x -> x)
 and' :: [Bool] -> Bool
 and' xs = foldr (&&) True xs
 -- and' [True, False, True] => True && (False && (True && True))
+-- and' (repeat False) => False
 
 --(&&') :: Bool -> Bool -> Bool
 --True &&' x = x
 --False &&' _ = False
+
