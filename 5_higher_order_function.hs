@@ -198,3 +198,10 @@ scanl (flip (:)) [] [3,2,1]
 
 sqrtSums :: Int
 sqrtSums = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1
+-- sqrtSums == 131
+-- sum (map sqrt [1..131]) ~= 1005
+-- sum (map sqrt [1..130]) ~= 993
+
+-- function application with $
+($) :: (a -> b) -> a -> b
+f $ x = f x
