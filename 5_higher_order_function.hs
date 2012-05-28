@@ -165,3 +165,6 @@ maximum' = foldl1 max
 reverse' :: [a] -> [a]
 reverse' = foldl (\acc x -> x : acc) []
 reverse'' = foldl (flip (:)) []
+
+product' :: Num a => [a] -> a
+product' = foldl (*) 1
