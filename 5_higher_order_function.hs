@@ -76,3 +76,4 @@ filter' p (x:xs)
 -- examples
 filter' (>3) [1,5,3,2,1,6,4,3,2,1]
 filter' (==3) [1,2,3,4,5]
+filter' even [1..10]
