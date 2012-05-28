@@ -204,6 +204,8 @@ sqrtSums = length (takeWhile (<1000) (scanl1 (+) (map sqrt [1..]))) + 1
 
 
 -- function application with $
+-- function applications are left associative
+-- $ makes function application right associative
 ($) :: (a -> b) -> a -> b
 f $ x = f x
 
