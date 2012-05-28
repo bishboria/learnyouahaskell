@@ -84,3 +84,10 @@ filter' (`elem` ['A'..'Z']) "i LAuGh at you bEcause u R all the same"
 filter' (<15) (filter even [1..20])
 -- equivalent to -- I prefer comprehension here.
 [x | x <- [1..20], x < 15, even x]
+
+quicksort' :: Ord a => [a] -> [a]
+quicksort' [] = []
+quicksort' (x:xs) = 
+    let smallerOrEqual = filter' (<= x) xs
+	larger = filter (> x) xs
+    in  quicksort' smallerOrEqual ++ [x] ++ quicksort larger
