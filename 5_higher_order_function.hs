@@ -155,5 +155,4 @@ map' f xs = foldl (\acc x -> acc ++ [f x]) [] xs
 
 -- ++ is slower than :
 --
--- so foldr is usually used to build new lists
--- from a list
+-- so foldr is usually used to build new lists from a list
