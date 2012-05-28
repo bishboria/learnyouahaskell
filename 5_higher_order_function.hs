@@ -80,3 +80,5 @@ filter' even [1..10]
 let notNull x = not (null x) in filter' notNull [[1,2,3],[],[3,4,5],[2,2],[],[],[]]
 filter' (`elem` ['a'..'z']) "u LaUgH aT mE BeCaUsE I aM diFfeRent"
 filter' (`elem` ['A'..'Z']) "i LAuGh at you bEcause u R all the same"
+
+filter' (<15) (filter even [1..20])
