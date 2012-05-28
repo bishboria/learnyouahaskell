@@ -227,7 +227,7 @@ map ($ 3) [(4+), (10*), (^2), sqrt]
 -- function composition
 (.) :: (b -> c) -> (a -> b) -> a -> c
 f . g = \x -> f (g x)
--- $which is the same as?
+-- which is the same as
 f . g = \x -> f $ g x
 
 map (\x -> negate (abs x)) [5,-3,-6,7,-3,2,-19,24]
