@@ -67,3 +67,9 @@ map (++ "!") ["BIFF", "BANG", "POW"]
 map (replicate 3) [3..6]
 map (map (^2)) [[1,2],[3,4,5,6],[7,8]]
 map fst [(1,3),(3,5),(6,3),(2,6),(2,5)]
+
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' p (x:xs)
+    | p x = x : filter' p xs
+    | otherwise = filter' p xs
