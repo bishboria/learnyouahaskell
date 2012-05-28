@@ -222,3 +222,9 @@ sum $ filter (> 10) $ map (*2) [2..10]
 
 
 map ($ 3) [(4+), (10*), (^2), sqrt]
+
+
+-- function composition
+(.) :: (b -> c) -> (a -> b) -> a -> c
+f . g = \x -> f (g x)
+f . g = \x -> f $ g x
