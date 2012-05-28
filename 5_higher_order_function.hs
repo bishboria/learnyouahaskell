@@ -189,3 +189,6 @@ and' xs = foldr (&&) True xs
 --True &&' x = x
 --False &&' _ = False
 
+
+-- scans
+scanl (+) 0 [3,5,2,1] -- [0,3,8,10,11]
