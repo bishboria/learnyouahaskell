@@ -100,3 +100,9 @@ takeWhile (/=' ') "elephants know how to party"
 
 sum (takeWhile (<10000) (filter odd (map (^2) [1..])))
 sum (takeWhile (<10000) [m | m <- [n^2 | n <- [1..]], odd m])
+
+chain :: Integer -> [Integer]
+chain 1 = [1]
+chain n
+    | even n = n : chain (n `div` 2)
+    | odd n = n : chain (n*3 + 1)
