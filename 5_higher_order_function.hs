@@ -251,3 +251,11 @@ sum' :: Num a => [a] -> a
 sum' xs = foldl (+) 0 xs -- xs is expected last for both
 -- so changing to point-free
 sum' = foldl (+) 0
+
+fn x = ceiling (negate (tan (cos (max 50 x))))
+fn = ceiling . negate . tan . cos . max 50
+
+oddSquareSum :: Integer
+oddSquareSum = sum (takeWhile (<10000) (filter odd (map (^2) [1..])))
+-- in point free
+oddSquareSum = sum . takeWhile (<10000) . filter odd $ map (^2) [1..]
