@@ -235,3 +235,8 @@ map (negate . abs) [5,-3,-6,7,-3,2,-19,24]
 
 map (\xs -> negate (sum (tail xs))) [[1..5],[3..6],[1..7]]
 map (negate . sum . tail) [[1..5],[3..6],[1..7]]
+
+-- with multiple parameters
+sum (replicate 5 (max 6.7 8.9))
+(sum . replicate 5) (max 6.7 8.9)
+sum . replicate 5 $ max 6.7 8.9
