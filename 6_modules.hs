@@ -20,3 +20,7 @@ wordNums = map (\ws -> (head ws, length ws)) . group . sort . words
 
 t = tails "party"
 t' = tails [1,2,3]
+
+h = "hawaii" `isPrefixOf` "hawaii joe"
+h' = "haha" `isPrefixOf` "ha"
+h'' = "ha" `isPrefixOf` "ha"
