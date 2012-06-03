@@ -60,3 +60,13 @@ digitSum = sum . map digitToInt . show
 -- :t Nothing
 -- :t Just "hey"
 -- :t Just True
+
+f = find (> 4) [3,4,5,6,7]
+f' = find odd [2,4,6,8,9]
+f'' = find (=='z') "mjolnir"
+
+firstTo40 :: Maybe Int
+firstTo40 = find (\x -> digitSum x == 40) [1..]
+
+firstTo :: Int -> Maybe Int
+firstTo n = find (\x -> digitSum x == n) [1..]
