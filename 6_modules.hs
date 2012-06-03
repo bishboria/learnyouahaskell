@@ -24,3 +24,7 @@ t' = tails [1,2,3]
 h = "hawaii" `isPrefixOf` "hawaii joe"
 h' = "haha" `isPrefixOf` "ha"
 h'' = "ha" `isPrefixOf` "ha"
+
+a = any (> 4) [1,2,3]
+a' = any (== 'F') "Frank Sobotka"
+a'' = any (\x -> x > 5 && x < 10) [1,4,11]
