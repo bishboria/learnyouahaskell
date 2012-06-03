@@ -49,3 +49,7 @@ decode shift msg = encode (negate shift) msg
 -- foldl (+) 0 (replicate 10000000 1) doesn't cause a stackoverflow...
 -- foldl (+) 0 (replicate 100000000 1) causes memory allocation failure...
 -- foldl' (+) 0 (replicate 100000000 1) works
+
+d = digitToInt '2'
+d' = digitToInt 'F'
+-- digitToInt 'z' breaks 'z' isn't hex
