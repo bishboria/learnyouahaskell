@@ -119,3 +119,6 @@ n' = Map.size newBook
 
 string2digits :: String -> [Int]
 string2digits = map digitToInt . filter isDigit
+
+intBook = Map.map string2digits phoneBook'
+betty' = Map.lookup "betty" intBook
