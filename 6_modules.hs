@@ -110,3 +110,9 @@ phoneBook' = Map.fromList $
 betty = Map.lookup "betty" phoneBook'
 wendy = Map.lookup "wendy" phoneBook'
 grace = Map.lookup "grace" phoneBook'
+
+newBook = Map.insert "grace" "341-9021" phoneBook'
+grace' = Map.lookup "grace" newBook
+
+n = Map.size phoneBook'
+n' = Map.size newBook
