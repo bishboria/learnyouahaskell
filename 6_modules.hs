@@ -40,4 +40,4 @@ c = chr 97
 mo = map ord "abcdefgh"
 
 encode :: Int -> String -> String
-encode offset msg = map (\c -> chr $ ord c + offset) msg
+encode offset msg = map (chr . (+ offset) . ord) msg -- (\c -> chr $ ord c + offset)
