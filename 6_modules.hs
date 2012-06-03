@@ -95,3 +95,4 @@ findKeyFold key xs = foldr (\(k,v) acc -> if key == k then Just v else acc) Noth
 
 mfl = Map.fromList [(3,"shoes"),(4,"trees"),(9,"bees")]
 mfl' = Map.fromList [("kima","greggs"),("jimmy","mcnulty"),("jay","landsman")]
+mfl'' = Map.fromList [("MS",1),("MS",2),("MS",3)]
