@@ -36,3 +36,5 @@ needle `isIn` haystack = any (needle `isPrefixOf`) (tails haystack)
 
 -- Caesar Cipher
 o = ord 'a'
+c = chr 97
+mo = map ord "abcdefgh"
