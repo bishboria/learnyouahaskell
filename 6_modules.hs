@@ -31,3 +31,4 @@ a'' = any (\x -> x > 5 && x < 10) [1,4,11]
 
 isIn :: Eq a => [a] -> [a] -> Bool
 needle `isIn` haystack = any (needle `isPrefixOf`) (tails haystack)
+-- isIn is the same as Data.List.IsInfixOf
