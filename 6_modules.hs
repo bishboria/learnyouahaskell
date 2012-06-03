@@ -10,3 +10,4 @@ numUniques = length . nub
 
 w = words "hey these are the words in this sentence"
 w' = words "hey these              are       the words in this sentence"
+g = group [1,1,1,1,1,1,1,1,1,2,2,3,2,2,5,6,7]
