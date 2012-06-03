@@ -94,4 +94,4 @@ findKeyFold key xs = foldr (\(k,v) acc -> if key == k then Just v else acc) Noth
 -- findKeyFold is the same as Data.List.lookup
 
 mfl = Map.fromList [(3,"shoes"),(4,"trees"),(9,"bees")]
-mfl = Map.fromList [("kima","greggs"),("jimmy","mcnulty"),("jay","landsman")]
+mfl' = Map.fromList [("kima","greggs"),("jimmy","mcnulty"),("jay","landsman")]
