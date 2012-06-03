@@ -53,3 +53,10 @@ decode shift msg = encode (negate shift) msg
 d = digitToInt '2'
 d' = digitToInt 'F'
 -- digitToInt 'z' breaks 'z' isn't hex
+
+digitSum :: Int -> Int
+digitSum = sum . map digitToInt . show
+
+-- :t Nothing
+-- :t Just "hey"
+-- :t Just True
