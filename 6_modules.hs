@@ -19,3 +19,4 @@ wordNums :: String -> [(String, Int)]
 wordNums = map (\ws -> (head ws, length ws)) . group . sort . words
 
 t = tails "party"
+t' = tails [1,2,3]
