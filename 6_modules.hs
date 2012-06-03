@@ -15,4 +15,5 @@ g' = group ["boom","bip","bip","boom","boom"]
 s = sort [5,4,3,7,2,1]
 s' = sort ["boom","bip","bip","boom","boom"]
 
+wordNums :: String -> [(String, Int)]
 wordNums = map (\ws -> (head ws, length ws)) . group . sort . words
