@@ -17,3 +17,5 @@ s' = sort ["boom","bip","bip","boom","boom"]
 
 wordNums :: String -> [(String, Int)]
 wordNums = map (\ws -> (head ws, length ws)) . group . sort . words
+
+t = tails "party"
