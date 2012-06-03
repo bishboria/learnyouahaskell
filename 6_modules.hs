@@ -122,3 +122,16 @@ string2digits = map digitToInt . filter isDigit
 
 intBook = Map.map string2digits phoneBook'
 betty' = Map.lookup "betty" intBook
+
+phoneBookMultipleNumbers = 
+    [("betty","555-2938")
+    ,("betty","342-2493")
+    ,("bonnie","452-2928")
+    ,("patsy","493-2928")
+    ,("patsy","943-2929")
+    ,("patsy","827-9192")
+    ,("lucille","205-9192")
+    ,("wendy","205-9200")
+    ,("penny","210-9200")
+    ,("penny","210-9250")
+    ]
