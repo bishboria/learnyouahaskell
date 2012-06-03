@@ -38,3 +38,6 @@ needle `isIn` haystack = any (needle `isPrefixOf`) (tails haystack)
 o = ord 'a'
 c = chr 97
 mo = map ord "abcdefgh"
+
+encode :: Int -> String -> String
+encode offset msg = map (\c -> chr $ ord c + offset) msg
