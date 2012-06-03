@@ -96,3 +96,17 @@ findKeyFold key xs = foldr (\(k,v) acc -> if key == k then Just v else acc) Noth
 mfl = Map.fromList [(3,"shoes"),(4,"trees"),(9,"bees")]
 mfl' = Map.fromList [("kima","greggs"),("jimmy","mcnulty"),("jay","landsman")]
 mfl'' = Map.fromList [("MS",1),("MS",2),("MS",3)]
+
+phoneBook' :: Map.Map String String
+phoneBook' = Map.fromList $
+    [("betty", "555-2938")
+    ,("bonnie", "452-2928")
+    ,("patsy", "493-2928")
+    ,("lucille", "205-2928")
+    ,("wendy", "939-8282")
+    ,("penny", "853-2492")
+    ]
+
+betty = Map.lookup "betty" phoneBook'
+wendy = Map.lookup "wendy" phoneBook'
+grace = Map.lookup "grace" phoneBook'
