@@ -116,3 +116,6 @@ grace' = Map.lookup "grace" newBook
 
 n = Map.size phoneBook'
 n' = Map.size newBook
+
+string2digits :: String -> [Int]
+string2digits = map digitToInt . filter isDigit
