@@ -136,9 +136,8 @@ phoneBookMultipleNumbers =
     ,("penny","210-9250")
     ]
 
-phoneBookToMap :: Ord k => [(k, String)] -> Map.Map k String
-phoneBookToMap xs = Map.fromListWith add xs
-    where add number1 number2 = number1 ++ ", " ++ number2
+phoneBookToMap :: Ord k => [(k, a)] -> Map.Map k [a]
+phoneBookToMap xs = Map.fromListWith (++) $ map (\(k,v) -> (k, [v])) xs
 
 patsy'sNumbers = Map.lookup "patsy" $ phoneBookToMap phoneBookMultipleNumbers
 wendy'sNumbers = Map.lookup "wendy" $ phoneBookToMap phoneBookMultipleNumbers
