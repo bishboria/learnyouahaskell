@@ -142,3 +142,6 @@ phoneBookToMap xs = Map.fromListWith (++) $ map (\(k,v) -> (k, [v])) xs
 patsy'sNumbers = Map.lookup "patsy" $ phoneBookToMap phoneBookMultipleNumbers
 wendy'sNumbers = Map.lookup "wendy" $ phoneBookToMap phoneBookMultipleNumbers
 betty'sNumbers = Map.lookup "betty" $ phoneBookToMap phoneBookMultipleNumbers
+
+maxTuple = Map.fromListWith max [(2,3),(2,5),(2,100),(3,29),(3,22),(3,11),(4,22),(4,15)]
+sumTuple = Map.fromListWith (+) [(2,3),(2,5),(2,100),(3,29),(3,22),(3,11),(4,22),(4,15)]
