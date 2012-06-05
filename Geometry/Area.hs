@@ -1,4 +1,5 @@
--- usage: import qualified Geometry.Area as Area
+-- from the end of chapter 6
+
 module Geometry.Area
 ( cube
 , cuboid

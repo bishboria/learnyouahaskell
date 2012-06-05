@@ -1,4 +1,5 @@
--- usage: import qualified Geometry.Volume as Volume
+-- from the end of chapter 6
+
 module Geometry.Volume
 ( cube
 , cuboid

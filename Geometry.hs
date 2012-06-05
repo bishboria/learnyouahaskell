@@ -1,3 +1,5 @@
+-- from the end of chapter 6
+
 module Geometry
 ( areaCube
 , areaCuboid
