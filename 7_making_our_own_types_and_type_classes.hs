@@ -16,8 +16,6 @@ area :: Shape -> Float
 area (Circle _ r) = pi * r ^ 2
 area (Rectangle (Point x1 y1) (Point x2 y2)) = (abs $ x2 - x1) * (abs $ y2 - y1)
 
-concentricCircles = map (Circle (Point 0 0)) [4,5,6,6]
-
 nudge :: Shape -> Float -> Float -> Shape
 nudge (Circle (Point x y) r) a b = Circle (Point (x+a) (y+b)) r
 nudge (Rectangle (Point x1 y1) (Point x2 y2)) a b =
@@ -32,3 +30,4 @@ baseRect :: Float -> Float -> Shape
 baseRect width height = Rectangle (Point 0 0) (Point width height)
 
 nudgedRectangle = nudge (baseRect 40 100) 60 23
+concentricCircles = map baseCircle [4,5,6,6]
