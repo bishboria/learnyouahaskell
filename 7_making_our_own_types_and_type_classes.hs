@@ -30,4 +30,4 @@ baseRect :: Float -> Float -> Shape
 baseRect width height = Rectangle (Point 0 0) (Point width height)
 
 nudgedRectangle = nudge (baseRect 40 100) 60 23
-concentricCircles = map baseCircle [4,5,6,6]
+concentricCircles = map (baseCircle) [4,5,6,6]
