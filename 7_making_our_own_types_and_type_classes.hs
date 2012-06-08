@@ -96,3 +96,8 @@ maybeFloat = Just 3 :: Maybe Float
 -- A type is concrete if it doesn't take any parameters at all, like
 -- Int or Bool, or if it takes type parameters and they're all filled
 -- up, like Maybe Char.
+
+data IntMaybe = INothing | IJust Int
+data StringMaybe = SNothing | SJust String
+data ShapeMaybe = ShNothing | ShJust Shape
+-- type params are better as you don't get ^^ that.
