@@ -35,25 +35,43 @@ concentricCircles = map (baseCircle) [4,5,6,6]
 
 data Person = Person String String Int Float String String deriving (Show)
 
-firstName :: Person -> String
-firstName (Person firstname _ _ _ _ _) = firstname
+firstName' :: Person -> String
+firstName' (Person firstname _ _ _ _ _) = firstname
 
-lastName :: Person -> String
-lastName (Person _ lastname _ _ _ _) = lastname
+lastName' :: Person -> String
+lastName' (Person _ lastname _ _ _ _) = lastname
 
-age :: Person -> Int
-age (Person _ _ age _ _ _) = age
+age' :: Person -> Int
+age' (Person _ _ age _ _ _) = age
 
-height :: Person -> Float
-height (Person _ _ _ height _ _) = height
+height' :: Person -> Float
+height' (Person _ _ _ height _ _) = height
 
-phoneNumber :: Person -> String
-phoneNumber (Person _ _ _ _ number _) = number
+phoneNumber' :: Person -> String
+phoneNumber' (Person _ _ _ _ number _) = number
 
-flavour :: Person -> String
-flavour (Person _ _ _ _ _ flavour) = flavour
+flavour' :: Person -> String
+flavour' (Person _ _ _ _ _ flavour) = flavour
 
 guy = Person "Buddy" "Finklestein" 43 184.2 "526-2928" "Chocolate"
-guy'sFirstName = firstName guy
-guy'sHeight = height guy
-guy'sFlavour = flavour guy
+guy'sFirstName = firstName' guy
+guy'sHeight = height' guy
+guy'sFlavour = flavour' guy
+
+data Person2 = Person2 { firstName :: String
+		       , lastName :: String
+		       , age :: Int
+		       , height :: Float
+		       , phoneNumber :: String
+		       , flavour :: String } deriving (Show)
+
+frank = Person2 "Frank" "J" 12 1.12 "1234123" "arst"
+frank' = Person2 { firstName="Frank", lastName="J"
+                 , age=12, height=1.12
+		 , phoneNumber="1234123", flavour="arst" }
+
+data Car = Car { company :: String
+               , model :: String
+	       , year :: Int
+	       } deriving (Show)
+myBaby = Car { company="Ford", model="Mustang", year=1967 }
