@@ -32,3 +32,6 @@ baseRect width height = Rectangle (Point 0 0) (Point width height)
 
 nudgedRectangle = nudge (baseRect 40 100) 60 23
 concentricCircles = map (baseCircle) [4,5,6,6]
+
+data Person = Person String String Int Float String String deriving (Show)
+guy = Person "Buddy" "Finklestein" 43 184.2 "526-2928" "Chocolate"
