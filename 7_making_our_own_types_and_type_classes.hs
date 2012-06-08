@@ -54,3 +54,6 @@ flavour :: Person -> String
 flavour (Person _ _ _ _ _ flavour) = flavour
 
 guy = Person "Buddy" "Finklestein" 43 184.2 "526-2928" "Chocolate"
+guy'sFirstName = firstName guy
+guy'sHeight = height guy
+guy'sFlavour = flavour guy
