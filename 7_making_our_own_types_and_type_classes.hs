@@ -74,4 +74,6 @@ data Car = Car { company :: String
                , model :: String
 	       , year :: Int
 	       } deriving (Show)
-myBaby = Car { company="Ford", model="Mustang", year=1967 }
+-- Can change the order of the fields
+-- Can't do this without record syntax
+myBaby = Car {model="Mustang", company="Ford", year=1967}
