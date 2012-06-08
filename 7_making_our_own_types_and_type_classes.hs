@@ -33,6 +33,9 @@ baseRect width height = Rectangle (Point 0 0) (Point width height)
 nudgedRectangle = nudge (baseRect 40 100) 60 23
 concentricCircles = map (baseCircle) [4,5,6,6]
 
+-- Record Syntax
+
+-- without record syntax... :|
 data Person = Person String String Int Float String String deriving (Show)
 
 firstName' :: Person -> String
@@ -58,6 +61,7 @@ guy'sFirstName = firstName' guy
 guy'sHeight = height' guy
 guy'sFlavour = flavour' guy
 
+-- with record syntax :)
 data Person2 = Person2 { firstName :: String
 		       , lastName :: String
 		       , age :: Int
@@ -74,6 +78,21 @@ data Car = Car { company :: String
                , model :: String
 	       , year :: Int
 	       } deriving (Show)
+
 -- Can change the order of the fields
 -- Can't do this without record syntax
 myBaby = Car {model="Mustang", company="Ford", year=1967}
+
+-- use record syntax with lots of params that aren't obvious
+-- e.g. data Vector = Vector Int Int Int is resonably obvious
+
+
+-- Type Parameters
+
+-- data Maybe a = Nothing | Just a -- Maybe is a type constructor
+maybeInt = Just 3 :: Maybe Int
+maybeFloat = Just 3 :: Maybe Float
+
+-- A type is concrete if it doesn't take any parameters at all, like
+-- Int or Bool, or if it takes type parameters and they're all filled
+-- up, like Maybe Char.
