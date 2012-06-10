@@ -109,3 +109,19 @@ stang = Car {company="Ford", model="Mustang", year=1967}
 -- parameterising Car value constructor i.e. Car a b c = Car {...
 -- is pointless as tellCar becomes more complicated and we'd end
 -- up using Car String String Int most of the time anyway.
+
+-- bad practice to put type constraints in data declarations
+-- e.g. toList :: Ord k => Map k a -> [(k, a)] doesn't care about
+-- the order of the keys, so no need for (Ord k)
+
+-- Although that's exactly what we're doing next...
+data Vector a = Vector a a a deriving (Show)
+
+vplus :: Num a => Vector a -> Vector a -> Vector a
+(Vector i j k) `vplus` (Vector l m n) = Vector (i+l) (j+m) (k+n)
+
+dotProd :: Num a => Vector a -> Vector a -> a
+(Vector i j k) `dotProd` (Vector l m n) = i*l + j*m + k*n
+
+vmult :: Num a => Vector a -> a -> Vector a
+(Vector i j k) `vmult` m = Vector (i*m) (j*m) (k*m)
