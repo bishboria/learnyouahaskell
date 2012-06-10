@@ -101,3 +101,11 @@ data IntMaybe = INothing | IJust Int
 data StringMaybe = SNothing | SJust String
 data ShapeMaybe = ShNothing | ShJust Shape
 -- type params are better as you don't get ^^ that.
+
+tellCar :: Car -> String
+tellCar (Car {company=c, model=m, year=y}) =
+	"This " ++ c ++ " " ++ m ++ " was made in " ++ show y
+stang = Car {company="Ford", model="Mustang", year=1967}
+-- parameterising Car value constructor i.e. Car a b c = Car {...
+-- is pointless as tellCar becomes more complicated and we'd end
+-- up using Car String String Int most of the time anyway.
