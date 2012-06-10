@@ -114,9 +114,9 @@ stang = Car {company="Ford", model="Mustang", year=1967}
 -- e.g. toList :: Ord k => Map k a -> [(k, a)] doesn't care about
 -- the order of the keys, so no need for (Ord k)
 
--- Although that's exactly what we're doing next...
+-- No type constraint
 data Vector a = Vector a a a deriving (Show)
-
+-- But you still have to for the functions
 vplus :: Num a => Vector a -> Vector a -> Vector a
 (Vector i j k) `vplus` (Vector l m n) = Vector (i+l) (j+m) (k+n)
 
