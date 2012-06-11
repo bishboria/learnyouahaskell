@@ -176,3 +176,7 @@ just100GtJust50 = Just 100 > Just 50
 -- Any Day of the Week
 data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 	   deriving (Eq, Ord, Show, Read, Bounded, Enum)
+
+wednesday = Wednesday
+showWednesday = show Wednesday
+readSaturday = read "Saturday" :: Day
