@@ -171,3 +171,7 @@ nothingGtJustMinus49999 = Nothing > Just (-49999)
 just3cmpJust2 = Just 3 `compare` Just 2
 just100GtJust50 = Just 100 > Just 50
 -- can't do Just (*3) > Just (*2). (*3),(*2) aren't instances of Ord
+
+
+-- Any Day of the Week
+data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
