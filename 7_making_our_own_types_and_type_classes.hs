@@ -238,3 +238,8 @@ type IntMap2 = Map.Map Int
 
 -- we can do:
 assocListIntInt = [(1,2),(3,5),(8,9)] :: AssocList Int Int
+-- and we can still use the list like a normal (Int,Int) list
+
+-- type synonyms (and types generally) can only be used in the type portion
+-- of Haskell. This includes data & type declarations as well as after ::
+-- in type declarations or type annotations
