@@ -194,7 +194,11 @@ minMaxRangeDay = [minBound .. maxBound] :: [Day]
 -- Type Synonyms
 
 -- [Char] and String are type synonyms.
--- defined as type String = [Char]
+-- defined as: type String = [Char]
 
 -- data creates a new type
--- type creates a type synonym ... First dodgy thing so far.
+-- type creates a type synonym... First dodgy thing so far.
+
+-- the following are exactly the same
+-- toUpperString :: [Char] -> [Char]
+-- toUpperString :: String -> String
