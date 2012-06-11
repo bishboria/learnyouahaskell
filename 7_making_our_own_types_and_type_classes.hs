@@ -189,3 +189,12 @@ succMonday = succ Monday
 predSaturday = pred Saturday
 rangeThuSun = [Thursday .. Sunday]
 minMaxRangeDay = [minBound .. maxBound] :: [Day]
+
+
+-- Type Synonyms
+
+-- [Char] and String are type synonyms.
+-- defined as type String = [Char]
+
+-- data creates a new type
+-- type creates a type synonym ... First dodgy thing so far.
