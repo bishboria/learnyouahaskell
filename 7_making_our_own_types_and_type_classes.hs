@@ -165,4 +165,9 @@ readJust3 = read "Just 3" :: Maybe Int
 trueCompFalse = True `compare` False
 trueGtFalse = True > False
 trueLtFalse = True < False
--- data types of typeclass Ord are ordered in the manner they are defined.
+-- instances of Ord are ordered in the manner they are defined.
+nothingLtJust100 = Nothing < Just 100
+nothingGtJustMinus49999 = Nothing > Just (-49999)
+just3cmpJust2 = Just 3 `compare` Just 2
+just100GtJust50 = Just 100 > Just 50
+-- can't do Just (*3) > Just (*2). (*3),(*2) aren't instances of Ord
