@@ -234,4 +234,7 @@ type IntMap v = Map.Map Int v
 type IntMap2 = Map.Map Int
 
 -- don't confuse type synonyms and type constructors
--- we can't do AssocList [(1,2),(4,5),(7,9)]
+-- we can't do: AssocList [(1,2),(4,5),(7,9)]
+
+-- we can do:
+assocListIntInt = [(1,2),(3,5),(8,9)] :: AssocList Int Int
