@@ -125,3 +125,28 @@ dotProd :: Num a => Vector a -> Vector a -> a
 
 vmult :: Num a => Vector a -> a -> Vector a
 (Vector i j k) `vmult` m = Vector (i*m) (j*m) (k*m)
+
+v1 = Vector 3 5 8 `vplus` Vector 9 2 8
+v2 = Vector 3 5 8 `vplus` Vector 9 2 8 `vplus` Vector 0 2 3
+v3 = Vector 3 9 7 `vmult` 10
+v4 = Vector 4 9 5 `dotProd` Vector 9.0 2.0 4.0
+v5 = Vector 2 9 3 `vmult` (Vector 4 9 5 `dotProd` Vector 9 2 4)
+
+-- Derived Instances
+-- Equating People
+data Person3 = Person3 { firstName3 :: String
+		       , lastName3 :: String
+		       , age3 :: Int
+		       } deriving (Eq)
+
+mikeD = Person3 {firstName3="Michael", lastName3="Diamond", age3=43}
+adRock = Person3 {firstName3="Adam", lastName3="Horovitz", age3=41}
+mca = Person3 {firstName3="Adam", lastName3="Yauch", age3=44}
+
+mca'adRock = mca == adRock
+mikeD'adRock = mikeD == adRock
+mikeD'mikeD = mikeD == mikeD
+mikeD'newPerson = mikeD == Person3 {firstName3="Michael", lastName3="Diamond", age3=43}
+
+beastieBoys = [mca, adRock, mikeD]
+isMikeDInBeastieBoys = mikeD `elem` beastieBoys
