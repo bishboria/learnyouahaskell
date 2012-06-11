@@ -7,6 +7,8 @@ module Shapes
 , baseRect
 ) where
 
+import qualified Data.Map as Map
+
 -- data Bool' = False | True
 
 data Point = Point Float Float deriving (Show)
@@ -227,4 +229,9 @@ type AssocList k v = [(k, v)]
 -- can be used like: Eq k => k -> AssocList k v -> Maybe v
 
 -- partially applied type constructor
-type IntMap v = Map Int v
+type IntMap v = Map.Map Int v
+-- or 
+type IntMap2 = Map.Map Int
+
+-- don't confuse type synonyms and type constructors
+-- we can't do AssocList [(1,2),(4,5),(7,9)]
