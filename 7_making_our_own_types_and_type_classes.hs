@@ -158,3 +158,10 @@ mysteryDude = "Person3 { firstName3=\"Michael\"" ++
 	              ", lastName3=\"Diamond\"" ++
 		      ", age3=43}"
 readMysteryDude = read mysteryDude :: Person3
+
+readJust3 = read "Just 3" :: Maybe Int
+
+data Bool2 = False2 | True2 deriving (Ord)
+trueCompFalse = True2 `compare` False2
+trueGtFalse = True2 > False2
+trueLtFalse = True2 < False2
