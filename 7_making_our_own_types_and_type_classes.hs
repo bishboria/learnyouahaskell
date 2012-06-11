@@ -221,3 +221,10 @@ type PhoneBook = [(Name, PhoneNumber)]
 
 inPhoneBook :: Name -> PhoneNumber -> PhoneBook -> Bool
 inPhoneBook name pnumber pbook = (name, pnumber) `elem` pbook
+
+-- parameterised type synonyms
+type AssocList k v = [(k, v)]
+-- can be used like: Eq k => k -> AssocList k v -> Maybe v
+
+-- partially applied type constructor
+type IntMap v = Map Int v
