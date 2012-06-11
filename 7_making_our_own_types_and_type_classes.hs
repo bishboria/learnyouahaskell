@@ -7,7 +7,7 @@ module Shapes
 , baseRect
 ) where
 
-data Bool' = False | True
+-- data Bool' = False | True
 
 data Point = Point Float Float deriving (Show)
 data Shape = Circle Point Float | Rectangle Point Point deriving (Show)
@@ -165,3 +165,4 @@ readJust3 = read "Just 3" :: Maybe Int
 trueCompFalse = True `compare` False
 trueGtFalse = True > False
 trueLtFalse = True < False
+-- data types of typeclass Ord are ordered in the manner they are defined.
