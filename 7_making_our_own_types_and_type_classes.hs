@@ -180,3 +180,12 @@ data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
 wednesday = Wednesday
 showWednesday = show Wednesday
 readSaturday = read "Saturday" :: Day
+
+saturdayEqSunday = Saturday == Sunday
+saturdayEqSaturday = Saturday == Saturday
+minDay = minBound :: Day
+maxDay = maxBound :: Day
+succMonday = succ Monday
+predSaturday = pred Saturday
+rangeThuSun = [Thursday .. Sunday]
+minMaxRangeDay = [minBound .. maxBound] :: [Day]
