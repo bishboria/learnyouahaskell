@@ -153,3 +153,8 @@ isMikeDInBeastieBoys = mikeD `elem` beastieBoys
 
 showMikeD = show mikeD
 showMikeD' = "mikeD is: " ++ show mikeD
+
+mysteryDude = "Person3 { firstName3=\"Michael\"" ++
+	              ", lastName3=\"Diamond\"" ++
+		      ", age3=43}"
+readMysteryDude = read mysteryDude :: Person3
