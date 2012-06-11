@@ -219,4 +219,5 @@ type Name = String
 type PhoneBook = [(Name, PhoneNumber)]
 -- could then say: phoneBook :: PhoneBook
 
-
+inPhoneBook :: Name -> PhoneNumber -> PhoneBook -> Bool
+inPhoneBook name pnumber pbook = (name, pnumber) `elem` pbook
