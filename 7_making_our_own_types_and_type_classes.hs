@@ -243,3 +243,9 @@ assocListIntInt = [(1,2),(3,5),(8,9)] :: AssocList Int Int
 -- type synonyms (and types generally) can only be used in the type portion
 -- of Haskell. This includes data & type declarations as well as after ::
 -- in type declarations or type annotations
+
+-- Go Left, Then Right
+data Either' a b = Left' a | Right' b deriving (Eq, Ord, Read, Show)
+right'20 = Right' 20
+left'woot = Left' "w00t"
+-- :t Right' 'a'
