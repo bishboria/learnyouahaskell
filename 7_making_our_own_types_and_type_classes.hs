@@ -212,3 +212,11 @@ phoneBook =
     ,("wendy", "939-8282")
     ,("penny", "853-2492")
     ]
+-- this definition doesn't tell us much other than it's a "String to String" association list.
+
+type PhoneNumber = String
+type Name = String
+type PhoneBook = [(Name, PhoneNumber)]
+-- could then say: phoneBook :: PhoneBook
+
+
