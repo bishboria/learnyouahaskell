@@ -137,7 +137,7 @@ v5 = Vector 2 9 3 `vmult` (Vector 4 9 5 `dotProd` Vector 9 2 4)
 data Person3 = Person3 { firstName3 :: String
 		       , lastName3 :: String
 		       , age3 :: Int
-		       } deriving (Eq)
+		       } deriving (Eq, Show, Read)
 
 mikeD = Person3 {firstName3="Michael", lastName3="Diamond", age3=43}
 adRock = Person3 {firstName3="Adam", lastName3="Horovitz", age3=41}
@@ -150,3 +150,6 @@ mikeD'newPerson = mikeD == Person3 {firstName3="Michael", lastName3="Diamond", a
 
 beastieBoys = [mca, adRock, mikeD]
 isMikeDInBeastieBoys = mikeD `elem` beastieBoys
+
+showMikeD = show mikeD
+showMikeD' = "mikeD is: " ++ show mikeD
