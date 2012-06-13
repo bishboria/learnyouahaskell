@@ -294,3 +294,10 @@ empty = Empty
 fiveConsEmpty = 5 `Cons` Empty
 fourConsFiveCons = 4 `Cons` (5 `Cons` Empty)
 -- using `Cons` here to show that it is just the : operator
+
+-- improving our list
+infixr 5 :-:       -- fixity: how tightly the operator binds and whether
+                   -- it's left or right-associative
+		   -- infixl/infixr
+		   -- bigger number higher precedence
+data List a = Empty | a :-: (List a) deriving (Show, Read, Eq, Ord)
