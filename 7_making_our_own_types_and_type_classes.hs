@@ -284,7 +284,13 @@ locker'' = lockerLookup 109 lockers
 
 
 -- Recursive Data Structures
+
 data List a = Empty | Cons a (List a) deriving (Show, Read, Eq, Ord)
 -- using record syntax
 -- data List a = Empty | Cons { listHead :: a, listTail :: List a }
 --     deriving (Show, Read, Eq, Ord)
+
+empty = Empty
+fiveConsEmpty = 5 `Cons` Empty
+fourConsFiveCons = 4 `Cons` (5 `Cons` Empty)
+-- using `Cons` here to show that it is just the : operator
