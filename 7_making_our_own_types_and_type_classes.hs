@@ -300,4 +300,4 @@ infixr 5 :-:       -- fixity: how tightly the operator binds and whether
                    -- it's left or right-associative
 		   -- infixl/infixr
 		   -- bigger number higher precedence
-data List a = Empty | a :-: (List a) deriving (Show, Read, Eq, Ord)
+data List' a = Empty' | a :-: (List' a) deriving (Show, Read, Eq, Ord)
