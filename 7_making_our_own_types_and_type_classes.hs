@@ -250,3 +250,12 @@ data Either' a b = Left' a | Right' b deriving (Eq, Ord, Read, Show)
 right'20 = Right' 20
 left'woot = Left' "w00t"
 -- :t Right' 'a'
+-- :t Left True
+
+-- Nothing is used to indicate failure
+-- If interested in how/why something failed:
+-- use Left constructor for failures, Right constructor for succes results
+
+data LockerState = Taken | Free deriving (Show, Eq)
+type Code = String
+type LockerMap = Map.Map Int (LockerState, Code)
