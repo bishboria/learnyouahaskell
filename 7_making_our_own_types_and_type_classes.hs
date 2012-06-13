@@ -267,3 +267,24 @@ lockerLookup lockerNumber map = case Map.lookup lockerNumber map of
 			     then Right code
 			     else Left $ "Locker " ++ show lockerNumber
                                          ++ " is already taken!"
+
+lockers :: LockerMap
+lockers = Map.fromList
+    [(100,(Taken, "ZD39I"))
+    ,(101,(Free, "JAH3I"))
+    ,(102,(Free, "IQSA9"))
+    ,(103,(Free, "QOTSA"))
+    ,(104,(Taken, "893JJ"))
+    ,(105,(Taken, "99292"))
+    ]
+
+locker = lockerLookup 101 lockers
+locker' = lockerLookup 100 lockers
+locker'' = lockerLookup 109 lockers
+
+
+-- Recursive Data Structures
+data List a = Empty | Cons a (List a) deriving (Show, Read, Eq, Ord)
+-- using record syntax
+-- data List a = Empty | Cons { listHead :: a, listTail :: List a }
+--     deriving (Show, Read, Eq, Ord)
