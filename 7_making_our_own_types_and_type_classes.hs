@@ -301,3 +301,5 @@ infixr 5 :-:       -- fixity: how tightly the operator binds and whether
 		   -- infixl/infixr
 		   -- bigger number higher precedence
 data List' a = Empty' | a :-: (List' a) deriving (Show, Read, Eq, Ord)
+consing = 3 :-: 4 :-: 5 :-: Empty'
+hundredConsWithConsing = 100 :-: consing
