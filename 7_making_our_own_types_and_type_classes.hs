@@ -338,3 +338,5 @@ nums = [8,6,4,1,7,3,5]
 numsTree = foldr treeInsert EmptyTree nums
 eightInTree = 8 `treeElem` numsTree
 hundredInTree = 100 `treeElem` numsTree
+oneInTree = 1 `treeElem` numsTree
+tenInTree = 10 `treeElem` numsTree
