@@ -309,3 +309,7 @@ infixr 5 ^++
 (^++) :: List' a -> List' a -> List' a
 Empty' ^++ ys = ys
 (x :-: xs) ^++ ys = x :-: (xs ^++ ys)
+
+listOne = 3 :-: 4 :-: 5 :-: Empty'
+listTwo = 6 :-: 7 :-: Empty'
+listThree = listOne ^++ listTwo
