@@ -313,3 +313,6 @@ Empty' ^++ ys = ys
 listOne = 3 :-: 4 :-: 5 :-: Empty'
 listTwo = 6 :-: 7 :-: Empty'
 listThree = listOne ^++ listTwo
+
+-- Let's Plant a Tree
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show)
