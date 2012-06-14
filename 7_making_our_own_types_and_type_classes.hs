@@ -335,7 +335,10 @@ treeElem x (Node a left right)
     | x > a = treeElem x right
 
 nums = [8,6,4,1,7,3,5]
+-- remember: pretty much everything that traverses a list one item at a
+--           time and returns a value can be implemented with a fold.
 numsTree = foldr treeInsert EmptyTree nums
+
 eightInTree = 8 `treeElem` numsTree
 hundredInTree = 100 `treeElem` numsTree
 oneInTree = 1 `treeElem` numsTree
