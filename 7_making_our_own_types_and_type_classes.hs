@@ -303,3 +303,9 @@ infixr 5 :-:       -- fixity: how tightly the operator binds and whether
 data List' a = Empty' | a :-: (List' a) deriving (Show, Read, Eq, Ord)
 consing = 3 :-: 4 :-: 5 :-: Empty'
 hundredConsWithConsing = 100 :-: consing
+
+-- our implementation of ++
+infixr 5 ^++
+(^++) :: List' a -> List' a -> List' a
+Empty' ^++ ys = ys
+(x :-: xs) ^++ ys = x :-: (xs ^++ ys)
