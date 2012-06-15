@@ -399,7 +399,8 @@ class Eq a => Num a where   -- says that a type must be an Eq before
 
 -- parameterized types as instances of type classes
 {-
-instance Eq (Maybe m) where
+instance Eq m => Eq (Maybe m) where  -- this definition guarantees m
+                                     -- is an instance of Eq first
     Just x == Just y = x == y
     Nothing == Nothing = True
     _ == _ = False
