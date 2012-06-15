@@ -357,3 +357,14 @@ class Eq a where            -- 'a' must be lowercase. >1 char allowed
 -- Equal if not inequal. inequal if not equal
 -- Final type of functions will be: Eq a => a -> a -> Bool
 -}
+
+-- A traffic light data type
+data TrafficLight = Red | Yellow | Green  -- no derivations here.
+
+instance Eq TrafficLight where
+    Red == Red = True
+    Green == Green = True
+    Yellow == Yellow = True
+    _ == _ = False
+-- class used to create new classes
+-- instance for making types instances of classes
