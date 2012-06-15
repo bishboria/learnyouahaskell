@@ -433,3 +433,7 @@ instance YesNo Bool where
 instance YesNo (Maybe a) where
     yesno (Just _) = True
     yesno Nothing = False
+
+instance YesNo (Tree a) where
+    yesno EmptyTree = False
+    yesno _ = True
