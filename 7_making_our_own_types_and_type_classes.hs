@@ -396,3 +396,11 @@ class Eq a => Num a where   -- says that a type must be an Eq before
                             -- constraint on class definition!
     -- ... Function declarations here
 -}
+
+-- parameterized types as instances of type classes
+{-
+instance Eq (Maybe m) where
+    Just x == Just y = x == y
+    Nothing == Nothing = True
+    _ == _ = False
+-}
