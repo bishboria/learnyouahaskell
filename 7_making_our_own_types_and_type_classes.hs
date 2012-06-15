@@ -426,3 +426,6 @@ instance YesNo Int where
 instance YesNo [a] where -- works on all lists. remember String == [Char]
     yesno [] = False
     yesno _ = True
+
+instance YesNo Bool where
+    yesno = id  -- id is the identity function
