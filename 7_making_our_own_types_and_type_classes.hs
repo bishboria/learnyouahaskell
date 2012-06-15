@@ -498,3 +498,18 @@ fmapTest''' = fmap (*2) Nothing
 instance Functor Tree where
     fmap f EmptyTree = EmptyTree
     fmap f (Node x left right) = Node (f x) (fmap f left) (fmap f right)
+
+fmapEmptyTree = fmap (*2) EmptyTree
+fmapMultiplyTreeElems = fmap (*4) (foldr treeInsert EmptyTree [5,7,3])
+
+-- Either as a functor
+{-
+instance Functor (Either a) where
+    fmap f (Right x) = Right (f x)
+    fmap f (Left x) = Left x
+-}
+
+{-
+instance Functor (Map k) where
+    fmap = map
+-}
