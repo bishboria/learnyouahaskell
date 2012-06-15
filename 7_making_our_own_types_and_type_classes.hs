@@ -477,3 +477,5 @@ class Functor f where               -- For things that can be mapped over
 instance Functor [] where
     fmap = map
 -}
+fmapList = fmap (*2) [1..3]
+mapList = map (*2) [1..3]
