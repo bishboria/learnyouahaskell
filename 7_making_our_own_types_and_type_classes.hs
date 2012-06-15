@@ -343,3 +343,17 @@ eightInTree = 8 `treeElem` numsTree
 hundredInTree = 100 `treeElem` numsTree
 oneInTree = 1 `treeElem` numsTree
 tenInTree = 10 `treeElem` numsTree
+
+
+-- Type Classes 102
+
+{-- definition of Eq
+class Eq a where            -- 'a' must be lowercase. >1 char allowed
+    (==) :: a -> a -> Bool
+    (/=) :: a -> a -> Bool  -- type declarations must be provided
+    x == y = not (x /= y)
+    x /= y = not (x == y)   -- implementation doesn't
+
+-- Equal if not inequal. inequal if not equal
+-- Final type of functions will be: Eq a => a -> a -> Bool
+-}
