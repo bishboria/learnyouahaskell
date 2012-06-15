@@ -493,3 +493,8 @@ fmapTest = fmap (++ " Hey guys im inside the just") (Just "Something serious.")
 fmapTest' = fmap (++ "Hey guys im inside the just") Nothing
 fmapTest'' = fmap (*2) (Just 200)
 fmapTest''' = fmap (*2) Nothing
+
+-- Trees are functors too
+instance Functor Tree where
+    fmap f EmptyTree = EmptyTree
+    fmap f (Node x left right) = Node (f x) (fmap f left) (fmap f right)
