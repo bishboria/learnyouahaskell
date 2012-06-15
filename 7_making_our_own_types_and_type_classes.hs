@@ -373,3 +373,5 @@ instance Eq TrafficLight where
 -- Only need to implement == as class definition has them defined in terms
 -- of one another.
 -- Called: Minimal Complete Definition
+
+-- Otherwise both would need to be implemented in the instance definition
