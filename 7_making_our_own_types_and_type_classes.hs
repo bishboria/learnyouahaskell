@@ -405,3 +405,6 @@ instance Eq m => Eq (Maybe m) where  -- this definition guarantees m
     Nothing == Nothing = True
     _ == _ = False
 -}
+
+-- class constraints in class defs are about subclassing.
+-- class constraints in instance defs are about requirements about the type
