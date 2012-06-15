@@ -513,3 +513,14 @@ instance Functor (Either a) where
 instance Functor (Map k) where
     fmap = map
 -}
+
+
+-- Kinds and Some Type-Foo
+
+{-
+:k Int
+Int :: * -- This indicates that Int is a concrete type
+
+:k Maybe
+Maybe :: * -> *   -- takes a concrete type and returns another
+-}
