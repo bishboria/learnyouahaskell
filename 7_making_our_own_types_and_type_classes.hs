@@ -388,3 +388,11 @@ redElem = Red `elem` [Red, Yellow, Green]
 showTrafficLights = [Red, Yellow, Green]
 -- deriving Eq would work same way
 -- deriviing Show wouldn't be same. It'd just say Red, Yellow or Green
+
+-- subclassing
+{-
+class Eq a => Num a where   -- says that a type must be an Eq before
+                            -- it can be a Num. subclass through class
+                            -- constraint on class definition!
+    -- ... Function declarations here
+-}
