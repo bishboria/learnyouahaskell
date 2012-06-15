@@ -375,3 +375,9 @@ instance Eq TrafficLight where
 -- Called: Minimal Complete Definition
 
 -- Otherwise both would need to be implemented in the instance definition
+
+-- Hand rolling it as an instance of Show
+instance Show TrafficLight where
+    show Red = "Red light"
+    show Yellow = "Yellow light"
+    show Green = "Green light"
