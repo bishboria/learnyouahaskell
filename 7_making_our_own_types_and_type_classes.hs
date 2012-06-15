@@ -523,4 +523,26 @@ Int :: * -- This indicates that Int is a concrete type
 
 :k Maybe
 Maybe :: * -> *   -- takes a concrete type and returns another
+
+:k Maybe Int
+Maybe Int :: *  -- Maybe Int is a concrete type
 -}
+
+-- types are the labels of values
+-- kinds are the labels of types
+
+{-
+:k Either
+Either :: * -> * -> * -- takes 2 concrete types to produce a concrete type
+
+:k Either String
+Either String :: * -> *
+
+:k Either String Int
+Either String Int :: *
+-}
+
+-- Functor wants types that only take one argument.
+-- Functor wants types of kind * -> *
+-- This is why we had to give Functor an (Either a) and not just Either
+-- !
