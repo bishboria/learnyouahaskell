@@ -387,4 +387,4 @@ redEqYellow = Red == Yellow
 redElem = Red `elem` [Red, Yellow, Green]
 showTrafficLights = [Red, Yellow, Green]
 -- deriving Eq would work same way
--- Show wouldn't as it would just say Red, Yellow or Green
+-- deriviing Show wouldn't be same. It'd just say Red, Yellow or Green
