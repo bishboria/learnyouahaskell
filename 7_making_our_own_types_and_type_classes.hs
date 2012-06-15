@@ -479,3 +479,17 @@ instance Functor [] where
 -}
 fmapList = fmap (*2) [1..3]
 mapList = map (*2) [1..3]
+
+-- f in the class definition of Functor should be a type constructor
+-- not a concrete type!
+
+-- Maybe as a functor
+{-
+instance Functor Maybe where
+    fmap f (Just x) = Just (f x)
+    fmap f Nothing = Nothing
+-}
+fmapTest = fmap (++ " Hey guys im inside the just") (Just "Something serious.")
+fmapTest' = fmap (++ "Hey guys im inside the just") Nothing
+fmapTest'' = fmap (*2) (Just 200)
+fmapTest''' = fmap (*2) Nothing
