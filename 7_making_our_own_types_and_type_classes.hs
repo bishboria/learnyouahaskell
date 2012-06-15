@@ -350,7 +350,7 @@ tenInTree = 10 `treeElem` numsTree
 {-- definition of Eq
 class Eq a where            -- 'a' must be lowercase. >1 char allowed
     (==) :: a -> a -> Bool
-    (/=) :: a -> a -> Bool  -- type declarations must be provided
+    (/=) :: a -> a -> Bool  -- function type declarations must be provided
     x == y = not (x /= y)
     x /= y = not (x == y)   -- implementation doesn't
 
