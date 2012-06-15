@@ -451,3 +451,10 @@ yesnoEmptyTree = yesno EmptyTree
 yesnoEmptyList = yesno []
 yesnoListOfZeroes = yesno [0,0,0]
 -- :t yesno
+
+-- now for the javascript like 'if'
+yesnoIf :: (YesNo y) => y -> a -> a -> a
+yesnoIf yesnoVal yesResult noResult =
+    if yesno yesnoVal
+       then yesResult
+       else noResult
