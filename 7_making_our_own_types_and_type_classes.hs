@@ -422,3 +422,7 @@ class YesNo a where
 instance YesNo Int where
     yesno 0 = False
     yesno _ = True
+
+instance YesNo [a] where -- works on all lists. remember String == [Char]
+    yesno [] = False
+    yesno _ = True
