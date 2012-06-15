@@ -458,3 +458,9 @@ yesnoIf yesnoVal yesResult noResult =
     if yesno yesnoVal
        then yesResult
        else noResult
+
+ifResult = yesnoIf [] "Yeah!" "No!"
+ifResult' = yesnoIf [2,3,4] "Yeah!" "No!"
+ifResult'' = yesnoIf True "Yeah!" "No!"
+ifResult''' = yesnoIf (Just 500) "Yeah!" "No!"
+ifResult'''' = yesnoIf Nothing "Yeah!" "No!"
