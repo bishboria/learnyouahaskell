@@ -411,3 +411,10 @@ instance Eq m => Eq (Maybe m) where  -- this definition guarantees m
 
 -- :info Maybe
 -- shows all the type classes that Maybe is an instance of.
+
+
+-- A Yes-No type class: javascript 'if' like behaviour for shits & giggles
+-- 0, "" and false are all falsey in javascript
+
+class YesNo a where
+    yesno :: a -> Bool
