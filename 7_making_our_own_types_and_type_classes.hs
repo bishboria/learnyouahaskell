@@ -464,3 +464,16 @@ ifResult' = yesnoIf [2,3,4] "Yeah!" "No!"
 ifResult'' = yesnoIf True "Yeah!" "No!"
 ifResult''' = yesnoIf (Just 500) "Yeah!" "No!"
 ifResult'''' = yesnoIf Nothing "Yeah!" "No!"
+
+
+-- The Functor Type Class
+
+{-
+class Functor f where               -- For things that can be mapped over
+    fmap :: (a -> b) -> f a -> f b
+-}
+
+{- --E.g.
+instance Functor [] where
+    fmap = map
+-}
