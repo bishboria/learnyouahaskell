@@ -368,3 +368,8 @@ instance Eq TrafficLight where
     _ == _ = False
 -- class used to create new classes
 -- instance for making types instances of classes
+-- 'a' in class definition replaced with type in instance definition
+
+-- Only need to implement == as class definition has them defined in terms
+-- of one another.
+-- Called: Minimal Complete Definition
