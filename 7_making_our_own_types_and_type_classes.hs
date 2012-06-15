@@ -437,3 +437,17 @@ instance YesNo (Maybe a) where
 instance YesNo (Tree a) where
     yesno EmptyTree = False
     yesno _ = True
+
+instance YesNo TrafficLight where
+    yesno Red = False
+    yesno _ = True
+
+yesnoZeroLength = yesno $ length []
+yesnoHaha = yesno "haha"
+yesnoEmptyString = yesno ""
+yesnoJustZero = yesno $ Just 0
+yesnoTrue = yesno True
+yesnoEmptyTree = yesno EmptyTree
+yesnoEmptyList = yesno []
+yesnoListOfZeroes = yesno [0,0,0]
+-- :t yesno
