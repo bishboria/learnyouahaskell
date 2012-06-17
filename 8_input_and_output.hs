@@ -1,0 +1,2 @@
+-- Hello, World!
+-- see 8_hello_world.hs
