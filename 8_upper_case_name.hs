@@ -8,5 +8,5 @@ main = do
     let bigFirstName = map toUpper firstName
         bigLastName = map toUpper lastName
     putStrLn $ "hey " ++ bigFirstName ++ " "
-                      ++ bigLastName ++
+                      ++ bigLastName
                       ++ ", how are you?"
