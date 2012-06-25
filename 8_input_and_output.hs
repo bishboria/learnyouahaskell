@@ -44,3 +44,7 @@ myLine = getLine
 -- see 8_upper_case_name.hs
 -- the jist:
 -- let for binding pure values. <- for binding results of IO actions
+
+
+-- Putting it in reverse
+-- see 8_reverse.hs
