@@ -38,3 +38,7 @@ nameTag = "Hello, my name is " ++ getLine
 myLine = getLine
 -}
 -- all this does is give getLine a new name. myLine is still an IO action
+
+
+-- Using let inside IO actions
+-- see 8_upper_case_name.hs
