@@ -56,3 +56,11 @@ myLine = getLine
 -- return wraps a value in an IO action
 -- <- takes an IO action, performs it, returns the value & binds to a name
 -- they are kind of opposites
+
+-- it would be easier to do this though
+{-
+main = do
+    let a = "hell"
+        b = "yeah"
+    putStrLn $ a ++ " " ++ b
+-}
