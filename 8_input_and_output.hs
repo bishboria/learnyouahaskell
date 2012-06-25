@@ -64,3 +64,9 @@ main = do
         b = "yeah"
     putStrLn $ a ++ " " ++ b
 -}
+
+-- Use return when you want an IO action that does nothing.
+-- Or when the result needs to be different from the last "real" action
+-- peformed by the do block
+-- e.g. putStrLn :: String -> IO (), but if you want an IO String, use
+-- return
