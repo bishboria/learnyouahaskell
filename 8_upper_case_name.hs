@@ -10,3 +10,4 @@ main = do
     putStrLn $ "hey " ++ bigFirstName ++ " "
                       ++ bigLastName
                       ++ ", how are you?"
+-- use let for binding pure values. <- for binding results of IO actions
