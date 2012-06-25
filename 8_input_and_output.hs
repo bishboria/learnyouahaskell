@@ -48,3 +48,5 @@ myLine = getLine
 
 -- Putting it in reverse
 -- see 8_reverse.hs
+
+-- see 8_using_returns_to_do_nothing.hs
