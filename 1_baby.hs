@@ -1,8 +1,8 @@
 doubleMe x = x + x
 doubleUs x y = doubleMe x + doubleMe y
 doubleSmallNumber x = if x > 100
-			 then x
-			 else x*2
+    then x
+    else x*2
 
 doubleSmallNumber' x = (if x > 100 then x else x*2)
 
@@ -25,46 +25,46 @@ indexList' = listInList !! 1
 compareList = [3,2,1] > [2,1,0] -- determined element by element
 compareList' = [3,4,2] < [3,4,3]
 
-headList = head [5,4,3,2,1]
-tailList = tail [5,4,3,2,1]
-lastList = last [5,4,3,2,1]
-initList = init [5,4,3,2,1]
+headList = head [5,4,3,2,1] -- 5
+tailList = tail [5,4,3,2,1] -- [4,3,2,1]
+lastList = last [5,4,3,2,1] -- 1
+initList = init [5,4,3,2,1] -- [5,4,3,2]
 
 startList = [5,4,3,2,1]
-middleOfList = init (tail startList)
-middleOfList' = tail (init startList)
+middleOfList = init (tail startList) -- [4,3,2]
+middleOfList' = tail (init startList) -- [4,3,2]
 
-lengthList = length [5,4,3,2,1]
+lengthList = length [5,4,3,2,1] -- 5
 
-isNull = null [1,2,3]
+isNull = null [1,2,3] -- False
 
-reverseList = reverse [5,4,3,2,1]
+reverseList = reverse [5,4,3,2,1] -- [1,2,3,4,5]
 
-takeFirst3 = take 3 [5,4,3,2,1]
-takeFirst100 = take 100 [5,4,3,2,1]
-takeNone = take 0 [5,4,3,2,1]
+takeFirst3 = take 3 [5,4,3,2,1] -- [5,4,3]
+takeFirst100 = take 100 [5,4,3,2,1] -- [5,4,3,2,1]
+takeNone = take 0 [5,4,3,2,1] -- []
 
-max = maximum [1,9,2,3,4]
-min = minimum [8,4,2,1,5,6]
+max = maximum [1,9,2,3,4] -- 9
+min = minimum [8,4,2,1,5,6] -- 1
 
-sumList = sum [5,2,1,6,3,2,5,7]
-productList = product [6,2,1,2]
+sumList = sum [5,2,1,6,3,2,5,7] -- 31
+productList = product [6,2,1,2] -- 24
 
-inList = elem 4 [3,4,5,6]
-inList' = 4 `elem` [3,4,5,6]
+inList = elem 4 [3,4,5,6] -- True
+inList' = 4 `elem` [3,4,5,6] -- True
 
-rangeNumber = [1..20]
-rangeCharacter = ['k'..'z']
-rangeStep = [2,4..20]
-rangeDecreasing = [20,19..1]
+rangeNumber = [1..20] -- expand the list 1,2,3,...,20
+rangeCharacter = ['k'..'z'] -- same for k to z
+rangeStep = [2,4..20] -- all evens between 2 and 20
+rangeDecreasing = [20,19..1] -- 20,19,18,17,...,1
 
-rangeSteppedInfiniteTake = take 10 [13,26..]
+rangeSteppedInfiniteTake = take 10 [13,26..] -- first 10 multiples of 13
 
-cycleListTake = take 10 (cycle [1,2,3])
-repeatElementTake = take 10 (repeat 5)
-replicateElement = replicate 3 10 -- 3 `replicate` 10
+cycleListTake = take 10 (cycle [1,2,3]) -- [1,2,3,1,2,3,1,2,3,1]
+repeatElementTake = take 10 (repeat 5) -- [5,5,5,5,5,5,5,5,5,5]
+replicateElement = replicate 3 10 -- 3 `replicate` 10 -- [10,10,10]
 
-rangeFloatDodgy = [0.1, 0.3 .. 1]
+rangeFloatDodgy = [0.1, 0.3 .. 1] -- expand a float range, weird values...
 
 comprehensionMultiplesTwo = [x*2 | x <- [1..10]]
 comprehensionMultiplesTwoFilterMultiples = [x*2 | x <- [1..10], x*2 >= 12]
@@ -84,7 +84,7 @@ descriptions = [adjective ++ " " ++ noun | adjective <- adjectives, noun <- noun
 
 length' xs = sum [1 | _ <- xs]
 
-removeNonUpperCase st = [c | c  <- st, c `elem` ['A'..'Z']]
+removeNonUpperCase st = [c | c <- st, c `elem` ['A'..'Z']]
 
 xxs = [[1,2,3,4,5],[9,8,7,6,5],[5,4,3,2,1]]
 onlyEven = [ [x | x <- xs, even x] | xs <- xxs]
