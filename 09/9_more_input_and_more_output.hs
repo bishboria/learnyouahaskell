@@ -101,3 +101,24 @@ withFile name mode f = bracket (openFile name mode)
 
 -- Grab the Handles!
 
+-- hGetContents, hGetLine, hPutStr, hPutStrLn, hGetChar, etc all work like
+-- their -h counterparts except +h versions work with handles instead of
+-- standard in/out
+
+-- Working with strings and files is common, so we can use:
+-- readFile, writeFile and appendFile
+
+import System.IO
+
+main = do
+    contents <- readFile "9_girlfriend.txt"
+    putStr contents
+-- run ./9_girlfriend_readFile
+
+import System.IO
+import Data.Char
+
+main = do
+    contents <- readFile "9_girlfriend.txt"
+    writeFile "9_girlfriendcaps.txt" (map toUpper contents)
+-- run ./9_girlfriend_writeFile
