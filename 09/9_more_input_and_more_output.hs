@@ -194,3 +194,25 @@ main = do
             removeFile "9_todo.txt"
             renameFile tempName "9_todo.txt")
 -- run ./9_deleteTodo_bracketOnError
+
+
+-- Command-Line Arguments
+
+:t getArgs
+getArgs :: IO [String]
+-- gets the arguments the program was run with an yields those as a list
+
+:t getProgName
+getProgName :: IO String
+-- get the program name
+
+import System.Environment
+import Data.List
+
+main = do
+    args <- getArgs
+    progName <- getProgName
+    putStrLn "The arguments are:"
+    mapM putStrLn args
+    putStrLn "The program name is:"
+    putStrLn progName
