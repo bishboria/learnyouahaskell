@@ -266,7 +266,7 @@ remove [fileName, numberString] = do
         (\(tempName, tempHandle) -> do
             hPutStr tempHandle newTodoItems
             hClose tempHandle
-            removeFile "9_todo.txt"
-            renameFile tempName "9_todo.txt")
+            removeFile fileName
+            renameFile tempName fileName)
 -- In the book removeFile "todo.txt" & renameFile... are still hardcoded!
 -- Tut. Tut. Tut.
