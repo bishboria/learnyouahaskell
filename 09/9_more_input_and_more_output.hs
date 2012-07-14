@@ -233,6 +233,7 @@ dispatch :: String -> [String] -> IO ()
 dispatch "add" = add
 dispatch "view" = view
 dispatch "remove" = remove
+dispatch "bump" = bump
 
 main = do
     (command:argList) <- getArgs
@@ -266,3 +267,21 @@ remove [fileName, numberString] = do
             renameFile tempName fileName)
 -- In the book removeFile "todo.txt" & renameFile... are still hardcoded!
 -- Tut. Tut. Tut.
+
+-- adding bump as part of the above, as an exercise left by the book
+bump :: [String] -> IO ()
+bump [fileName, numberString] = do
+    contents <- readFile fileName
+    let todoTasks = lines contents
+        number = read numberString
+        todo = todoTasks !! number
+        newTodoItems = unlines $ [todo] ++ delete todo todoTasks
+    bracketOnError (openTempFile "." "temp")
+        (\(tempName, tempHandle) -> do
+            hClose tempHandle
+            removeFile tempName)
+        (\(tempName, tempHandle) -> do
+            hPutStr tempHandle newTodoItems
+            hClose tempHandle
+            removeFile fileName
+            renameFile tempName fileName)
