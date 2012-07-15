@@ -9,6 +9,11 @@ dispatch "add" = add
 dispatch "view" = view
 dispatch "remove" = remove
 dispatch "bump" = bump
+dispatch command = doesntExist command
+
+doesntExist :: String -> [String] -> IO ()
+doesntExist command _ =
+    putStrLn $ "The " ++ command ++ " command doesn't exist"
 
 main = do
     (command:argList) <- getArgs
@@ -16,6 +21,7 @@ main = do
 
 add :: [String] -> IO ()
 add [fileName, todoItem] = appendFile fileName (todoItem ++ "\n")
+add _ = putStrLn "The add command takes exactly two arguments"
 
 view :: [String] -> IO ()
 view [fileName] = do
@@ -24,6 +30,7 @@ view [fileName] = do
         numberedTasks = zipWith (\n line -> show n ++ " - " ++ line)
                                 [0..] todoTasks
     putStr $ unlines numberedTasks
+view _ = putStrLn "The view command takes one argument"
 
 remove :: [String] -> IO ()
 remove [fileName, numberString] = do
@@ -32,6 +39,7 @@ remove [fileName, numberString] = do
         number = read numberString
         newTodoItems = unlines $ delete (todoTasks !! number) todoTasks
     replaceFileContents fileName newTodoItems
+remove _ = putStrLn "The remove command takes exactly two arguments"
 
 bump :: [String] -> IO ()
 bump [fileName, numberString] = do
@@ -41,6 +49,7 @@ bump [fileName, numberString] = do
         todo = todoTasks !! number
         newTodoItems = unlines $ [todo] ++ delete todo todoTasks
     replaceFileContents fileName newTodoItems
+bump _ = putStrLn "The bump command takes exactly two arguments"
 
 replaceFileContents :: FilePath -> String -> IO ()
 replaceFileContents fileName contents =

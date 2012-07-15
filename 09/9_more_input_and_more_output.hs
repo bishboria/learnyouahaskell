@@ -285,3 +285,15 @@ bump [fileName, numberString] = do
             hClose tempHandle
             removeFile fileName
             renameFile tempName fileName)
+-- In 9_todo.hs I've pulled out the duplicated bracketOnError code
+-- into its own function. Much cleaner!
+
+
+-- Dealing with Bad Input
+-- add a catchall pattern to dispatch function on bad commands
+
+dispatch command = doesntExist command
+
+doesntExist :: String -> [String] -> IO ()
+doesntExist command _ =
+    putStrLn $ "The " ++ command ++ " command doesn't exist"
