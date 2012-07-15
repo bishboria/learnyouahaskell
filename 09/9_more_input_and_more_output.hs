@@ -297,3 +297,84 @@ dispatch command = doesntExist command
 doesntExist :: String -> [String] -> IO ()
 doesntExist command _ =
     putStrLn $ "The " ++ command ++ " command doesn't exist"
+-- similar error handling have been added to add, view, remove and bump
+-- in 9_todo.hs
+
+
+-- Randomness
+
+import System.Random
+:t random
+random :: (RandomGen g, Random a) => g -> (a, g)
+-- RandomGen type class is for types that can act as sources of randomness
+-- Random type class is for types whose values can be random
+
+-- to use random we need an instance of RandomGen type class, like:
+-- StdGen (exported by System.Random)
+
+-- manually make a random generator using mkStdGen
+:t mkStdGen
+mkStdGen :: Int -> StdGen
+
+random (mkStdGen 100) :: (Int, StdGen) -- need to tell Haskell which type
+gen = mkStdGen 100
+random gen :: (Int, StdGen) -- produces same output given same input :)
+
+x = read "10 1" :: StdGen
+random x :: (Int, StdGen)
+random x :: (Int, StdGen)
+random x :: (Float, StdGen) -- different type annotation, same input
+random x :: (Bool, StdGen)
+random x :: (Integer, StdGen)
+
+
+-- Tossing a coin
+
+import System.Random
+
+threeCoins :: StdGen -> (Bool, Bool, Bool)
+threeCoins gen =
+    let (firstCoin, newGen) = random gen        -- don't need the annotation
+        (secondCoin, newGen') = random newGen   -- as the type is inferred
+        (thirdCoin, newGen'') = random newGen'  -- from function declaration
+    in  (firstCoin, secondCoin, thirdCoin)
+
+threeCoins (mkStdGen 100)
+threeCoins (mkStdGen 94)
+threeCoins (mkStdGen 56)
+threeCoins (mkStdGen 68)
+
+-- More Random Functions
+:t randoms
+randoms :: RandgomGen g, Random a => g -> [a]
+-- randoms produces a stream of random values based on the generator
+
+take 5 $ randoms (mkStdGen 11) :: [Int]
+take 5 $ randoms (mkStdGen 11) :: [Bool]
+take 5 $ randoms (mkStdGen 11) :: [Float]
+
+randoms' :: (RandgomGen g, Random a) => g -> [a]
+randoms' gen =
+    let (value, newGen) = random gen
+    in  value:randoms' newGen
+-- because we want a stream of values, we can't pass the final generator
+-- back.
+
+-- a finite version that returns the last generator
+finiteRandoms :: (RandomGen g, Random a, Num n) => n -> g -> ([a],g)
+finiteRandoms 0 gen = ([], gen)
+finiteRandoms n gen =
+    let (value, newGen) = random gen
+        (restOfList, finalGen) = finiteRandoms (n-1) newGen
+    in  (value:restOfList, finalGen)
+
+-- *** This is my work ***
+-- The book says that you can't get the last generator, but you can do the
+-- next best thing: pair up the value with the generator that created it!
+import System.Random
+infiniteRandoms :: (RandomGen g, Random a) => g -> [(a, g)]
+infiniteRandoms gen =
+    let (value, newGen) = random gen
+    in  (value, gen):infiniteRandoms newGen
+-- Infinite random values and access to the generators that created them.
+-- usage example: infiniteRandoms (mkStdGen 1234) :: [(Int, StdGen)]
