@@ -31,17 +31,7 @@ remove [fileName, numberString] = do
     let todoTasks = lines contents
         number = read numberString
         newTodoItems = unlines $ delete (todoTasks !! number) todoTasks
-    bracketOnError (openTempFile "." "temp")
-        (\(tempName, tempHandle) -> do
-            hClose tempHandle
-            removeFile tempName)
-        (\(tempName, tempHandle) -> do
-            hPutStr tempHandle newTodoItems
-            hClose tempHandle
-            removeFile fileName
-            renameFile tempName fileName)
--- In the book removeFile "todo.txt" & renameFile... are still hardcoded!
--- Tut. Tut. Tut.
+    replaceFileContents fileName newTodoItems
 
 bump :: [String] -> IO ()
 bump [fileName, numberString] = do
@@ -50,12 +40,18 @@ bump [fileName, numberString] = do
         number = read numberString
         todo = todoTasks !! number
         newTodoItems = unlines $ [todo] ++ delete todo todoTasks
+    replaceFileContents fileName newTodoItems
+
+replaceFileContents :: FilePath -> String -> IO ()
+replaceFileContents fileName contents =
     bracketOnError (openTempFile "." "temp")
         (\(tempName, tempHandle) -> do
             hClose tempHandle
             removeFile tempName)
         (\(tempName, tempHandle) -> do
-            hPutStr tempHandle newTodoItems
+            hPutStr tempHandle contents
             hClose tempHandle
             removeFile fileName
             renameFile tempName fileName)
+-- In the book removeFile "todo.txt" & renameFile... are still hardcoded!
+-- Tut. Tut. Tut.
