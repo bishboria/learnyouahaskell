@@ -378,3 +378,95 @@ infiniteRandoms gen =
     in  (value, gen):infiniteRandoms newGen
 -- Infinite random values and access to the generators that created them.
 -- usage example: infiniteRandoms (mkStdGen 1234) :: [(Int, StdGen)]
+
+:t randomR
+randomR :: (RandomGen g, Random a) :: (a, a) -> g -> (a, g)
+
+randomR (1,6) (mkStdGen 359353)
+randomR (1,6) (mkStdGen 35935335)
+
+-- produce an infinite stream of random numbers in a range using randomRs
+:t randomRs
+randomRs :: (RandomGen g, Random a) :: (a, a) -> g -> [a]
+
+take 10 $ randomRs ('a','z') (mkStdGen 3) :: [Char]
+
+
+-- Randomness and IO
+
+import System.Random
+
+main = do
+    gen <- getStdGen
+    putStrLn $ take 20 $ randomRs ('a','z') gen
+-- run ./9_random_string_1
+
+-- using getStdGen sets the global random generator
+-- so calling getStdGen returns the same generator
+import System.Random
+
+main = do
+    gen <- getStdGen
+    putStrLn $ take 20 $ randomRs ('a','z') gen
+    putStrLn "And now calling getStdGen again produces..."
+    gen2 <- getStdGen
+    putStrLn $ take 20 $ randomRs ('a','z') gen2
+    putStrLn "The same random output... Look at 9_random_string_3.hs"
+-- run ./9_random_string_2
+
+-- to get a different generator use newStdGen
+-- it splits the current generator into two. updating the global with one
+-- and returning the other as the result
+-- calling getStdGen would return something different after using newStdGen
+import System.Random
+
+main = do
+    gen <- getStdGen
+    putStrLn $ take 20 $ randomRs ('a','z') gen
+    gen2 <- newStdGen
+    putStrLn $ take 20 $ randomRs ('a','z') gen2
+-- run ./9_random_string_3
+
+-- guessing a number
+import System.Random
+import Control.Monad (when)
+
+main = do
+    gen <- getStdGen
+    askForNumber gen
+
+askForNumber :: StdGen -> IO ()
+askForNumber gen = do
+    let (randNumber, newGen) = randomR (1,10) gen :: (Int, StdGen)
+    putStrLn "Which number in the range from 1 to 10 am I thinking of? "
+    numberString <- getLine
+    when (not $ null numberString) $ do
+        let number = read numberString
+        if randNumber == number
+            then putStrLn "You are correct!"
+            else putStrLn $ "Sorry, it was " ++ show randNumber
+        askForNumber newGen
+-- run ./9_guess_number
+-- change read to reads in you don't want the program to blow up on bad
+-- input.
+:t reads
+reads :: Read a => ReadS a
+
+-- another way to do the same thing
+import System.Random
+import Control.Monad (when)
+
+main = do
+    gen <- getStdGen
+    let (randNumber, _) = randomR (1,10) gen :: (Int, StdGen)
+    putStrLn "Which number in the range from 1 to 10 am I thinking of? "
+    numberString <- getLine
+    when (not $ null numberString) $ do
+        let number = read numberString
+        if randNumber == number
+            then putStrLn "You are correct!"
+            else putStrLn $ "Sorry, it was " ++ show randNumber
+        newStdGen
+        main
+-- run ./9_guess_number_2
+-- other one better as it does less in main and supplies a reusable function
