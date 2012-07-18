@@ -1,0 +1,8 @@
+This is some source text
+
+That will be copied to:
+9_bytestringdestination.txt
+
+How original
+
+E = m*c^2

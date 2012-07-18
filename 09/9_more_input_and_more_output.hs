@@ -470,3 +470,103 @@ main = do
         main
 -- run ./9_guess_number_2
 -- other one better as it does less in main and supplies a reusable function
+
+
+-- Bytestrings
+
+-- Lazy Bytestrings are stored in chunks of 64KB.
+-- if you eval a lazy bytestring, the first 64K will be evaluated, and a
+-- promise to compute the rest (a thunk).
+
+-- Bytestrings are strict are stored in an array. You evaluate the whole
+-- thing. You can't have infinite bytestrings.
+
+-- documentation for Data.ByteString.Lazy will show lots of functions with
+-- the same names as Data.List (but with type signature different).
+
+-- We'll do qualified importts of bytestrings
+
+import qualified Data.ByteString.Lazy as B      -- Lazy
+import qualified Data.ByteString as S           -- Strict
+
+:t B.pack
+B.pack :: [GHC.Word.Word8] -> B.ByteString
+
+:t S.pack
+S.pack :: [GHC.Word.Word8] -> S.ByteString
+
+-- Word8 represents an unsigned 8 bit integer ie 0 to 255
+-- Word8 is also an instance of Num type class
+
+B.pack [99,97,110]
+B.pack [98..120]
+
+:t B.unpack
+B.unpack :: B.ByteString -> [GHC.Word.Word8]
+
+by = B.pack [98,111,114,116]
+B.unpack by
+
+-- fromChunks a list of strict bytestrings and returns a lazy bytestring
+:t B.fromChunks
+B.fromChunks :: [S.ByteString] -> B.ByteString
+
+-- toChunks does the reverse
+:t B.toChunks
+B.toChunks :: B.ByteString -> [S.ByteString]
+
+B.fromChunks [S.pack [40,41,42], S.pack [43,44,45], S.pack [46,47,48]]
+-- Chunk "()*" (Chunk "+,-" (Chunk "./0" Empty))
+-- this is good if you have lots of small strict bytestrings and you want
+-- to process them efficiently without joining them into one big strict
+-- bytestring in memory first
+
+-- bytestring version of : is called cons
+:t B.cons
+B.cons :: GHC.Word.Wordu -> B.ByteString -> B.ByteString
+
+B.cons 85 $ B.pack [80,81,82,84]
+-- Chunk "U" (Chunk "PQRT" Empty)
+
+-- ByteString package info can be found at:
+-- http://hackage.haskell.org/pacakage/bytestring/
+
+:t B.readFile
+B.readFile :: FilePath -> IO B.ByteString
+
+
+-- Copying Files with Bytestrings
+
+-- a program that takes two filenames as command-line arguments
+-- copies the first file into the second.
+-- System.Directory already has copyFile, but here's another implementation
+
+import System.Environment
+import System.Directory
+import System.IO
+import Control.Exception
+import qualified Data.ByteString.Lazy as B
+
+main = do
+    (fileName1:fileName2:_) <- getArgs
+    copy fileName1 fileName2
+
+copy source dest = do
+    contents <- B.readFile source
+    bracketOnError
+        (openTempFile "." "temp")
+        (\(tempName, tempHandle) -> do
+            hClose tempHandle
+            removeFile tempName)
+        (\(tempName, tempHandle) -> do
+            B.hPutStr tempHandle contents
+            hClose tempHandle
+            renameFile tempName dest)
+-- run ./9_bytestringcopy 9_bytestringsource.txt 9_bytestringdestination.txt
+
+
+-- Whenever you need better performance in a program that reads a lot
+-- of data into strings, give bytestrings a try. You might get a good
+-- performance boost.
+
+-- Write with ordinary strings first, convert to bytestrings if need be.
