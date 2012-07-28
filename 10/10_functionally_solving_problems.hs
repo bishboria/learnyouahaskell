@@ -16,6 +16,10 @@ solveRPN  = head . foldl foldingFunction [] . words
 -- solveRPN "90 34 12 33 55 66 + * - +"
 -- solveRPN "90 34 12 33 55 66 + * - + -"
 -- solveRPN "90 3.8 -"
+-- solveRPN "2.7 ln"
+-- solveRPN "10 10 10 10 sum 4 /"
+-- solveRPN "10 10 10 10 10 sum 4 /"
+-- solveRPN "10 2 ^"
 
 -- Reminder
 -- comments assume f needs to evaluate both operands before it can return
