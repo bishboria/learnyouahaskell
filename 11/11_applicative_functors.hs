@@ -96,3 +96,41 @@ b = (*3) `fmap` (+100) $ 1
 c = (*3) . (+100) $ 1
 z = fmap (show . (*3)) (+100) 1
 -- load 11_composition_as_fmap.hs
+
+
+-- Again fmap's type:
+-- fmap :: (Functor f) => (a -> b) -> f a -> f b
+--
+-- because Haskell curries functions this can be writen as:
+-- fmap :: (a -> b) -> (f a -> f b)
+--
+-- it takes a function a -> b and produces a function (f a -> f b)
+-- This is called Lifting a function
+--
+-- :t fmap (*2)
+-- fmap (*2) :: (Functor f, Num b) => f b -> f b
+--
+-- :t fmap (replicate 3)
+-- fmap (replicate 3) :: Functor f => f a -> f [a]
+--
+-- fmap (++"!") reverse "hello"
+-- "olleh!"
+
+-- fmap can be thought of in two ways:
+-- a.  As a function that takes a function and a functor value and then maps that
+--     function over the functor value
+-- b.  As a function that takes a function and lifts that function so it operates
+--     on functor values
+
+import Control.Monad.Instances
+-- Reminder
+-- instance Functor (Either a) where
+--     fmap f (Right x) = Right (f x)
+--     fmap f (Left  x) = Left  x
+
+a = fmap (replicate 3) [1,2,3,4]
+b = fmap (replicate 3) (Just 4)
+c = fmap (replicate 3) (Right "blah")
+d = fmap (replicate 3) Nothing
+e = fmap (replicate 3) (Left "foo")
+-- load 11_fmap_on_replicate.hs
