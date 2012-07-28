@@ -14,7 +14,7 @@
 -- To make Either into a Functor instance have to write:
 --
 -- instace Functor (Either a) where
--- 
+--
 -- its type would then be:
 -- :t fmap
 -- fmap :: (b -> c) -> Either a b -> Either a c
@@ -59,3 +59,40 @@ main = do
     line <- fmap (intersperse '-' . reverse . map toUpper) getLine
     putStrLn line
 -- run ./11_reverse_intersperse
+
+
+-- Functions as Functors
+--
+-- Given a function of type a -> b. It can be rewritten as (->) a b.
+-- But this takes two parameters and for it to be a functor it has to
+-- take just one.
+--
+-- the implementation in Control.Monad.Instances is as follows:
+--
+-- instance Functor ((->) r) where
+--     fmap f g = (\x -> f (g x))
+--
+-- recall fmap's type
+-- fmap :: (a -> b) -> f a -> f b
+--
+-- replacing each f with (->) r
+-- fmap :: (a -> b) -> ((->) r a) -> ((->) r b)
+--
+-- now we can write (->) r a and (->) r b as infix
+-- fmap :: (a -> b) -> (r -> a) -> (r -> b)
+--
+-- So mapping a function over a function much produce a function.
+-- This is function composition!
+--
+-- Here's another way to write this instance:
+--
+-- instance Functor ((->) r) where
+--     fmap = (.)
+
+import Control.Monad.Instances
+
+a = fmap (*3) (+100) 1
+b = (*3) `fmap` (+100) $ 1
+c = (*3) . (+100) $ 1
+z = fmap (show . (*3)) (+100) 1
+-- load 11_composition_as_fmap.hs
