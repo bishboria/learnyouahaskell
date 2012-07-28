@@ -1,3 +1,5 @@
+import Data.List -- needed for main function at bottom of file
+
 -- Writing an RPN function
 
 solveRPN :: String -> Double
@@ -63,9 +65,9 @@ roadStep (pathA, pathB) (Section a b c) =
     let timeA = sum (map snd pathA)
         timeB = sum (map snd pathB)
         forwardTimeToA = timeA + a
-        crossTimeToA = timeB + b + c
+        crossTimeToA   = timeB + b + c
         forwardTimeToB = timeB + b
-        crossTimeToB = timeA + a + c
+        crossTimeToB   = timeA + a + c
         newPathToA = if forwardTimeToA <= crossTimeToA
                         then (A, a):pathA
                         else (C, c):(B, b):pathB
@@ -84,3 +86,21 @@ optimalPath roadSystem =
     in  if sum (map snd bestAPath) <= sum (map snd bestBPath)
             then reverse bestAPath
             else reverse bestBPath
+
+-- Getting a road system from the input
+
+groupsOf :: Int -> [a] -> [[a]]
+groupsOf 0 _  = undefined
+groupsOf _ [] = []
+groupsOf n xs = take n xs : groupsOf n (drop n xs)
+
+
+main = do
+    contents <- getContents
+    let threes     = groupsOf 3 (map read $ lines contents)
+        roadSystem = map (\[a,b,c] -> Section a b c) threes
+        path       = optimalPath roadSystem
+        pathString = concat $ map (show . fst) path
+        pathTime   = sum $ map snd path
+    putStrLn $ "The best path to take is: " ++ pathString
+    putStrLn $ "Time taken: " ++ show pathTime
