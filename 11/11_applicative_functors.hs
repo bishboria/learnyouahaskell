@@ -134,3 +134,109 @@ c = fmap (replicate 3) (Right "blah")
 d = fmap (replicate 3) Nothing
 e = fmap (replicate 3) (Left "foo")
 -- load 11_fmap_on_replicate.hs
+
+
+-- Functor Laws
+
+-- Law 1.
+-- fmap id == id
+--
+-- This implies that the fmap over the functor value doesn't do anything that is
+-- hidden.
+
+-- fmap id (Just 3)
+-- Just 3
+--
+-- id (Just 3)
+-- Just 3
+--
+-- fmap id [1..5]
+-- [1,2,3,4,5]
+--
+-- id [1..5]
+-- [1,2,3,4,5]
+--
+-- fmap id []
+-- []
+--
+-- id []
+-- []
+--
+-- fmap id Nothing
+-- Nothing
+--
+-- id Nothing
+-- Nothing
+--
+-- recall the implementation of fmap for Maybe to see why fmap id == id holds:
+-- instance Functor Maybe where
+--     fmap f (Just x) = Just (f x)
+--     fmap f Nothing  = Nothing
+
+-- Law 2.
+-- fmap (f . g) x == fmap f (fmap g x)
+-- fmap (f . g) x == (fmap f . fmap g) x
+--
+-- This says that composing two functions then mapping the result function
+-- over the functor is the same as mapping one function over a functor then
+-- mapping the result over another one
+--
+-- Using Maybe as an example (Nothing part is trivial due to definition.)
+-- fmap (f . g) (Just x)
+-- Just ((f . g) x)
+-- Just (f (g x))
+--
+-- fmap f (fmap g (Just x))
+-- fmap f (Just (g x))
+-- Just (f (g x))
+
+
+-- Breaking the Law
+data CMaybe a = CNothing | CJust Int a
+    deriving (Show, Eq) -- C means counter
+
+-- CNothing
+--
+-- CJust 0 "haha"
+--
+-- :t CNothing
+-- CNothing :: CMaybe a
+--
+-- :t CJust 0 "haha"
+-- CJust 0 "haha" :: CMaybe [Char]
+--
+-- :t CJust 100 [1,2,3]
+-- CJust 100 [1,2,3] :: Num t => CMaybe [t]
+
+instance Functor CMaybe where
+    fmap f CNothing          = CNothing
+    fmap f (CJust counter x) = CJust (counter + 1) (f x)
+-- Like the definition for Maybe except the additional increment of counter
+
+-- fmap (++"ha") (CJust 0 "ho")
+-- CJust 1 "hoha"
+--
+-- fmap (++"he") (fmap (++"ha") (CJust 0 "ho"))
+-- CJust 2 "hohahe"
+--
+-- fmap (++"blah") CNothing
+-- CNothing
+
+-- Does this obey functor laws? We only need one counter example
+--
+-- fmap id (CJust 0 "haha")
+-- CJust 1 "haha"
+--
+-- id (CJust 0 "haha")
+-- CJust 0 "haha"
+--
+-- load 11_CMaybe.hs
+
+-- CMaybe is part of the functor type class, but since Law 1 doesn't hold
+-- it is not a functor!
+
+-- Having functors obey the two laws means you can reason about the code.
+-- Mapping over a functor with do nothing more than map.
+
+-- When making your own functors it might be a good idea to through in a
+-- few tests to prove that it behaves properly!
