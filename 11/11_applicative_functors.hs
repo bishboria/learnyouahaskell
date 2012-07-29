@@ -141,7 +141,7 @@ e = fmap (replicate 3) (Left "foo")
 -- Law 1.
 -- fmap id == id
 --
--- This implies that the fmap over the functor value doesn't do anything that is
+-- This implies that fmap over the functor value doesn't do anything that is
 -- hidden.
 
 -- fmap id (Just 3)
@@ -168,7 +168,7 @@ e = fmap (replicate 3) (Left "foo")
 -- id Nothing
 -- Nothing
 --
--- recall the implementation of fmap for Maybe to see why fmap id == id holds:
+-- recall the implementation of fmap for Maybe to see why fmap id == id holds
 -- instance Functor Maybe where
 --     fmap f (Just x) = Just (f x)
 --     fmap f Nothing  = Nothing
@@ -286,8 +286,8 @@ instance Functor CMaybe where
 
 
 -- With normal functors we can't map Just (3 *) over (Just 5)
--- we can't map functions that are inside functor values over another functor value
--- This is where applicative functors come in.
+-- we can't map functions that are inside functor values over another
+-- functor value. This is where applicative functors come in.
 
 
 -- Say Hello to Applicative
@@ -296,8 +296,8 @@ instance Functor CMaybe where
 class (Functor f) => Applicative f where
     pure  :: a -> f a
     (<*>) :: f (a -> b) -> f a -> f b
--- no default implementation is provided, so have to make your own if you define
--- a class as an applicative functor
+-- no default implementation is provided, so have to make your own if you
+-- define a class as an applicative functor
 
 -- firstly, if something wants to be Applicative, it has to be an instance of
 -- Functor first. I.e. we can use fmap on it.
