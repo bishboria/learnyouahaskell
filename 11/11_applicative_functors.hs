@@ -283,3 +283,28 @@ instance Functor CMaybe where
 --
 -- fmap (\z -> z 2) $ fmap (\y -> y 1) $ fmap (\x y z -> x + y / z) [3,4,5,6]
 -- [3.5, 4.5, 5.5, 6.5]
+
+
+-- With normal functors we can't map Just (3 *) over (Just 5)
+-- we can't map functions that are inside functor values over another functor value
+-- This is where applicative functors come in.
+
+
+-- Say Hello to Applicative
+
+-- the Applicative type class defines two functions:
+class (Functor f) => Applicative f where
+    pure  :: a -> f a
+    (<*>) :: f (a -> b) -> f a -> f b
+-- no default implementation is provided, so have to make your own if you define
+-- a class as an applicative functor
+
+-- firstly, if something wants to be Applicative, it has to be an instance of
+-- Functor first. I.e. we can use fmap on it.
+--
+-- pure takes any type a and wraps it inside f. Like putting a value into a
+-- default (or pure) context
+--
+-- <*> is like fmap, but more powerful.
+-- It takes a functor value with a function inside it and a functor value
+-- then applies the function over the value in second functor
