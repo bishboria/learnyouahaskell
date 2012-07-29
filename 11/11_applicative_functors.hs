@@ -240,3 +240,46 @@ instance Functor CMaybe where
 
 -- When making your own functors it might be a good idea to through in a
 -- few tests to prove that it behaves properly!
+
+
+
+-- Using Applicative Functors
+--
+-- So far we've only mapped functions that take one parameter. What happens
+-- if we map a function that requires two parameters?
+--
+-- :t fmap (*) (Just 3)
+-- fmap (*) (Just 3) :: Maybe (Int -> Int)
+--
+-- this would have a value of Just (3 *)
+-- i.e. a function wrapped in a just
+--
+-- to use it however... is a bit messy
+-- fmap (\f -> f 3) $ fmap (*) (Just 3)
+-- Just 9
+--
+-- other examples:
+--
+-- :t fmap (++) (Just "hey")
+-- fmap (++) (Just "hey") :: Maybe ([Char] -> [Char])
+--
+-- fmap (\f -> f " how're you?") $ fmap (++) (Just "hey")
+-- Just "hey how're you?"
+--
+-- :t fmap compare (Just 'a')
+-- fmap compare (Just 'a') :: Mabye (Char -> Ordering)
+--
+-- fmap (\f -> f 'z') $ fmap compare (Just 'a')
+-- Just LT
+--
+-- :t fmap compare "A LIST OF CHARS"
+-- fmap compare "A LIST OF CHARS" :: [Char -> Ordering]
+--
+-- fmap (\f -> f 'A') $ fmap compare "A LIST OF CHARS"
+-- [EQ,LT,GT,GT,GT,GT,LT,GT,GT,LT,GT,GT,EQ,GT,GT]
+--
+-- :t fmap (\x y z -> x + y / z) [3,4,5,6]
+-- fmap (\x y z -> x + y / z) [3,4,5,6] :: Fractional a => [a -> a -> a]
+--
+-- fmap (\z -> z 2) $ fmap (\y -> y 1) $ fmap (\x y z -> x + y / z) [3,4,5,6]
+-- [3.5, 4.5, 5.5, 6.5]
