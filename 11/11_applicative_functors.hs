@@ -13,7 +13,7 @@
 --
 -- To make Either into a Functor instance have to write:
 --
--- instace Functor (Either a) where
+-- instance Functor (Either a) where
 --
 -- its type would then be:
 -- :t fmap
@@ -308,3 +308,104 @@ class (Functor f) => Applicative f where
 -- <*> is like fmap, but more powerful.
 -- It takes a functor value with a function inside it and a functor value
 -- then applies the function over the value in second functor
+
+
+-- Maybe the Applicator Functor
+--
+-- the applicative instance implementation for Maybe
+instance Applicative Maybe where
+    pure = Just
+    Nothing  <*> _         = Nothing
+    (Just f) <*> something = fmap f something
+
+-- pure wraps something in an applicative value, hence Just.
+-- There is no function inside Nothing, so we return Nothing.
+-- Otherwise we extract f and map f over something with fmap.
+
+-- examples
+import Control.Applicative
+
+Just (+3) <*> Just 9
+-- Just 12
+pure (+3) <*> Just 10
+-- Just 13
+pure (+3) <*> Just 9
+-- Just 12
+Just (++"hahah") <*> Nothing
+-- Nothing
+Nothing <*> Just "woot"
+-- Nothing
+
+-- Use "pure" when you are dealing with values in an applicative context,
+-- rather than a raw Just.
+--
+-- These examples could easily have been achieved with mapping unwrapped
+-- functions over functors like we did before: fmap (\f -> ... ) something
+--
+-- With normal functors mapping a function over a functor, you can't really
+-- get the result out in any general way. Applicative functors allow you to
+-- operate on several functor with a single function
+
+
+-- The Applicative Style
+
+pure (+) <*> Just 3 <*> Just 5
+-- Just 8
+pure (+) <*> Just 3 <*> Nothing
+-- Nothing
+pure (+) <*> Nothing <*> Just 5
+-- Nothing
+
+-- <*> is left associative, so
+pure (+) <*> Just 3 <*> Just 5
+(pure (+) <*> Just 3) <*> Just 5
+(Just (+) <*> Just 3) <*> Just 5
+Just (3+) <*> Just 5
+Just 8
+-- applicative functors and applicative style allow us to apply functions that
+-- don't expect applicative values and apply to values that are applicative
+--
+-- since pure f <*> x == fmap f x, we don't really need to wrap the function
+-- in the first place, so Control.Applicative also exports <$>
+
+(<$>)  :: (Functor f) => (a -> b) -> f a -> f b
+f <$> x = fmap f x
+
+-- now we can instead write
+(++) <$> Just "johntra" <*> Just "volta"
+-- Just "johntravolta"
+
+
+-- Lists
+
+-- The list type constructor [] is an applicative functor
+instance Applicative [] where
+    pure x = [x]
+    fs <*> xs = [f x | f <- fs, x <- xs]
+
+-- pure creates a minimal context that can yield a value
+-- [] and Nothing do not contain values.
+pure "Hey" :: [String]
+-- ["Hey"]
+pure "Hey" :: Maybe String
+-- Just "Hey"
+[(*0),(+100),(^2)] <*> [1,2,3]
+-- [0,0,0,101,102,103,1,4,9]
+[(+),(*)] <*> [1,2] <*> [3,4]
+-- [4,5,5,6,3,4,6,8]
+(++) <$> ["ha","heh","hmm"] <*> ["?","!","."]
+-- ["ha?","ha!","ha.","heh?","heh!","heh.","hmm?","hmm!","hmm."]
+
+-- list could be viewed as non-deterministic computations
+-- values like 100 or "what" can be viewed as deterministic: only one result
+-- [1,2,3] can be viewed as a computation that can't decide, so gives all the
+-- possible results. (+) <$> [1,2,3] <*> [4,5,6] is like adding two
+-- non-deterministic computations and getting something back that is even
+-- less sure about the result :)
+
+[x*y | x <- [2,5,10], y <- [8,10,11]]
+-- [16,20,22,40,50,55,80,100,110]
+(*) <$> [2,5,10] <*> [8,10,11]
+-- [16,20,22,40,50,55,80,100,110]
+filter (>50) $ (*) <$> [2,5,10] <*> [8,10,11]
+-- [55,80,100,110]
