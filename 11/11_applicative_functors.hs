@@ -432,3 +432,88 @@ myAction = (++) <$> getLine <*> getLine
 main = do
     a <- (++) <$> getLine <*> getLine
     putStrLn $ "The two lines concatenated turn out to be: " ++ a
+
+
+-- Functions As Applicatives
+instance Applicative ((->) r) where
+    pure x = (\_ -> x)
+    f <*> g = \x -> f x (g x)
+-- wrapping a value in pure: the result it yields is that value because of
+-- minimal default context. It ignores any parameter given to it and always
+-- returns the value
+(pure 3) "blah"
+-- 3
+pure 3 "blah"
+-- 3 (because of left associativity
+
+-- The implementation for <*> is interesting so let's see how to use it
+:t (+) <$> (+3) <*> (*100)
+-- (+) <$> (+3) <*> (*100) :: (Num a) => a -> a
+(+) <$> (+3) <*> (*100) $ 5
+-- 508
+-- To work it out remember for (->) r:
+-- fmap f g = (\x -> f (g x))
+-- f <*> g  = f x (g x)
+(+) <$> (+3) <*> (*100) $ 5
+(fmap (+) (+3)) <*> (*100) $ 5
+(\x -> (+) ((+3) x)) <*> (*100) $ 5
+(\x -> (\y -> (+) ((+3) y)) x ((*100) x)) $ 5
+(+) ((+3) 5) ((*100) 5)
+(+) (8) (500)
+(+) 8 500
+-- 508
+
+(\x y -> x + y) <$> (+3) <*> (*100) $ 5
+-- 508
+(\x y z -> [x,y,z]) <$> (+3) <*> (*2) <*> (/2) $ 5
+-- [8.0,10.0,2.5]
+-- we create a function that will call the lambda with the eventual results
+-- from (+3), (*2) and (/2). The value 5 is given to each of the three
+-- functions and the result is put in a list
+
+
+-- Zip Lists
+
+-- Recall from earlier that [(+3),(*2)] <*> [1,2] Applied both functions to
+-- both values to produce [4,5,2,4]. But you could interpret it as:
+-- [1+3,2*2].
+--
+-- Because one type can't have two instances for the same type class, ZipList
+-- was introduced. It has one constructor, ZipList, and one field, a list.
+instance Applicative ZipList where
+    pure x = ZipList (repeat x)
+    ZipList fs <*> ZipList xs = ZipList (zipWith (\f x -> f x) fs xs)
+-- pure has to create an infinite list because <*> applies each function to
+-- each value and we don't necessarily know how long the other list will be.
+-- It also satisfies the law: pure f <*> xs == fmap f xs
+--
+-- ZipList type has no Show instance, so have to show with getZipList
+getZipList $ (+) <$> ZipList [1,2,3] <*> ZipList [100,100,100]
+-- [101,102,103]
+getZipList $ (+) <$> ZipList [1,2,3] <*> ZipList [100,100..]
+-- [101,102,103]
+getZipList $ max <$> ZipList [1,2,3,4,5,3] <*> ZipList [5,3,1,2]
+-- [5,3,3,4]
+getZipList $ (,,) <$> ZipList "dog" <*> ZipList "cat" <*> ZipList "rat"
+-- [('d','c','r'),('o','a','a'),('g','t','t')]
+-- The (,,) function is the same as \x y z -> (x,y,z). And (,) is \x y -> (x,y)
+
+-- The standard library not only has zipWith, but zipWith3, zipWith4, .. up to
+-- zipWith7. zipWith3 takes a function with 3 parameters and zips 3 lists
+-- together with it, etc.
+--
+-- using ZipList with an applicative style, we don't need those separate
+-- functions and we can go up to an arbitrary amount of lists with a function.
+
+
+-- Applicative Laws
+--
+-- like normal functors, applicative functors have some laws. The most important
+-- of which: pure f <*> x == fmap f x
+--
+-- The rest are
+pure id <*> v = v
+pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
+pure f <*> pure x = pure (f x)
+u <*> pure y = pure ($ y) <*> u
+-- if interested go through these laws with some instances to show they hold.
