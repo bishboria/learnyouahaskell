@@ -409,3 +409,26 @@ pure "Hey" :: Maybe String
 -- [16,20,22,40,50,55,80,100,110]
 filter (>50) $ (*) <$> [2,5,10] <*> [8,10,11]
 -- [55,80,100,110]
+
+
+-- IO Is An Applicative Functor, Too
+
+instance Applicative IO where
+    pure    = return
+    a <*> b = do f <- a
+                 x <- b
+                 return (f x)
+
+-- consider
+myAction :: IO String
+myAction = do a <- getLine
+              b <- getLine
+              return $ a ++ b
+-- or in applicative style
+myAction :: IO String
+myAction = (++) <$> getLine <*> getLine
+
+-- because myAction is a completely normal IO action, you can do:
+main = do
+    a <- (++) <$> getLine <*> getLine
+    putStrLn $ "The two lines concatenated turn out to be: " ++ a
