@@ -517,3 +517,55 @@ pure (.) <*> u <*> v <*> w = u <*> (v <*> w)
 pure f <*> pure x = pure (f x)
 u <*> pure y = pure ($ y) <*> u
 -- if interested go through these laws with some instances to show they hold.
+
+
+-- Useful Functions For Applicatives
+--
+-- Control.Applicative defines liftA2 which has the type
+liftA2 :: (Applicative f) => (a -> b -> c) -> f a -> f b -> f c
+liftA2 f a b = f <$> a <*> b
+-- a conveient way of writing applicative style.
+
+-- Although it shows off the power of applicative functors over ordinary
+-- functors. Ordinary functors can only map functions over one functor value.
+-- Applicative functors can apply a function between several functor values
+--
+-- Also (a -> b -> c) -> (f a -> f b -> f c) says that liftA2 takes a binary
+-- function and promotes it into a function that operates on two applicatives.
+
+-- We can take two applicative values and combine them into one applicative
+-- value that has inside it the results of those two applicative values in a
+-- list.
+fmap (\x -> [x]) (Just 4)
+-- Just [4].             fmap (\x -> [x]) Just 4 == [Just 4] :)
+
+-- we have Just 3 and Just [4], how do we get Just [3,4]
+liftA2 (:) (Just 3) (Just [4])
+-- Just [3,4]
+(:) <$> Just 3 <*> Just [4]
+-- Just [3,4]
+
+-- Let's try implementing a function that takes a list of applicative values
+-- and returns an applicative value that has a list as its result value.
+-- We'll call it sequenceA
+sequenceA :: Applicative f => [f a] -> f [a]
+sequenceA [] = pure []
+sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
+-- load 11_sequenceA.hs
+
+sequenceA [Just 1, Just 2]
+-- Just [1,2]
+
+-- or as a foldr
+sequenceA :: Applicative f => [f a] -> f [a]
+sequenceA = foldr (liftA2 (:)) (pure [])
+-- load 11_sequenceA_foldr.hs
+
+sequenceA [Just 3, Just 2, Just 1]
+-- Just [3,2,1]
+sequenceA [Just 3, Nothing, Just 1]
+-- Nothing
+sequenceA [(+3),(+2),(+1)] 3
+-- [6,5,4]
+sequenceA [[1,2,3],[4,5,6]]
+-- [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
