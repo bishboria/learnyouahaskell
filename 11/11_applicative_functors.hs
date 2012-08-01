@@ -569,3 +569,45 @@ sequenceA [(+3),(+2),(+1)] 3
 -- [6,5,4]
 sequenceA [[1,2,3],[4,5,6]]
 -- [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+sequenceA [[1,2,3],[4,5,6],[3,4,4],[]]
+-- []
+
+-- When used on Maybe values, sequenceA creates a Maybe value with all the
+-- results inside it as a list. If one of the values is Nothing, then the
+-- result is also Nothing.
+--
+-- When used on functions, sequenceA takes a list of functions and returns a
+-- function that resturns a list. Above we made a function that takes a
+-- number and applies it to each function in the list and returns the list of
+-- results.
+--
+-- When used with [], sequenceA takes a list of lists and returns a list of
+-- lists. It creates lists that have all possible combinations of their
+-- elements.
+sequenceA [[1,2,3],[4,5,6]]
+-- [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+[[x,y] | x <- [1,2,3], y <- [4,5,6]]
+-- [[1,4],[1,5],[1,6],[2,4],[2,5],[2,6],[3,4],[3,5],[3,6]]
+sequenceA [[1,2],[3,4]]
+-- [[1,3],[1,4],[2,3],[2,4]]
+[[x,y] | x <- [1,2], y <- [3,4]]
+-- [[1,3],[1,4],[2,3],[2,4]]
+sequenceA [[1,2],[3,4],[5,6]]
+-- [[1,3,5],[1,3,6],[1,4,5],[1,4,6],[2,3,5],[2,3,6],[2,4,5],[2,4,6]]
+[[x,y,z] | x <- [1,2], y <- [3,4], z <- [5,6]]
+-- [[1,3,5],[1,3,6],[1,4,5],[1,4,6],[2,3,5],[2,3,6],[2,4,5],[2,4,6]]
+
+-- When used with IO actions, sequence is the same thing as sequence. It takes
+-- a list of IO actions and returns an IO action that will perform each of
+-- those actions and have as its result a list of the results of those IO
+-- actions, i.e. [IO a] -> IO [a]
+sequenceA [getLine, getLine, getLine]
+-- heyh
+-- ho
+-- woo
+-- ["heyh","ho","woo"]
+
+-- Applicative functors allow us to combine different computations by using the
+-- applicative style. Using <$> and <*> wen can employ normal functions to
+-- operate on any number of applicative functors and take advantages of the
+-- semantics of each one.
