@@ -57,3 +57,72 @@ CharList :: [Char] -> CharList
 getCharList :: CharList -> [Char]
 -- this could be thought of as wrapping/unwrapping or as converting values
 -- between types
+
+
+-- Using newtype to Make Type Class Instances
+--
+-- We sometimes want to make our type instances of certain classes, but the
+-- type parameters don't match.
+--
+-- What if we want to make the tuple an instance of Functor such that when
+-- we fmap a function over a tuple, it is applied to the first component
+-- of the tuple? eg fmap (+3) (1,1) => (4,1)
+newtype Pair b a = Pair { getPair :: (a,b) }
+
+instance Functor (Pair c) where
+    fmap f (Pair (x, y)) = Pair (f x, y)
+
+:t fmap
+-- fmap :: (a -> b) -> Pair c a -> Pair c b
+getPair $ fmap (*100) (Pair (2,3))
+-- (200,3)
+getPair $ fmap reverse (Pair ("london calling",3))
+-- ("gnillac nodnol",3)
+
+
+-- On newtype laziness
+--
+-- values that are created using newtype are lazier than those that are
+-- created otherwise. We can see this when using undefined.
+
+-- trying to evaluate undefined, haskell throws an exception
+undefined
+-- *** Exception: Prelude.undefined
+
+-- if we have a list with some values undefined and ask for the head
+-- everything is fine as it only needs to evaluate the first element:
+head [3,4,5,undefined,2,undefined]
+-- 3
+
+-- consider the following:
+data CoolBool = CoolBool { getCoolBool :: Bool }
+helloMe :: CoolBool -> String
+helloMe (CoolBool _) = "hello"
+-- helloMe returns "hello" regardless of the input being True or False
+
+-- Instead of giving helloMe a Bool:
+helloMe undefined
+-- *** Exception: Prelude.undefined
+-- Even though we said that it didn't matter what the parameter was in the
+-- helloMe definition...
+--
+-- Types defined with data can have multiple value constructors (even
+-- though ours has only one). So Haskell is forced to evaluate the
+-- parameters just enough in order to see which constructor was used to
+-- create the value
+
+newtype CoolBool = CoolBool { getCoolBool :: Bool }
+helloMe :: CoolBool -> String
+helloMe (CoolBool _) = "hello"
+
+helloMe undefined
+-- "hello"
+-- This worked because Haskell knows that types made with newtype can have
+-- only one constructor, it doesn't need to evaluate the value passed to
+-- the function to make sure it conforms to the (CoolBool _) pattern.
+
+-- data and newtype behave similarly from the outside, but they are really
+-- two different mechanisms. Data can be used to make completely new types,
+-- newtype is just for making a new type out of an existing type. Pattern
+-- matching on newtype values isn't like taking something out of a box (as
+-- it is with data), but more like direct type conversion.
