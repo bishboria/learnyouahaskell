@@ -157,3 +157,92 @@ newtype CharList = CharList { getCharList :: [Char] }
 -- newtype: you want to take an existing type and wrap it in order to make
 --          it an instance of a type class
 -- data: you want to make something completely new.
+
+
+-- About Those Monoids
+--
+-- A monoid is made up of an associative binary function and a value that
+-- acts as an identity with respect to that function. E.g. 1 with * and [] with ++.
+class Monoid m where
+    mempty  :: m
+    mappend :: m -> m -> m
+    mconcat :: [m] -> m
+    mconcat  = foldr mappend mempty
+
+-- first: only concrete types can be made instance of Monoid. This is
+-- different to Applicative and Functor.
+--
+-- mempty (a polymorphic constant) represents the identity value for a
+-- particular monoid.
+--
+-- mappend is the binary function. It takes two monoid values and returns
+-- a third of the same type.
+--
+-- mconcat takes a list of monoid values and reduces it to one value using
+-- mappend. The default implementation of mconcat is fine for most cases,
+-- so we generally don't worry about it.
+
+
+-- The Monoid Laws
+         mempty `mappend` x = x
+         x `mappend` mempty = x
+(x `mappend` y) `mappend` z = x `mappend` (y `mappend` z)
+-- the first two state that mempty acts like the identity wrt mappend
+-- the third states that mappend is associative.
+
+
+-- Meet Some Monoids
+
+-- List Are Monoids
+instance Monoid [a] where
+    mempty  = []
+    mappend = (++)
+-- remember we require a concrete type, hence [a] instead of []
+[1,2,3] `mappend` [4,5,6]
+-- [1,2,3,4,5,6]
+("one" `mappend` "two") `mappend` "three"
+-- "onetwothree"
+"one" `mappend` ("two" `mappend` "three")
+-- "onetwothree"
+"one" `mappend` "two" `mappend` "three"
+-- "onetwothree"
+"pang" `mappend` mempty
+-- "pang"
+mconcat [[1,2],[3,6],[9]]
+-- [1,2,3,6,9]
+mempty :: [a]
+-- []
+
+-- Product and Sum
+-- we've already noted that * and 1 together can be used as a monoid
+0 + 4
+-- 4
+5 + 0
+-- 5
+(1 + 3) + 5
+1 + (3 + 5)
+
+-- we have two equally valid ways that numbers can be monads, so
+-- Data.Monoid uses newtype!
+newtype Product a = Product { getProduct :: a }
+    deriving (Eq, Ord, Read, Show, Bounded)
+
+instance Num a => Monoid (Product a) where
+    mempty = Product 1
+    Product x `mappend` Product y = Product (x * y)
+-- sum is defined similarly
+
+getProduct $ Product 3 `mappend` Product 9
+-- 27
+getProduct $ Product 3 `mappend` mempty
+-- 3
+getProduct $ Product 3 `mappend` Product 4 `mappend` Product 2
+-- 24
+getProduct . mconcat . map Product $ [3,4,2]
+-- 24
+getSum $ Sum 2 `mappend` Sum 9
+-- 11
+getSum $ mempty `mappend` Sum 3
+-- 3
+getSum . mconcat . map Sum $ [1,2,3]
+-- 6
