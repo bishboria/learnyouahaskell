@@ -349,3 +349,30 @@ lengthCompare "zen" "ann"
 -- The Ordering monoid allows us to easily compare things by many different
 -- criteria and put those criteria in an order themselves, ranging from
 -- most important to least.
+
+
+-- Maybe the Monoid
+
+instance Monoid a => Monoid (Maybe a) where
+    mempty = Nothing
+    Nothing `mappend` m = m
+    m `mappend` Nothing = m
+    Just m1 `mappend` Just m2 = Just (m1 `mappend` m2)
+-- Class constraint says: Maybe a is an instance of Monoid only if a is an
+-- instance of monoid
+Nothing `mappend` Just "andy"
+-- Just "andy"
+Just LT `mappend` Nothing
+-- Just LT
+Just (Sum 3) `mappend` Just (Sum 4)
+-- Just (Sum {getSum = 7})
+-- This is useful when we're dealing with monoids as results of
+-- computations that may have failed.
+
+-- What if the type of the contents of the Maybe is not an instance of
+-- Monoid? In the previous declaration the only case where we must rely
+-- on the contents being monoids is when both parameters of mappend are
+-- Just values. When we don't know if the contents are monoids, we can't
+-- use mappend between them.
+--
+-- Instead, we can discard the second value and keep the first one.
