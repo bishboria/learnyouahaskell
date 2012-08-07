@@ -246,3 +246,38 @@ getSum $ mempty `mappend` Sum 3
 -- 3
 getSum . mconcat . map Sum $ [1,2,3]
 -- 6
+
+-- Any and All
+
+-- Bool with || and && are two different ways we can act like a monoid
+newtype Any = Any { getAny :: Bool }
+    deriving (Eq, Ord, Read, Show, Bounded)
+
+instance Monoid Any where
+    mempty = Any False
+    Any x `mappend` Any y = Any (x || y)
+
+getAny $ Any True `mappend` Any False
+-- True
+getAny $ mempty `mappend` Any True
+-- True
+getAny . mconcat . map Any $ [False, False, False, True]
+-- True
+getAny $ mempty `mappend` mempty
+-- False
+-- if *Any* of the values are true, then the result is true
+
+newtype All = All { getAll :: Bool }
+
+instance Monoid All where
+    mempty = All True
+    All x `mappend` All y = All (x && y)
+
+getAll $ mempty `mappend` All True
+-- True
+getAll $ mempty `mappend` All False
+-- False
+getAll . mconcat . map All $ [True, True, True]
+-- True
+getAll . mconcat . map All $ [True, True, False]
+-- False
