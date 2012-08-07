@@ -281,3 +281,60 @@ getAll . mconcat . map All $ [True, True, True]
 -- True
 getAll . mconcat . map All $ [True, True, False]
 -- False
+
+-- The Ordering Monoid
+1 `compare` 2
+-- LT
+2 `compare` 2
+-- EQ
+3 `compare` 2
+-- GT
+
+instance Monoid Ordering where
+    mempty = EQ
+    LT `mappend` _ = LT
+    EQ `mappend` y = y
+    GT `mappend` _ = GT
+-- We keep the value on the left, unless it is EQ, then we take the right
+-- value
+--
+-- This implementation is similar to how we alphabetically compare words.
+LT `mappend` GT
+-- LT
+GT `mappend` LT
+-- GT
+mempty `mappend` LT
+-- LT
+mempty `mappend` GT
+-- GT
+
+-- How is this monoid useful? Imagine we need a function that takes two
+-- strings, compares their lengths, and returns an Ordering. But if the
+-- strings are of the same length, instead of returning EQ right away, we
+-- want to compare them alphabetically. One way:
+lengthCompare    :: String -> String -> Ordering
+lengthCompare x y = let a = length x `compare` length y
+                        b = x `compare` y
+                    in  if a == EQ then b else a
+-- as a monoid:
+import Data.Monoid
+
+lengthCompare    :: String -> String -> Ordering
+lengthCompare x y = (length x `compare` length y) `mappend`
+                    (x `compare` y)
+
+lengthCompare "zen" "ants"
+-- LT
+lengthCompare "zen" "ant"
+-- GT
+
+-- Using Ordering monoid properties to build a function, the lhs is kept
+-- unless it is EQ then it's the rhs that's taken. So putting the most
+-- important criterion as the first parameter.
+
+-- Expanding lengthCompare to have a new second most important criterion
+lengthCompare    :: String -> String -> Ordering
+lengthCompare x y = (length x `compare` length y) `mappend`
+                    (vowels x `compare` vowels y) `mappend`
+                    (x `compare` y)
+    where vowels  = length . filter (`elem` "aeiou")
