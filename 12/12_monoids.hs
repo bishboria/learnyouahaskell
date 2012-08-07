@@ -126,3 +126,34 @@ helloMe undefined
 -- newtype is just for making a new type out of an existing type. Pattern
 -- matching on newtype values isn't like taking something out of a box (as
 -- it is with data), but more like direct type conversion.
+
+
+-- Type vs newtype vs data
+
+-- type is for making type synonyms.
+type IntList = [Int]
+([1,2,3] :: IntList) ++ ([1,2,3] :: [Int])
+-- [1,2,3,1,2,3]
+-- we use type synonyms to make our type signatures more descriptive
+-- eg from Chapter 7
+type PhoneBook = [(String,String)]
+
+-- newtype is for taking existing types and wrapping them in new types
+-- mostly so that it's easier to make them instances of certain type
+-- classes. the newtype is separate from the original type. Given:
+newtype CharList = CharList { getCharList :: [Char] }
+-- we can not use ++ to put together CharList and [Char]
+--
+-- Using record syntax in newtype declarations we get functions for
+-- converting between the types: The value constructor and the extractor
+-- function.
+
+-- data is for making our own data types: Many constructors each with many
+-- fields.
+
+-- summary:
+-- type: you want to just make type synonyms to look cleaner and be more
+--       descriptive.
+-- newtype: you want to take an existing type and wrap it in order to make
+--          it an instance of a type class
+-- data: you want to make something completely new.
