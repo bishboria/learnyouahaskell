@@ -375,4 +375,30 @@ Just (Sum 3) `mappend` Just (Sum 4)
 -- Just values. When we don't know if the contents are monoids, we can't
 -- use mappend between them.
 --
--- Instead, we can discard the second value and keep the first one.
+-- Instead, we can discard the second value and keep the first one. For
+-- that purpose, the First a type exists
+newtype First a = First { getFirst :: Maybe a }
+    deriving (Eq, Ord, Read, Show)
+
+instance Monoid (First a) where
+    mempty = First Nothing
+    First (Just x) `mappend` _ = First (Just x)
+    First Nothing  `mappend` x = x
+
+getFirst $ First (Just 'a') `mappend` First (Just 'b')
+-- Just 'a'
+getFirst $ First Nothing `mappend` First (Just 'b')
+-- Just 'b'
+getFirst $ First (Just 'a') `mappend` First Nothing
+-- Just 'a'
+-- First is useful if we have a bunch of Maybe values and we just want to
+-- know if any of them is a Just
+getFirst . mconcat . map First $ [Nothing, Just 9, Just 10]
+-- Just 9
+
+-- if we want to keep the second parameter if both given to mappend are
+-- Just values then Data.Monoid provides Last. Works similar to First.
+getLast . mconcat . map Last $ [Nothing, Just 9, Just 10]
+-- Just 10
+getLast $ Last (Just "one") `mappend` Last (Just "two")
+-- Just "two"
