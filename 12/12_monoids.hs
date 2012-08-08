@@ -402,3 +402,81 @@ getLast . mconcat . map Last $ [Nothing, Just 9, Just 10]
 -- Just 10
 getLast $ Last (Just "one") `mappend` Last (Just "two")
 -- Just "two"
+
+
+-- Folding with Monoids
+--
+-- Because there are so many datastructures that work well with folds,
+-- the Foldable type class was introduced. Like Functor is for things that
+-- can be mapped over, Foldable is for things that can be folded up. It's
+-- found in Data.Foldable. We can use this with Monoids.
+import qualified Data.Foldable as F
+
+:t foldr
+-- foldr :: (a -> b -> b) -> b -> [a] -> b
+:t F.foldr
+-- F.foldr :: (F.Foldable t) => (a -> b -> b) -> b -> t a -> b
+foldr (*) 1 [1,2,3]
+-- 6
+F.foldr (*) 1 [1,2,3]
+-- 6
+F.foldl (+) 2 (Just 9)
+-- 11
+F.foldr (||) False (Just True)
+-- True
+
+-- Recall the tree data structure from Chapter 7:
+data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show)
+-- In chapter 7, we made it an instace of Functor, now Foldable
+
+-- One way to make the Tree type constructor an instance of Foldable is
+-- to directly implement foldr. Another, of much easier way, is to
+-- implement the foldMap function of the Foldable type class.
+:t foldMap
+foldMap :: (Monoid m, Foldable t) => (a -> m) -> t a -> m
+--
+-- first parameter is a function that takes a value of the type the foldable
+-- structure contains and returns a monoid value.
+-- Second param is a foldable structure containing values of type a
+-- It maps that function over the structure, producing a foldable
+-- structure that contains monoid values. Then, by doing mappend between
+-- those monoid values and joins them into a single monoid value.
+--
+-- All we have to do is implement foldMap and we get foldr, foldl for free
+instance F.Foldable Tree where
+    foldMap f EmptyTree    = mempty
+    foldMap f (Node x l r) = F.foldMap f l `mappend`
+                             f x           `mappend`
+                             F.foldMap f r
+
+testTree = Node 5
+            (Node 3
+                (Node 1 EmptyTree EmptyTree)
+                (Node 6 EmptyTree EmptyTree)
+            )
+            (Node 9
+                (Node 8 EmptyTree EmptyTree)
+                (Node 10 EmptyTree EmptyTree)
+            )
+
+F.foldl (+) 0 testTree
+-- 42
+F.foldl (*) 1 testTree
+-- 64800
+
+-- foldMap isn't just useful for creating new instances of Foldable. It
+-- also comes in handy for reducing our structure to a single monoid value.
+-- If we want to know if any number in our tree is equal to 3, we can:
+getAny $ F.foldMap (\x -> Any $ x == 3) testTree
+-- True
+-- The function takes a number and returns a monoid value: a Bool wrapped
+-- in Any.
+getAny $ F.foldMap (\x -> Any $ x > 15) testTree
+-- False
+F.foldMap (\x -> [x]) testTree
+-- [1,3,6,5,8,9,10]
+-- Each element in the tree becomes a singleton list. Then mappend takes
+-- place between all those elements and concatenates them all into a single
+-- list.
+--
+-- These tricks work on any instance of Foldable.
