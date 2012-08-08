@@ -97,3 +97,42 @@ Just 1 `applyMaybe` \x -> if x > 2 then Just x else Nothing
 -- apply ordinary functions to applicative values. We'll see that since
 -- monads are an upgraded version of applicative functors we can also do
 -- that. Will also see other things that applicative functors can't do.
+
+
+-- The Monad Type Class
+class Monad m where
+    return :: a -> m a
+
+    (>>=) :: m a -> (a -> m b) -> m b
+
+    (>>)  :: m a -> m b -> m b
+    x >> y = x >>= \_ -> y
+
+    fail    :: String -> m a
+    fail msg = error msg
+-- it doesn't say class (Applicative m) => Monad m where because when
+-- Haskell was made it didn't occur that applicative functors were a good
+-- fit for Haskell... But every monad is an applicative functor.
+--
+-- return is the same as pure. It takes a value and wraps it in a minimal
+-- default context. I.e. It takes a value and wraps it in a monad.
+--
+-- >>= is like function application, but it takes a monadic value and feeds
+-- it to a function that takes a normal value and returns a monadic value.
+--
+-- We'll talk about >> and fail later.
+
+-- Maybe an instance of Monad
+instance Monad Maybe where
+    return x      = Just x
+    Nothing >>= f = Nothing
+    Just x  >>= f = f x
+    fail _        = Nothing
+-- return is exactly the same as pure.
+-- >>= is just like applyMaybe
+return "WHAT" :: Maybe String
+-- Just "WHAT"
+Just 9 >>= \x -> return (x*10)
+-- Just 90
+Nothing >>= \x -> return (x*10)
+-- Nothing
