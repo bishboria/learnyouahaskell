@@ -136,3 +136,98 @@ Just 9 >>= \x -> return (x*10)
 -- Just 90
 Nothing >>= \x -> return (x*10)
 -- Nothing
+
+
+-- Walk The Line
+--
+-- Pierre is taking up tightrope walking. He is quite good, until birds
+-- come and rest on the pole. He can retain balance as long as the birds
+-- on the left and right differ by less than 4
+
+type Birds = Int
+type Pole  = (Birds, Birds)
+
+landLeft :: Birds -> Pole -> Pole
+landLeft n (left, right) = (left + n, right)
+
+landRight :: Birds -> Pole -> Pole
+landRight n (left, right) = (left, right + n)
+
+landLeft 2 (0,0)
+-- (2,0)
+landRight 1 (1,2)
+-- (3,1)
+landRight (-1) (1,2)
+-- (1,1)
+landLeft 2 (landRight 1 (landLeft 1 (0,0)))
+-- (3,1)
+-- The bottom example shows that it a bit awkward to apply chains of birds
+-- landing on the pole.
+-- We could use the following function:
+(-:) :: a -> (a -> b) -> b
+x -: f = f x
+-- Now we can have the parameter on the left and the function on the right
+(0,0) -: landLeft 1 -: landRight 1 -: landLeft 2
+-- (3,1)
+
+-- The above looks much cleaner now.
+
+
+-- I'll Fly Away
+
+-- It all looks fine so far, but:
+landLeft 10 (0,3)
+-- (10,3) Pierre would have fallen off the tightrope.
+(0,0) -: landLeft 1 -: landRight 4 -: landLeft (-1) -: landRight (-2)
+-- (0,2) landLeft (-1) Pierre would have fallen off the tightrope.
+--
+-- We need something to indicate a failure... Maybe to the rescue.
+
+-- fixing the land functions:
+landLeft :: Birds -> Pole -> Maybe Pole
+landLeft n (left, right)
+    | abs ((left + n) - right) < 4 = Just (left + n, right)
+    | otherwise                    = Nothing
+
+landRight :: Birds -> Pole -> Maybe Pole
+landRight n (left, right)
+    | abs (left - (right + n)) < 4 = Just (left, right + n)
+    | otherwise                    = Nothing
+-- Now the functions return a Maybe Pole. If the number of birds on any side
+-- cause Pierre to lose balance, we get Nothing indicating failure.
+landLeft 2 (0,0)
+-- Just (2,0)
+landLeft 10 (0,3)
+-- Nothing
+
+-- Because we are now returning a Maybe Pole, we can't chain up calls as
+-- before... Now, we can use >>= instead!
+
+landRight 1 (0,0) >>= landLeft 2
+-- Just (2,1)
+
+-- Remember landLeft 2 has a type Pole -> Maybe Pole. We can't just give
+-- it a Maybe Pole, so we have to get the value out of the monad first,
+-- hence we use >>=
+
+Nothing >>= landLeft 2
+-- Nothing
+return (0,0) >>= landRight 2 >>= landLeft 2 >>= landRight 2
+-- Just (2,4)
+
+-- Previously we had this:
+(0,0) -: landLeft 1 -: landRight 4 -: landLeft (-1) -: landRight (-2)
+-- (0,2)
+-- which is incorrect. Now we have:
+return (0,0) >>= landLeft 1 >>= landRight 4 >>= landLeft (-1) >>= landRight (-2)
+-- Nothing
+-- Which is correct!
+
+-- We couldn't have done this just using Maybe as an applicative.
+-- Applicative functors don't allow for the applicative values to interact
+-- with each other very much. They can, at best, be used as parameters to a
+-- function by using the applicative style.
+--
+-- Here each step relies on the result of the previous. On every landing,
+-- the possible result from the previous is examined and the pole is checked
+-- for balance. This determines whether the landing will succeed or fail.
