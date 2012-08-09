@@ -257,3 +257,26 @@ Just 3 >> Just 4
 -- Just 4
 Just 3 >> Nothing
 -- Nothing
+
+-- Replace >> with >>= \_ -> and it's easy to see what's going on.
+return (0,0) >>= landLeft 1 >> Nothing >>= landRight 1
+
+-- What would this look like if we hadn't treated Maybe values as values
+-- with a failure context?
+routine :: Maybe Pole
+routine = case landLeft 1 (0,0) of
+    Nothing    -> Nothing
+    Just pole1 -> case landRight 4 pole1 of
+        Nothing    -> Nothing
+        Just pole2 -> case landLeft 2 pole2 of
+            Nothing    -> Nothing
+            Just pole3 -> landLeft 1 pole3
+-- We land a bird on the pole, check for the possibility for failure.
+-- If it failed, return Nothing. Otherwise repeat the process.
+--
+-- Clearly chaining up monadic applications with >>= saves a lot of time
+-- when do computations that are based on computations that might have
+-- failed.
+--
+-- Maybe's implementation of >>= features exactly the logic checking for
+-- failure and ending, or success then continuing.
