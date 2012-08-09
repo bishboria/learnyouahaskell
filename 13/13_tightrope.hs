@@ -13,3 +13,9 @@ landRight n (left, right)
 
 walked = return (0,0) >>= landLeft 2 >>= landRight 1 >>= landLeft 2 >>= landRight (-1)
 -- walked == Nothing
+
+banana  :: Pole -> Maybe Pole
+banana _ = Nothing
+
+slip = return (0,0) >>= landLeft 1 >>= banana >>= landRight 1
+-- slip == Nothing

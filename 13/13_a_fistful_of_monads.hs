@@ -231,3 +231,29 @@ return (0,0) >>= landLeft 1 >>= landRight 4 >>= landLeft (-1) >>= landRight (-2)
 -- Here each step relies on the result of the previous. On every landing,
 -- the possible result from the previous is examined and the pole is checked
 -- for balance. This determines whether the landing will succeed or fail.
+
+
+-- Banana on a Wire
+
+-- Here's a function that ignores the current number of birds on the
+-- balancing pole and just makes Pierre slip and fall.
+banana  :: Pole -> Maybe Pole
+banana _ = Nothing
+
+return (0,0) >>= landLeft 1 >>= banana >>= landRight 1
+-- Nothing
+
+-- instead of making functions that ignore their input and just return a
+-- predetermined monadic value, we can use >>:
+(>>)  :: (Monad m) => m a -> m b -> m b
+m >> n = m >>= \_ -> n
+-- Normally, passing a value to a function that ignores its parameter and
+-- returns some predetermined value always results in that predetermined
+-- value. However, with monads the context and meaning has to be taken into
+-- account:
+Nothing >> Just 3
+-- Nothing
+Just 3 >> Just 4
+-- Just 4
+Just 3 >> Nothing
+-- Nothing
