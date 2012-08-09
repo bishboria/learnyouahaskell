@@ -280,3 +280,38 @@ routine = case landLeft 1 (0,0) of
 --
 -- Maybe's implementation of >>= features exactly the logic checking for
 -- failure and ending, or success then continuing.
+
+
+-- do Notation
+
+-- Monads in Haskell are so useful they were given their own syntax called
+-- do notation. Used for gluing together several actions into one. We saw
+-- this in Chapter 8 using IO actions. Consider the following:
+Just 3 >>= (\x -> Just (show x ++ "!"))
+-- Just "3!"
+Just 3 >>= (\x -> Just "!" >>= (\y -> Just (show x ++ y)))
+-- Just "3!"
+-- Which has the same feel as:
+let x = 3; y = "!" in show x ++ y
+-- The main difference is that the values are monadic:
+Nothing >>= (\x -> Just "!" >>= (\y -> Just (show x ++ y)))
+-- Nothing
+Just 3 >>= (\x -> Nothing >>= (\y -> Just (show x ++ y)))
+-- Nothing
+Just 3 >>= (\x -> Just "!" >>= (\y -> Nothing)
+-- Nothing
+-- It's kind of like assigning values to variables in let expressions. To
+-- further illustrate this:
+foo :: Maybe String
+foo = Just 3   >>= (\x ->
+      Just "!" >>= (\y ->
+      Just (show x ++ y)))
+
+-- To avoid writing all the lambdas, we have do notation:
+foo :: Maybe String
+foo = do
+    x <- Just 3
+    y <- Just "!"
+    Just (show x ++ y)
+-- So each of lines is nested within the line above if converted back to
+-- >>= notation
