@@ -451,7 +451,73 @@ listOfTuples  = do
 -- do Notation and List Comprehensions
 
 -- using lists with do notation might remind you of something
-[(n,ch) | n <- [1,2], ch <- ['a','b']]
+[ (n,ch) | n <- [1,2], ch <- ['a','b'] ]
 -- [(1,'a'),(1,'b'),(2,'a'),(2,'b')]
 -- It turns out list comprehensions are just syntactic sugar for using lists
 -- as monads.
+
+
+-- MonadPlus and the guard Function
+
+-- List comprehensions allow us to filter output
+[ x | x <- [1..50], '7' `elem` show x ]
+-- [7,17,27,37,47]
+-- To see how filtering in list comprehensions translates to list monad we
+-- need to look at the guard function on the MonadPlus type class.
+
+-- MonadPlus type class is for monads that can also act as monoids.
+class Monad m => MonadPlus m where
+    mzero :: m a
+    mplus :: m a -> m a -> m a
+-- mzero is synonymous with mempty from Monoid, and mplus corresponds to
+-- mappend
+
+-- Lists are monoids as well as monads so they can be MonadPlus too:
+instance MonadPlus [] where
+    mzero = []
+    mplus = (++)
+-- mzero for lists is failure. mplus joins two values into one.
+
+guard      :: (MonadPlus m) => Bool -> m ()
+guard True  = return ()
+guard False = mzero
+-- If guard receives True, it returns an empty tuple, (), and puts it into
+-- a minimum default context that still succeeds. False returns [] meaning
+-- failure.
+guard (5 > 2) :: Maybe ()
+-- Just ()
+guard (1 > 2) :: Maybe ()
+-- Nothing
+guard (5 > 2) :: [()]
+-- [()]
+guard (1 > 2) :: [()]
+-- Nothing
+
+-- we can use guard like so:
+[1..50] >>= (\x -> guard ('7' `elem` show x) >> return x)
+-- [7,17,27,37,47]
+-- Which is the same as the list comprehension above
+
+guard (5 > 2) >> return "cool" :: [String]
+-- ["cool"]
+guard (1 > 2) >> return "cool" :: [String]
+-- []
+-- If the guard succeeds the result contained within it is the empty tuple.
+-- Then >> ignores the empty tuple and returns something else as the result.
+-- If the guard fails, then so does the return. feeding [] to >>= is
+-- always a failure.
+--
+-- If the Bool is False, produce a failure now. If it is True, make a
+-- succesful value and put the dummy result () inside it.
+--
+-- This allows the computation to continue.
+
+-- In do notation:
+sevensOnly :: [Int]
+sevensOnly = do
+    x <- [1..50]
+    guard ('7' `elem` show x)
+    return x
+-- sevensOnly == [7,17,27,37,47]
+--
+-- filtering in list comprehensions is the same as using guard
