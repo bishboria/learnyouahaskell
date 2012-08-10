@@ -410,3 +410,39 @@ wopwop = do
 -- wopwop == Nothing
 -- The failed pattern match has caused a failure within the context of the
 -- monad without crashing the entire program.
+
+
+-- The List Monad
+
+-- Using lists as applicative functors:
+(*) <$> [1,2,3] <*> [10,100,1000]
+-- [10,100,1000,20,200,2000,30,300,3000]
+
+-- how [] is defined as a monad
+instance Monad [] where
+    return x = [x]
+    xs >>= f = concat (map f xs)
+    fail _   = []
+
+[3,4,5] >>= \x -> [x,-x]
+-- [3,-3,4,-4,5,-5]
+
+-- The empty list is pretty much the equivalent of Nothing in Maybe
+[] >>= \x -> ["bad","mad","rad"]
+-- []
+[1,2,3] >>= \x -> []
+-- []
+
+-- Just as with Maybe, we can chain them up:
+[1,2] >>= \n -> ['a','b'] >>= \ch -> return (n, ch)
+-- [(1,'a'),(1,'b'),(2,'a'),(2,'b')]
+
+-- The equivalent using do notation
+listOfTuples :: [(Int,Char)]
+listOfTuples  = do
+    n <- [1,2]
+    ch <- ['a','b']
+    return (n,ch)
+-- [(1,'a'),(1,'b'),(2,'a'),(2,'b')]
+-- The above makes it a bit more obvious that n takes on every value of
+-- [1,2], same for ch.
