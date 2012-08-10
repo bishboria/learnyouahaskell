@@ -315,3 +315,54 @@ foo = do
     Just (show x ++ y)
 -- So each of lines is nested within the line above if converted back to
 -- >>= notation
+
+
+-- Do As I Do
+
+-- In a do expression, every line that isn't a let line is a monadic value.
+-- We use <- to inspect its result. The last monadic value in a do
+-- expression can't be used with <- to bind its result, it wouldn't make sense when translated back to >>= chain.
+Just 9 >>= (\x -> Just (x > 8))
+-- Just True
+marySue :: Maybe Bool
+marySue = do
+    x <- Just 9
+    Just (x > 8)
+-- With do notation it's easy to see why the result of the monadic
+-- expression is the result of the last monadic value.
+
+-- Our tightrope walker's routine can also be expressed in do notation.
+routine :: Maybe Pole
+routine = do
+    start  <- return (0,0)
+    first  <- landLeft 2 start
+    second <- landRight 2 first
+    landLeft 1 second
+-- routine == Just (3,2)
+-- unfortunately with do notation we have to explicitly pass the previous
+-- Pole to the landLeft/Right functions.
+
+-- Here is the code if we didn't use monadic aspects of Maybe:
+routine :: Maybe Pole
+routine =
+    case Just (0,0) of
+        Nothing    -> Nothing
+        Just start -> case landLeft 2 start of
+            Nothing    -> Nothing
+            Just first -> case landRight 2 first of
+                Nothing     -> Nothing
+                Just second -> landLeft 1 second
+
+-- throwing Pierre a banana:
+routine :: Maybe Pole
+routine = do
+    start  <- return (0,0)
+    first  <- landLeft 2 start
+    Nothing
+    second <- landRight 2 first
+    landLeft 1 second
+-- routine == Nothing
+--
+-- Writing a line in do notation without binding, <-, the monadic value is
+-- just like putting >> after the monadic value whose result we want to
+-- ignore. It's also prettier than _ <- Nothing.
