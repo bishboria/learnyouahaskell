@@ -446,3 +446,12 @@ listOfTuples  = do
 -- [(1,'a'),(1,'b'),(2,'a'),(2,'b')]
 -- The above makes it a bit more obvious that n takes on every value of
 -- [1,2], same for ch.
+
+
+-- do Notation and List Comprehensions
+
+-- using lists with do notation might remind you of something
+[(n,ch) | n <- [1,2], ch <- ['a','b']]
+-- [(1,'a'),(1,'b'),(2,'a'),(2,'b')]
+-- It turns out list comprehensions are just syntactic sugar for using lists
+-- as monads.
