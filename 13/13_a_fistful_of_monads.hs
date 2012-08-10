@@ -366,3 +366,7 @@ routine = do
 -- Writing a line in do notation without binding, <-, the monadic value is
 -- just like putting >> after the monadic value whose result we want to
 -- ignore. It's also prettier than _ <- Nothing.
+
+-- When to use do and when to use >>= is up to you. This example works best
+-- with >>= as the each step specifically relies on the previous result.
+-- Using do, we have to bind each result and use that in the next...
