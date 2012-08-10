@@ -370,3 +370,43 @@ routine = do
 -- When to use do and when to use >>= is up to you. This example works best
 -- with >>= as the each step specifically relies on the previous result.
 -- Using do, we have to bind each result and use that in the next...
+
+
+-- Pattern Matching and Failure
+
+-- In do notation we can utilize pattern matching when we bind monadic
+-- values to names.
+justH :: Maybe Char
+justH = do
+    (x:xs) <- Just "hello"
+    return x
+-- justH == Just 'h'
+--
+-- What if this pattern were to fail? In functions, the next pattern is
+-- tried, until one is matched or an error is thrown and the program crashes
+--
+-- A failed pattern match in a let expression results in an error straight
+-- away.
+--
+-- In do notation, the fail method (on the Monad type class) enables it to
+-- result in a failure in the context of the current monad, instead of
+-- making the program crash.
+--
+-- its default implementation:
+fail :: (Monad m) => String -> m a
+fail msg = error msg
+-- although, this default impl does cause the program to crash...
+
+-- Maybe is implemented thusly:
+fail _ = Nothing
+-- it ignores the error message and returns Nothing so the final value in
+-- the sequence of computations will be Nothing
+
+-- Here is a do expression with a pattern match that will fail:
+wopwop :: Maybe Char
+wopwop = do
+    (x:xs) <- Just ""
+    return x
+-- wopwop == Nothing
+-- The failed pattern match has caused a failure within the context of the
+-- monad without crashing the entire program.
