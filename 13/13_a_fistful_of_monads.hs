@@ -1,4 +1,5 @@
 -- A FISTFUL OF MONADS
+-- -- It shouldn't matter how a chain of function applications using bind
 
 -- In this chapter we'll learn that monads are just beefed-up applicative
 -- functors. Much like applicative functors are beefed-up functors.
@@ -601,3 +602,82 @@ canReachIn3 (6,2) (7,3)
 
 -- Change this function to show the list of moves if you can reach a place
 -- in 3 moves
+
+
+-- Monad Laws
+
+-- Left Identity
+return x >>= f == f x
+-- return x puts x in a minimal context. If return is really minimal then
+-- it should be equivalent to calling f x directly
+
+-- Examples:
+return 3 >>= (\x -> Just (x + 100000))
+-- Just 100003
+(\x -> Just (x + 100000)) 3
+-- Just 100003
+return "WoM" >>= (\x -> [x,x,x])
+-- ["WoM","WoM","WoM"]
+(\x -> [x,x,x]) "WoM"
+-- ["WoM","WoM","WoM"]
+
+-- Right Identity
+m >>= return == m
+-- pulling the value out of the monad and then wrapping it again with
+-- return is the same as just having the result as the original monadic
+-- value
+
+-- Examples:
+Just "move on up" >>= (\x -> return x) -- Just "move on up" >>= return
+-- Just "move on up"
+[1,2,3,4] >>= (\x -> return x) -- [1,2,3,4] >>= return
+-- [1,2,3,4]
+putStrLn "Wah!" >>= (\x -> return x) -- putStrLn "Wah!" >>= return
+-- Wah!
+-- For the list example, >>= is defined as:
+xs >>= f = concat (map f xs)
+-- so:
+[1,2,3,4] >>= return
+concat (map return [1,2,3,4])
+concat [[1],[2],[3],[4]]
+[1,2,3,4]
+
+-- Left and Right Identity are those that explain how return should work.
+-- It would not be good if return created a monadic value that wasn't
+-- minimal
+
+-- Associativity
+(m >>= f) >>= g == m >>= (\x f x >>= g)
+-- It shouldn't matter how a chain of function applications using bind
+-- is nested
+
+-- Exmaples:
+return (0,0) >>= landRight 2 >>= landLeft 2 >>= landRight 2
+-- Just (2,4)
+((return (0,0) >> landRight 2) >>= landLeft 2) >>= landRight 2
+-- Just (2,4)
+return (0,0)  >>= (\x ->
+landRight 2 x >>= (\y ->
+landLeft 2 y  >>= (\z ->
+landRight 2 z)))
+-- Just (2,4)
+
+-- Another way to look at associativity
+(.)  :: (b -> c) -> (a -> b) -> (a -> c)
+f . g = \x -> f (g x)
+-- What if the values returned were monadic?
+(<=<) :: (Monad m) => (b -> m c) -> (a -> m b) -> (a -> m c)
+f <=< g = \x -> g x >>= f
+
+f x = [x,-x]
+g x = [x*3,x*2]
+h = f <=< g
+h 3
+-- [9,-9,6,-6]
+
+-- What does this have to do with associativity?
+f <=< (g <=< h) == (f <=< g) <=< h
+-- translating the left identity to this syntax:
+f <=< return == f
+-- translating the right identity:
+return <=< f == f
