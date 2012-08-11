@@ -1,5 +1,4 @@
 -- A FISTFUL OF MONADS
--- -- It shouldn't matter how a chain of function applications using bind
 
 -- In this chapter we'll learn that monads are just beefed-up applicative
 -- functors. Much like applicative functors are beefed-up functors.
