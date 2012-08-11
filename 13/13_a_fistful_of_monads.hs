@@ -521,3 +521,83 @@ sevensOnly = do
 -- sevensOnly == [7,17,27,37,47]
 --
 -- filtering in list comprehensions is the same as using guard
+
+
+-- A Knight's Quest
+
+-- We want to find out if a Knight can reach a certain position on a
+-- chessboard in three moves.
+type KnightPos = (Int,Int) -- Column, Row
+-- since we have nondeterminism, use of lists, at our disposal let's pick
+-- all the moves at once instead of picking one.
+
+moveKnight :: KnightPos -> [KnightPos]
+moveKnight (c,r) = do
+    (c',r') <- [(c+2,r-1),(c+2,r+1),(c-2,r-1),(c-2,r+1)
+               ,(c+1,r-2),(c+1,r+2),(c-1,r-2),(c-1,r+2)
+               ]
+    guard (c' `elem` [1..8] && r' `elem` [1..8])
+    return (c',r')
+-- Given a starting position (c,r), a knight can only take L shaped moves
+-- of the form in the list being drawn from. The guard ensures all moves
+-- are still on the board.
+
+-- Alternative implementation
+moveKnight' :: KnightPos -> [KnightPos]
+moveKnight' (c,r) = filter onBoard
+    [(c+2,r-1),(c+2,r+1),(c-2,r-1),(c-2,r+1)
+    ,(c+1,r-2),(c+1,r+2),(c-1,r-2),(c-1,r+2)
+    ]
+    where onBoard (c,r) = c `elem` [1..8] && r `elem` [1..8]
+
+moveKnight (6,2)
+-- [(8,1),(8,3),(4,1),(4,3),(7,4),(5,4)]
+moveKnight (8,1)
+-- [(6,2),(7,3)]
+
+-- Here's a function that takes a position and works out all possible
+-- positions in three moves.
+in3 :: KnightPos -> [KnightPos]
+in3 start = do
+    first  <- moveKnight start
+    second <- moveKnight first
+    moveKnight second
+
+in3 (6,2)
+-- [(8,1),(8,3),(4,1),(4,3),(7,4),(5,4),(5,2),(5,4),(8,1),(8,5),(6,1),(6,5)
+-- ,(8,1),(8,3),(4,1),(4,3),(7,4),(5,4),(8,3),(8,5),(4,3),(4,5),(7,2),(7,6)
+-- ,(5,2),(5,6),(5,2),(8,3),(6,3),(5,4),(5,6),(8,3),(8,7),(6,3),(6,7),(8,1)
+-- ,(8,3),(4,1),(4,3),(7,4),(5,4),(4,1),(4,3),(3,4),(1,4),(7,2),(7,4),(3,2)
+-- ,(3,4),(6,1),(6,5),(4,1),(4,5),(5,2),(5,4),(1,2),(1,4),(4,1),(4,5),(2,1)
+-- ,(2,5),(8,1),(8,3),(4,1),(4,3),(7,4),(5,4),(8,3),(8,5),(4,3),(4,5),(7,2)
+-- ,(7,6),(5,2),(5,6),(4,1),(4,3),(3,4),(1,4),(4,3),(4,5),(3,2),(3,6),(1,2)
+-- ,(1,6),(7,2),(3,2),(6,3),(4,3),(7,4),(7,6),(3,4),(3,6),(6,3),(6,7),(4,3)
+-- ,(4,7),(5,2),(1,2),(4,3),(2,3),(5,4),(5,6),(1,4),(1,6),(4,3),(4,7),(2,3)
+-- ,(2,7),(7,2),(7,4),(3,2),(3,4),(6,1),(6,5),(4,1),(4,5),(7,4),(7,6),(3,4)
+-- ,(3,6),(6,3),(6,7),(4,3),(4,7),(6,1),(6,3),(7,4),(6,5),(6,7),(7,4),(7,8)
+-- ,(8,1),(8,3),(4,1),(4,3),(7,4),(5,4),(8,5),(8,7),(4,5),(4,7),(7,4),(7,8)
+-- ,(5,4),(5,8),(5,2),(5,4),(8,1),(8,5),(6,1),(6,5),(5,4),(5,6),(8,3),(8,7)
+-- ,(6,3),(6,7),(5,2),(5,4),(1,2),(1,4),(4,1),(4,5),(2,1),(2,5),(5,4),(5,6)
+-- ,(1,4),(1,6),(4,3),(4,7),(2,3),(2,7),(8,1),(8,3),(4,1),(4,3),(7,4),(5,4)
+-- ,(8,5),(8,7),(4,5),(4,7),(7,4),(7,8),(5,4),(5,8),(6,1),(6,3),(2,1),(2,3)
+-- ,(5,4),(3,4),(6,5),(6,7),(2,5),(2,7),(5,4),(5,8),(3,4),(3,8)]
+-- The same position can appear several times as there are multiple ways to
+-- reach the same position.
+
+-- same code without do notation
+in3' :: KnightPos -> [KnightPos]
+in3' start = return start >>= moveKnight >>= moveKnight >>= moveKnight
+-- we could do moveKnight start instead of return start >>= moveKnight...
+
+-- Finally, a function that takes two positions and tells us if we can reach
+-- that position in 3 moves.
+canReachIn3 :: KnightPos -> KnightPos -> Bool
+canReachIn3 start end = end `elem` in3 start
+
+canReachIn3 (6,2) (6,1)
+-- True
+canReachIn3 (6,2) (7,3)
+-- False
+
+-- Change this function to show the list of moves if you can reach a place
+-- in 3 moves
