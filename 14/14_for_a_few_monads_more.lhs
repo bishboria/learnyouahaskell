@@ -16,7 +16,8 @@ another value attached that acts simliar to a log.
 Writer allows us to do computations while making sure that all log values
 are combined into one log value, which is then attached to the result.
 
-For instance, we might want to equip our values with strings that explain what's going on, probably for debugging purposes.
+For instance, we might want to equip our values with strings that explain
+what's going on, probably for debugging purposes.
 
 Consider: a function that takes a number of bandits in a gang and tells us
 if that's a big gang...
