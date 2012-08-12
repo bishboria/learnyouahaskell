@@ -150,3 +150,45 @@ Let's return 3 a few times with different monoids:
 
 Writer instance doesn't have its own implementation of fail, so it will
 call error if it fails to pattern match.
+
+
+Using do Notation with Writer
+
+Because we now have a Monad instance (with Writer), we can use do notation
+
+> import Control.Monad.Writer
+>
+> logNumber  :: Int -> Writer [String] Int
+> logNumber x = writer (x, ["Got number: " ++ show x])
+>
+> multWithLog :: Writer [String] Int
+> multWithLog = do
+>     a <- logNumber 3
+>     b <- logNumber 5
+>     return (a*b)
+
+We use return to present the final value as it will put a*b in a default
+context and not add anything new to the log.
+
+> runWriter multWithLog
+<>(15,["Got number: 3","Got number: 5"])
+
+Sometimes it's useful just to be able to add some monoid value whenever we
+want, so we use tell
+
+> multWithLog :: Writer [String] Int
+> multWithLog = do
+>     a <- logNumber 3
+>     b <- logNumber 5
+>     tell ["Gonna multiply these two"]
+>     return (a*b)
+>
+> runWriter multWithLog
+<>(15,["Got number: 3","Got number: 5","Gonna multiply these two"])
+
+tell takes a monoid value and creates a Write value that returns the dummy
+() value as its result but has the desired monoid attached. When we have a
+monadic calue that has () as its result, we don't bind it to a variable.
+
+Remember the final line in do notation is the result of the entire
+expression.
