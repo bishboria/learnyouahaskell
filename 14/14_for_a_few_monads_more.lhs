@@ -113,3 +113,40 @@ With Sum a now we are attaching values that keeps a number that gets added.
 
 > ("dogmeat", Sum 5) `applyLog` addDrink `applyLog` addDrink
 <>("beer",Sum {getSum = 65})
+
+
+The Writer Type
+
+Now that we've seen a value with an attached monoid acts like a monad, let's
+see the Monad instance (in Control.Monad.Writer)
+
+> newtype Writer w a = Writer { runWriter :: (a, w) }
+
+Control.Monad.Writer doesn't export the value constructor, so that it can
+change the implementation whenever it wishes. It exports the writer
+function.
+
+Because the constructor isn't exported, you can't pattern match against it.
+You need to use runWriter instead to get the tuple out of the monad.
+
+> instance (Monoid w) => Monad (Writer w) where
+>     return x = Writer (x, mempty)
+>     (Writer (x, v)) >>= f = let (Writer (y, v')) = f x
+>                             in Writer (y, v `mappend` v')
+
+It is easy to see that >>= is the same as applyLog except wrapping values
+in a Writer. return is setting up the value in a minimum context. Since we
+are using monoids as the attached value, the minimum context for it is
+mempty.
+
+Let's return 3 a few times with different monoids:
+
+> runWriter (return 3 :: Writer String Int)
+<>(3,"")
+> runWriter (return 3 :: Writer (Sum Int) Int)
+<>(3,Sum {getSum = 0})
+> runWriter (return 3 :: Writer (Product Int) Int)
+<>(3,Product {getProduct = 1})
+
+Writer instance doesn't have its own implementation of fail, so it will
+call error if it fails to pattern match.
