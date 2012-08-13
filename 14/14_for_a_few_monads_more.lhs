@@ -192,3 +192,45 @@ monadic calue that has () as its result, we don't bind it to a variable.
 
 Remember the final line in do notation is the result of the entire
 expression.
+
+
+Adding Logging to Programs
+
+Euclid's algorithm takes two numbers and calculates the greatest common
+divisor. Haskell already comes with gcd, but let's make our own that has
+logging capabilities.
+
+first the standard algorithm
+> gcd' :: Int -> Int -> Int
+> gcd' a b
+>     | b == 0    = a
+>     | otherwise = gcd' b (a `mod` b)
+
+> gcd' 8 3
+<>1
+
+Now we want to equip it with with a context. A monoid that acts as a log.
+> import Control.Monad.Writer
+>
+> gcd' :: Int -> Int -> Writer [String] Int
+> gcd' a b
+>     | b == 0 = do
+>         tell ["Finished with " ++ show a]
+>         return a
+>     | otherwise = do
+>         tell [show a ++ " mod " ++ show b ++ " = " ++ show (a `mod` b)]
+>         gcd' b (a `mod` b)
+
+> fst $ runWriter (gcd' 8 3)
+<>1
+> mapM_ putStrLn $ snd $ runWriter (gcd' 8 3)
+<>8 mod 3 = 2
+<>3 mod 2 = 1
+<>2 mod 1 = 0
+<>Finished with 1
+
+By changing normal values to monadic values we are change the algorithm to
+report what it's doing. We also let the implementation of >>= for Writer
+take care of the logs for us. To add a logging mechanism to a function:
+Replace normal values with Writer values, change normal function application
+with >>= (or do expression).
