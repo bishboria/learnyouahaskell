@@ -369,3 +369,20 @@ end*
 
 This isn't scientific way of testing performance, but is a quick way to see
 that difference lists have benefits over ordinary lists
+
+
+Reader? Ugh, Not This Joke Again
+
+In chapter 11 we saw that (->) r is an instance of Functor. Mapping a
+function f over g will make a function like: \x -> f (g x)
+> let f = (*5)
+> let g = (+3)
+> (fmap f g) 8
+<>55
+
+We also saw that functions are Applicative Functors. They allow us to
+operate on the eventual results of functions as if we already had their
+results.
+> let f = (+) <$> (*2) <*> (+10)
+> f 3
+<>19
