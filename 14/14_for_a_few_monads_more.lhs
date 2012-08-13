@@ -257,7 +257,7 @@ the left part all the way to the beginning .
 The following version of gcd logs in reverse
 
 > import Control.Monad.Writer
-> 
+>
 > gcdReverse :: Int -> Int -> Writer [String] Int
 > gcdReverse a b
 >     | b == 0 = do
@@ -282,3 +282,56 @@ This is inefficient as it ends up associating the use of ++ to the left
 instead of to the right. Because lists can be inefficient when repeatedly
 appending like this, it's best to use a data structure that always supports
 effiicent appending. Like the difference list.
+
+
+Using Difference Lists
+
+A difference list is a function that takes a list and prepends another list
+to it. For example, the difference list equivalent of [1,2,3] is the
+function \xs -> [1,2,3] ++ xs. An empty difference list is \xs -> [] ++ xs
+
+Appending two difference lists can be done like:
+> f `append` g = \xs -> f (g xs)
+Where f and g are functions that take lists and prepend something to them
+> f = ("dog"++)
+> g = ("meat"++)
+> f `append` g == \xs -> "dog" ++ ("meat" ++ xs)
+
+> newtype DiffList a = DiffList { getDiffList :: [a] -> [a] }
+>
+> toDiffList :: [a] -> DiffList a
+> toDiffList xs = DiffList (xs++)
+>
+> fromDiffList :: DiffList a -> [a]
+> fromDiffList (DiffList f) = f []
+
+Here is the monoid instance:
+> instance Monoid (DiffList a) where
+>     mempty = DiffList (\xs -> [] ++ xs)
+>     (DiffList f) `mappend` (DiffList g) = DiffList (\xs -> f (g xs))
+
+Notice how mempty is just id. And mappend is just function composition.
+
+> fromDiffList (toDiffList [1,2,3,4] `mappend` toDiffList [1,2,3])
+<>[1,2,3,4,1,2,3]
+
+Now we can increase the efficiency of gcdReverse by making it use difference
+lists instead.
+
+> gcdReverse' :: Int -> Int -> Writer (DiffList String) Int
+> gcdReverse' a b
+>     | b == 0 do
+>         tell (toDiffList ["Finished with " ++ show a]
+>         return a
+>     | otherwise = do
+>         result <- gcdReverse' b (a `mod` b)
+>         tell (toDiffList [show a ++ " mod " ++ show b ++ " = " ++ show (a `mod` b)])
+>         return result
+We need to change the Writer type to DiffList String instead of [String]
+and also intercept each argument to tell and turn it into a DiffList first
+
+> mapM_ putStrLn . fromDiffList . snd . runWriter $ gcdReverse' 100 34
+<>Finished with 2
+<>32 mod 2 = 0
+<>34 mod 32 = 2
+<>100 mod 34 = 32
