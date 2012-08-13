@@ -356,6 +356,9 @@ the log counts up.
 > finalCountDownSlow x = do
 >     finalCountDownSlow (x-1)
 >     tell [show x]
+>
+> mapM_ putStrLn . fromDiffList . snd . runWriter $ finalCountDownFast 500000
+> mapM_ putStrLn . snd . runWriter $ finalCountDownSlow 500000
 
 Running each of the two shows that finalCountDownFast is a lot quicker at
 producing output.
