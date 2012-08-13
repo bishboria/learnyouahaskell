@@ -8,6 +8,8 @@ gcd' a b
     | otherwise = do
         tell [show a ++ " mod " ++ show b ++ " = " ++ show (a `mod` b)]
         gcd' b (a `mod` b)
+-- this way of appending the log is efficient
+-- a++(b++(c++(d++e)))
 
 -- fst $ runWriter (gcd' 8 3)
 -- 1
@@ -26,6 +28,8 @@ gcdReverse a b
         result <- gcdReverse b (a `mod` b)
         tell [show a ++ " mod " ++ show b ++ " = " ++ show (a `mod` b)]
         return result
+-- This way of appending the log is inefficient
+-- (((a++b)++c)++d)++e
 
 -- mapM_ putStrLn $ snd $ runWriter (gcdReverse 8 3)
 -- Finished with 1
