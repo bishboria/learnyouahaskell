@@ -335,3 +335,34 @@ and also intercept each argument to tell and turn it into a DiffList first
 <>32 mod 2 = 0
 <>34 mod 32 = 2
 <>100 mod 34 = 32
+
+
+Comparing Performance
+
+To get a feel for how much difference lists improve performance, let's
+count down from some number to zero but produce the log in reverse to that
+the log counts up.
+
+> finalCountDownFast :: Int -> Writer (DiffList String) ()
+> finalCountDownFast 0 = do
+>     tell (toDiffList ["0"])
+> finalCountDownFast x = do
+>     finalCountDownFast (x-1)
+>     tell (toDiffList [show x])
+>
+> finalCountDownSlow :: Int -> Writer [String] ()
+> finalCountDownSlow 0 = do
+>     tell ["0"]
+> finalCountDownSlow x = do
+>     finalCountDownSlow (x-1)
+>     tell [show x]
+
+Running each of the two shows that finalCountDownFast is a lot quicker at
+producing output.
+
+*In fact, finalCountDownSlow ran out of memory on my machine and ghci
+terminated... it only reached 256... finalCountDownFast easily reaches the
+end*
+
+This isn't scientific way of testing performance, but is a quick way to see
+that difference lists have benefits over ordinary lists

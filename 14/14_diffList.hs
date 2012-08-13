@@ -34,3 +34,20 @@ gcdresult = mapM_ putStrLn . fromDiffList . snd . runWriter $ gcdReverse' 100 34
 -- 32 mod 2 = 0
 -- 34 mod 32 = 2
 -- 100 mod 34 = 32
+
+finalCountDownFast :: Int -> Writer (DiffList String) ()
+finalCountDownFast 0 = do
+    tell (toDiffList ["0"])
+finalCountDownFast x = do
+    finalCountDownFast (x-1)
+    tell (toDiffList [show x])
+
+finalCountDownSlow :: Int -> Writer [String] ()
+finalCountDownSlow 0 = do
+    tell ["0"]
+finalCountDownSlow x = do
+    finalCountDownSlow (x-1)
+    tell [show x]
+
+countdownFast = mapM_ putStrLn . fromDiffList . snd . runWriter $ finalCountDownFast 500000
+countdownSlow = mapM_ putStrLn . snd . runWriter $ finalCountDownSlow 500000
