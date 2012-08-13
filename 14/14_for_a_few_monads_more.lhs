@@ -234,3 +234,51 @@ report what it's doing. We also let the implementation of >>= for Writer
 take care of the logs for us. To add a logging mechanism to a function:
 Replace normal values with Writer values, change normal function application
 with >>= (or do expression).
+
+
+Inefficient List Construction
+
+When using the Writer monad, you need to be careful to choose the correct
+monoid, lists can turn out to be very slow.
+
+List use ++ for mappend and adding something to the end of the list is slow
+if that list is really long.
+
+In gcd' we something like:
+<>a ++ (b ++ (c ++ (d ++ e)))
+This is efficient as we're constructing the left part of the list and adding
+more on the right.
+
+If not careful, it can turn out like:
+<>(((a ++ b) ++ c) ++ d) ++ e
+This is bad because it associates to the left instead and must construct
+the left part all the way to the beginning .
+
+The following version of gcd logs in reverse
+
+> import Control.Monad.Writer
+> 
+> gcdReverse :: Int -> Int -> Writer [String] Int
+> gcdReverse a b
+>     | b == 0 = do
+>         tell ["Finished with " ++ show a]
+>         return a
+>     | otherwise = do
+>         result <- gcdReverse b (a `mod` b)
+>         tell [show a ++ " mod " ++ show b ++ " = " ++ show (a `mod` b)]
+>         return result
+
+It does the recursion first and binds its resulting value to result. It then
+adds the current step to the log, but at the end. Finally it returns the
+result at the end.
+
+> mapM_ putStrLn $ snd $ runWriter (gcdReverse 8 3)
+<>Finished with 1
+<>2 mod 1 = 0
+<>3 mod 2 = 1
+<>8 mod 3 = 2
+
+This is inefficient as it ends up associating the use of ++ to the left
+instead of to the right. Because lists can be inefficient when repeatedly
+appending like this, it's best to use a data structure that always supports
+effiicent appending. Like the difference list.
