@@ -401,3 +401,47 @@ function to something in order to get the resut
 Bind looks a bit cryptic here: Because we are using functions as monads, we return \w ... from >>=. To get the result from a function we need to apply
 it to h first, hence (h w). The result is then passed to f which returns a
 monadic value (a function in this case) and so we apply that to w as well.
+
+
+The Reader Monad
+
+Here's a do expression showing >>= in action
+> import Control.Monad.Instances
+>
+> addStuff :: Int -> Int
+> addStuff = do
+>     a <- (*2)
+>     b <- (+10)
+>     return (a+b)
+>
+> addStuff 3
+<>19
+
+This is the same as the applicative version above. Written as >>=
+> import Control.Monad.Instances
+>
+> addStuff :: Int -> Int
+> addStuff = (*2)  >>= \a ->
+>            (+10) >>= \b ->
+>            return (a+b)
+>
+> addStuff 3
+<>19
+
+Both (*2) and (+10) are applied to the number 3 (in this case). return (a+b)
+does aswell, but it ignores that value and always presents a+b as the
+result. It's called the reader monad as all functions read from a common
+source.
+
+addStuff could also be written like, which might make it clearer:
+> addStuff :: Int -> Int
+> addStuff x = let
+>     a = (*2) x
+>     b = (+10) x
+>     in a+b
+
+The Reader monad allows us to treat functions as values with a context. We
+can act like we already know what the function will return. If we have lots
+of functions that are all just missing one parameter and they will
+eventually be applied to the same thing, we can use the reader monad to
+extract their future results and >>= will make sure it works out.
