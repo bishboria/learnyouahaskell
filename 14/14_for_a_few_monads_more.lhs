@@ -386,3 +386,18 @@ results.
 > let f = (+) <$> (*2) <*> (+10)
 > f 3
 <>19
+
+
+Functions As Monads
+
+(->) r is also a monad. A function can be considered a value with a context.
+The context is that the value is not present yet and we need to apply that
+function to something in order to get the resut
+
+> instance Monad ((->) r) where
+>     return x = \_ -> x
+>     h >>= f  = \w -> f (h w) w
+
+Bind looks a bit cryptic here: Because we are using functions as monads, we return \w ... from >>=. To get the result from a function we need to apply
+it to h first, hence (h w). The result is then passed to f which returns a
+monadic value (a function in this case) and so we apply that to w as well.
