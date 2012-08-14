@@ -445,3 +445,67 @@ can act like we already know what the function will return. If we have lots
 of functions that are all just missing one parameter and they will
 eventually be applied to the same thing, we can use the reader monad to
 extract their future results and >>= will make sure it works out.
+
+
+Tasteful Stateful Computations
+
+Consider the threeCoins function from Chapter 9:
+> threeCoins :: StdGen -> (Bool,Bool,Bool)
+> threeCoins gen =
+>     let (firstCoin, newGen)   = random gen
+>         (secondCoin, newGen') = random newGen
+>         (thirdCoin, newGen'') = random newGen'
+>     in  (firstCoin, secondCoin, thirdCoin)
+Here we are passing state between calls to random. We have to do this since
+Haskell is pure. Handling state manually like this is a bit tedious so
+Haskell uses the State Monad.
+
+
+Stateful Computations
+
+A stateful computation is a function that takes some state and returns a
+value along with some new state:
+<> s -> (a, s)
+
+
+Stacks and Stones
+
+If we want to model a stack we need to:
+    push: an element on to the top of the stack
+    pop:  removes the topmost element from the stack
+
+Here are the functions in use:
+> type Stack = [Int]
+>
+> pop :: Stack -> (Int, Stack)
+> pop (x:xs) = (x, xs)
+>
+> push :: Int -> Stack -> (Int, Stack)
+> push a xs = ((), a:xs)
+
+Pop is a stateful computation because of its type. Applying the first
+parameter to push makes it into a stateful computation. Here's some code
+to test:
+
+> stackManip :: Stack -> (Int, Stack)
+> stackManip stack = let
+>     ((), newStack1) = push 3 stack
+>     (a, newStack2)  = pop newStack1
+>     in pop newStack2
+
+We take a stack, push 3 onto it, then pop twice (discarding the value of the
+first pop, a).
+
+> stackManip [5,8,2,1]
+<>(5,[8,2,1])
+
+Notice that stackManip is itself a stateful computation. So we've taken some
+stateful computations and glued them together into another stateful
+computation...
+
+Using the State Monad allows us to do stackManip in the following way:
+> stackManip = do
+>     push 3
+>     a <- pop
+>     pop
+So we won't need to deal with intermediate state manually.
