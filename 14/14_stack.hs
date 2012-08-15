@@ -9,7 +9,7 @@ push' :: Int -> Stack -> ((), Stack)
 push' a xs = ((), a:xs)
 
 stackManip' :: Stack -> (Int, Stack)
-stackManip' stack = 
+stackManip' stack =
     let ((), newStack1) = push' 3 stack
         (a, newStack2)  = pop' newStack1
     in pop' newStack2
@@ -58,3 +58,10 @@ moreStack = do
 -- ((),[8,3,2,1])
 -- runState moreStack [100,5,3,2,1]
 -- ((),[5,3,2,1])
+
+stackyStack :: State Stack ()
+stackyStack = do
+    stackNow <- get
+    if stackNow == [1,2,3]
+        then put [8,3,1]
+        else put [9,2,1]

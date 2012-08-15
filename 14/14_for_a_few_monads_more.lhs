@@ -607,3 +607,47 @@ stackManip and stackStuff to produce more stateful computations:
 <>((),[8,3,2,1])
 > runState moreStack [100,5,3,2,1]
 <>((),[5,3,2,1]
+
+
+Getting and Setting State
+
+Control.Monad.State module provides a type class called MonadState, which
+has two useful functions: get and put. for State:
+
+> get = state $ \s -> (s, s)
+It takes the current state and presents it as the result.
+
+> put newState = state $ \s -> ((), newState)
+Takes some state and creates a stateful function that replaces the current
+state with it.
+
+With these functions we can see what the current stack is and we can replace
+it with another stack.
+
+> stackyStack :: State Stack ()
+> stackyStack = do
+>     stackNow <- get
+>     if stackNow == [1,2,3]
+>         then put [8,3,1]
+>         else put [9,2,1]
+
+We can also use get and put to implement push and pop:
+
+> pop :: State Stack Int
+> pop = do
+>     (x:xs) <- get
+>     put xs
+>     return x
+>
+> push :: Int -> State Stack ()
+> push x = do
+>     xs <- get
+>     put (x:xs)
+
+If >>= only worked with State values then:
+
+> (>>=) :: State s a -> (a -> State s b) -> (State s b)
+
+State s stays the same type, but a can change into b. This means we can glue
+together several statements whose results are of different types, but
+state's type must stay the same. State s is the monad.
