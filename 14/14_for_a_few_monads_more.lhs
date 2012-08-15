@@ -733,3 +733,95 @@ Since the error type is ambiguous (it's never used or declared).
 As a task, change the tightrope walker function to use the Error monad so
 that when Pierre slips and falls, we see how many birds were on each side
 when he fell.
+
+
+Some Useful Monadic Functions
+
+We'll look at the following monadic functions: liftM, join, filterM and
+foldM
+
+
+liftM and Friends
+
+liftM takes a function and a monadic value and maps the function over the
+monadic value. Which is the same as fmap on Functor
+
+> liftM :: (Monad m)   => (a -> b) -> m a -> m b
+> fmap  :: (Functor f) => (a -> b) -> f a -> f b
+
+If the Functor and Monad instances for a type obey the functor and monad
+laws, they amount to the same thing.
+
+> liftM (*3) (Just 8)
+<>Just 24
+> fmap (*3) (Just 8)
+<>Just 24
+> runWriter $ liftM not $ writer (True, "chickpeas")
+<>(False,"chickpeas")
+> runWriter $ fmap not $ writer (True, "chickpeas")
+<>(False,"chickpeas")
+> runState (liftM (+100) pop) [1,2,3,4]
+<>(101,[2,3,4])
+> runState (fmap (+100) pop) [1,2,3,4]
+<>(101,[2,3,4])
+
+liftM applied to a Writer applies the function to the first part of the
+tuple, which is the result.
+
+> liftM    :: (Monad m ) => (a -> b) -> m a -> m b
+> liftM f m = m >>= (\x -> return (f x))
+
+Or with do notation:
+
+> liftM    :: (Monad m ) => (a -> b) -> m a -> m b
+> liftM f m = do
+>     x <- m
+>     return (f x)
+
+We can implement fmap, or liftM, just by using monadic properties.
+
+Applicative type class allows to to apply functions between values with
+contexts as if they were normal values.
+
+> (+) <$> Just 3 <*> Just 5
+<>Just 8
+> (+) <$> Just 3 <*> Nothing
+<>Nothing
+
+<$> is just fmap.
+
+> (<*>) :: (Applicative f) => f (a -> b) -> f a -> f b
+
+So <*> is kind of like fmap, except that the function is in a context. <*>
+can also be implemented using monadic properties. ap function is basically
+<*> but with a Monad constraint instead of an Applicative constraint.
+
+> ap :: (Monad m) => m (a -> b) -> m a -> m b
+> ap mf m = do
+>     f <- mf
+>     x <- m
+>     return (f x)
+
+ap takes a function that's wrapped in a monad and a monadic value. It
+extracts the function out of the monad, f, and the value, x. It applies f to
+x and puts it in a minimal context.
+
+> Just (+3) <*> Just 4
+<>Just 7
+> Just (+3) `ap` Just 4
+<>Just 7
+> [(+1),(+2),(+3)] <*> [10,11]
+<>[11,12,12,13,13,14]
+> [(+1),(+2),(+3)] `ap` [10,11]
+<>[11,12,12,13,13,14]
+
+If you have a Monad instance you can make it Applicative by saying that
+pure is return and <*> is `ap`. Similarly, if you already have a Monad, you
+can make it a Functor by saying that fmap is liftM.
+
+We learned from Chapter 11 that:
+> liftA2 :: (Applicative f) => (a -> b -> c) -> f a -> f b -> f c
+> liftA2 f x y = f <$> x <*> y
+
+liftM2 does the same thing, except it has a Monad constraint instead of an
+Applicative constraint.
