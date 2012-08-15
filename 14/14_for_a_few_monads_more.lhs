@@ -667,7 +667,7 @@ generator. This is a stateful computation.
 
 > import System.Random
 > import Control.Monad.State
-> 
+>
 > randomSt :: (RandomGen g, Random a) => State g a
 > randomSt = state random
 
@@ -686,3 +686,50 @@ threeCoins is now a stateful computation
 <>((True,False,True),680029187 2103410263)
 
 Now doing things that require state is much less painful.
+
+
+Error Error on the Wall
+
+Maybe is used to add a context of possible failure to values. Although, it
+doesn't say how/why it failed. This is where Either comes in. Either is an
+enhanced Maybe. It's implementation is found in Control.Monad.Error:
+
+> instance (Error e) => Monad (Either e) where
+>     return x       = Right x
+>     Right x  >>= f = f x
+>     Left err >>= f = Left err
+>     fail msg       = Left (strMsg msg)
+
+This instance has the extra requirement that e, in Either e, must be an
+instance of the Error type class. This is for types that can act like error
+messages. strMsg function takes an error in the form of a string and returns
+a value such that can be interpreted as an instance of Error.
+
+String is an instance of Error
+
+> :t strMsg
+<>strMsg :: (Error a) => String -> a
+> strMsg "boom!" :: String
+<>"boom!"
+
+As we use String to describe the error when using Either, we don't worry
+about this too much.
+
+Examples:
+> Left "boom" >>= \x -> return (x+1)
+<>Left "boom"
+> Left "boom" >>= \x -> Left "no way!"
+<>Left "boom"
+> Right 100 >>= \x -> Left "no way!"
+<>Left "no way!"
+> Right 3 >>= \x -> return (x + 100)
+<>Right 103
+
+Sometimes the last example may have a type error (although mine didn't...)
+If it does, do this:
+> Right 3 >>= \x -> return (x + 100) :: Either String Int
+Since the error type is ambiguous (it's never used or declared).
+
+As a task, change the tightrope walker function to use the Error monad so
+that when Pierre slips and falls, we see how many birds were on each side
+when he fell.
