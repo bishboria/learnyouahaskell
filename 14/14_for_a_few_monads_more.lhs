@@ -651,3 +651,38 @@ If >>= only worked with State values then:
 State s stays the same type, but a can change into b. This means we can glue
 together several statements whose results are of different types, but
 state's type must stay the same. State s is the monad.
+
+
+Randomness and sthe State Monad
+
+Earlier we spoke of how generating random numbers can be awkward due to
+passing of the new generator as state. This is simplified with the State
+monad.
+
+Recall:
+> random :: (RandomGen g, Random a) => g -> (a, g)
+
+We take a random generator and produce a random number along with a new
+generator. This is a stateful computation.
+
+> import System.Random
+> import Control.Monad.State
+> 
+> randomSt :: (RandomGen g, Random a) => State g a
+> randomSt = state random
+
+So, now if we want to throw three coins:
+
+> threeCoins :: State StdGen (Bool, Bool, Bool)
+> threeCoins = do
+>     a <- randomSt
+>     b <- randomSt
+>     c <- randomSt
+>     return (a, b, c)
+
+threeCoins is now a stateful computation
+
+> runState threeCoins (mkStdGen 33)
+<>((True,False,True),680029187 2103410263)
+
+Now doing things that require state is much less painful.
