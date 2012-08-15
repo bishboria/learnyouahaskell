@@ -509,3 +509,101 @@ Using the State Monad allows us to do stackManip in the following way:
 >     a <- pop
 >     pop
 So we won't need to deal with intermediate state manually.
+
+
+The State Monad
+
+Control.Monad.State module provides a newtype that wraps stateful
+computations:
+
+> newtype State s a = State { runState :: s -> (a, s) }
+
+Control.Monad.State like Control.Monad.Writer doesn't export its
+constructor, only the state function. This function takes a stateful
+computation.
+
+Here is the Monad instance:
+
+> instance Monad (State s) where
+>     return x = State $ \s -> (x, s)
+>     (State h) >>= f = State $ \s -> let (a, newState) = h s
+>                                         (State g)     = f a
+>                                     in  g newState
+
+return takes a value and puts it in a stateful computation that always has
+that value as the result.
+
+What about >>=? The result of feeding a stateful computation to a function
+with >>= must itself, so we start out with declaring a lambda. The lambda
+will be the result. We apply state s to h, which gives us a value and a
+newState. We pass the value a to f and that produces the next state that we
+can apply newState to. Giving the result. The stateful computation g is
+hidden inside f and requires a to get it out.
+
+To see how this works out translate:
+> stackManip = do
+>     push 3
+>     pop
+>     push 6
+into >>= notation
+
+It's easy to change push and pop using a state wrapper as they are already
+stateful computations
+
+> import Control.Monad.State
+>
+> pop :: State Stack Int
+> pop = state $ \(x:xs) -> (x, xs)
+>
+> push :: Int -> State Stack ()
+> push a = state $ \xs -> ((), a:xs)
+>
+> stackManip :: State Stack Int
+> stackManip = do
+>     push 3
+>     a <- pop
+>     pop
+>
+> runState stackManip [5,8,2,1]
+<>(5,[8,2,1])
+
+We didn't need to bind pop to a, as we don't use it later, so we could
+rewrite it as:
+> stackManip :: State Stack Int
+> stackManip = do
+>     push 3
+>     pop
+>     pop
+
+Given stackManip's type we must always have pop as the last operation.
+
+Something a bit more complicated:
+> stackStuff :: State Stack ()
+> stackStuff = do
+>     a <- pop
+>     if a == 5
+>         then push 5
+>         else do
+>             push 3
+>             push 8
+>
+> runState stackStuff [9,0,2,1,0]
+<>((),[8,3,0,2,1,0])
+
+Because do expressions result in monadic values. do expressions with State
+monads are also stateful computations. So that means we can glue together
+stackManip and stackStuff to produce more stateful computations:
+
+> moreStack :: State Stack ()
+> moreStack = do
+>     a <- stackManip
+>     if a = 100
+>         then stackStuff
+>         else return ()
+>
+> runState moreStack [8,3,2,1]
+<>((),[3,2,1])
+> runState moreStack [100,4,2,1]
+<>((),[8,3,2,1])
+> runState moreStack [100,5,3,2,1]
+<>((),[5,3,2,1]
