@@ -825,3 +825,54 @@ We learned from Chapter 11 that:
 
 liftM2 does the same thing, except it has a Monad constraint instead of an
 Applicative constraint.
+
+
+The Join Function
+
+If the result of one monadic value is another monadic value, can we flatten
+it to get just a single monadic value back? E.g. Just (Just 9)
+
+> join :: (Monad m) => m (m a) -> m a
+>
+> join (Just (Just 9))
+<>Just 9
+> join (Just Nothing)
+<>Nothing
+> join Nothing
+<>Nothing
+> join [[1,2,3],[4,5,6]]
+<>[1,2,3,4,5,6]
+For lists, join is just concat.
+
+> runWriter $ join (writer (writer (1, "aaa"), "bbb"))
+<>(1,"bbbaaa")
+The out monoid comes first, then the inner monoid is appended to it.
+
+> join (Right (Right 9)) :: Either String Int
+<>Right 9
+> join (Right (Left "error")) :: Either String Int
+<>Left "error"
+> join (Left "error") :: Either String Int
+Flattening Either is similar to Maybe.
+
+> runState (join (state $ \s -> (push 10, 1:2:s))) [0,0,0]
+<>((),[10,1,2,0,0,0])
+Applying join to a stateful computation whose result is also a stateful
+computation results in applying the outer first then the inner. The lambda
+pushes 2 then 1 onto the stack given to it. push 10 is then carried out.
+
+The implemenation of join is as follows:
+> join :: (Monad m) => m (m a) -> m a
+> join mm = do
+>     m <- mm
+>     m
+The use of <- handles the monadic context of the resultant m.
+
+An interesting property of join is that:
+> m >>= f == join (fmap f m)
+Also, it's often easier to figure out how to flatten a nested monad than to
+figure out how to implement >>=...
+
+Another interesting thing is that neither Functors nor Applicatives can
+provide the functions required in order to implement join. So that means
+Monads are stronger than both Functors and Applicatives as it can do more.
