@@ -1110,3 +1110,113 @@ We can also change canReachIn3 to be more general:
 <>False
 > canReachIn 6 (1,1) (8,8)
 <>True
+
+
+Making Monads
+
+We have a list [3,5,9] but we want to express the probability of each
+value occurring. We want to add a probability context to each value,
+something like this:
+> [(3,0.5),(5,0.25),(9,0.25)]
+
+Floating point numbers to represent probabilities isn't a good idea, so
+let's use Rational.
+
+> import Data.Ratio
+> 1%4
+<> 1 % 4
+> 1%2 + 1%2
+<>1 % 1
+> 1%3 + 5%4
+<>19 % 12
+
+So our list with probability context will look like:
+> [(3,1%2),(5,1%4),(9,1%4)]
+
+Wrapping this in a newtype gives a constructor and a way of getting the
+value back out again.
+
+> import Data.Ratio
+>
+> newtype Prob a = Prob { getProb :: [(a, Rational)] } deriving Show
+
+list is a functor, and we added extra stuff to a list, so this should be a
+functor too. When we map a function over list, we apply it to each element.
+In our case we want to do the same, except leave the probabilities as they
+are.
+
+> instance Functor Prob where
+>     fmap f (Prob xs) = Prob $ map (\(x,p) -> (f x, p)) xs
+
+We unwrap from the newtype, apply f to each value (leave probability as it is) and wrap the result back up.
+
+> fmap negate (Prob [(3,1%2),(5,1%4),(9,1%4)])
+<>Prob {getProb = [(-3,1 % 2),(-5,1 % 4),(-9,1 % 4)]}
+
+The probabilities should always add up to one.
+
+But, is this a Monad? It looks like it should be. Let's think about return.
+
+For lists, return takes a single value and puts it in a singleton list.
+Here our minimal context is a value plus a probability. If the monadic
+value returned must always be presented, then it makes sense that the
+probability of the value being returned is 1.
+
+What about >>=? Let's make use of the fact that for monads
+m >>= f == join (fmap f m). This means to make >>= all we have to think
+about is how to join, or flatten, probability lists.
+
+Let's make up some numbers and see how it should play out: There is a 25%
+chance that one of 'a' or 'b' will occur. 'a' and 'b' are equally likely to
+occur. There is a 75% chance that one of 'c' or 'd' will occur. Again, 'c'
+and 'd' are equally likely to occur.
+
+If we work out what the absolute probabilities are for each of 'a', 'b',
+'c', and 'd' we'd get: a:1%4*1%2==1%8; b:1%8; c:3%8; d:3%8.
+
+As a probability list:
+> situation :: Prob (Prob Char)
+> situation = Prob
+>     [(Prob [('a',1%2),('b',1%2)], 1%4)
+>     ,(Prob [('c',1%2),('d',1%2)], 3%4)
+>     ]
+
+So to flatten the probabilites, we have to multiply the external
+probability by the internal one for each value in the list.
+
+> flatten :: Prob (Prob a) -> Prob a
+> flatten (Prob xs) = Prob $ concat $ map multAll xs
+>     where multAll (Prob innerxs, p) = map (\(x, r) -> (x, p*r)) innerxs
+
+multAll takes a tuple of a probability list and a probability and multiplies the probability with each of the probabilities in the probability list.
+
+We map multAll over each of the nested probability lists, concatenating the
+result into one list and then wrapping it up.
+
+Now we can write our Monad instance.
+
+> instance Monad Prob where
+>     return x = Prob [(x,1%1)]
+>     m >>= f  = flatten (fmap f m)
+>     fail _   = Prob []
+
+The instance is simple because we've done the hard work with fmap and
+flatten. Also if a pattern match fails, we get an empty list.
+
+It's important to check that the Monad laws hold. (These are the first 2):
+> (return $ Prob [('a',1%2),('b',1%2)]) >>= id
+<>Prob {getProb = [('a',1 % 2),('b',1 % 2)]}
+> id Prob [('a',1%2),('b',1%2)]
+<>Prob {getProb = [('a',1 % 2),('b',1 % 2)]}
+> Prob [('a',1%2),('b',1%2)] >>= return
+<>Prob {getProb = [('a',1 % 2),('b',1 % 2)]}
+
+It's pointing out the obvious, really, that this isn't a rigorous proof.
+
+The third law, f <=< (g <=< h) == (f <=< g) <=< h, should hold because it
+holds for the list monad and that forms the basis of the probability monad
+and also because multiplication is associative.
+
+Now that we have a monad, let's do things with it: We have two normal coins
+and one loaded coin. The loaded coin has tails 9%10 and heads 1%10. If we
+throw all three coins at once, what's the odds of them all being tails?
