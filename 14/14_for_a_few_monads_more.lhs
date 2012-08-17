@@ -876,3 +876,63 @@ figure out how to implement >>=...
 Another interesting thing is that neither Functors nor Applicatives can
 provide the functions required in order to implement join. So that means
 Monads are stronger than both Functors and Applicatives as it can do more.
+
+
+filterM
+
+The filter function's type is:
+> filter :: (a -> Bool) -> [a] -> [a]
+
+What if the Bool returned was a monad and came with a context? If we didn't
+attach the context to the new output, then the context will be lost.
+
+filterM's type:
+> filterM :: (Monad m) => (a -> m Bool) -> [a] -> m [a]
+
+The predicate returns a monadic value whose result is a Bool, but because
+it can have a context that could be anything.
+
+Using filter:
+> filter (\x -> x < 4) [9,1,5,2,10,3]
+<>[1,2,3]
+
+Now a predicate that also provides a log of everything that it did:
+> keepSmall :: Int -> Writer [String] Bool
+> keepSmall x
+>     | x < 4 = do
+>         tell ["Keeping " ++ show x]
+>         return True
+>     | otherwise = do
+>         tell [show x ++ " is too large, throwing it away"]
+>         return False
+
+Instead of returning a Bool, this returns a Writer [String] Bool.
+
+> fst $ runWriter $ filterM keepSmall [9,1,5,2,10,3]
+<>[1,2,3]
+> mapM_ putStrLn $ snd $ runWriter $ filterM keepSmall [9,1,5,2,10,3]
+<>9 is too large, throwing it away
+<>Keeping 1
+<>5 is too large, throwing it away
+<>Keeping 2
+<>10 is too large, throwing it away
+<>Keeping 3
+
+A cool trick in Haskell is the ability to get the powerset of a list using
+filterM. It uses the nondeterministic nature of list monads.
+
+> powerset :: [a] -> [[a]]
+> powerset xs = filterM (\x -> [True, False]) xs
+>
+> powerset [1,2,3]
+<>[[1,2,3],[1,2],[1,3],[1],[2,3],[2],[3],[]]
+
+How is it so easy to produce? The secret is in the implementation of filterM
+> filterM :: (Monad m) => (a -> m Bool) -> [a] -> m [a]
+> filterM p (x:xs) = do
+>    flg <- p x
+>    ys <- filterM p xs
+>    if flg then x:ys else ys
+
+The recursive call and the usage of each value of flg make creating powerset
+almost trivial.
