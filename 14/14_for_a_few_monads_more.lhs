@@ -936,3 +936,33 @@ How is it so easy to produce? The secret is in the implementation of filterM
 
 The recursive call and the usage of each value of flg make creating powerset
 almost trivial.
+
+
+foldM
+
+Recall foldl's type:
+> foldl :: (a -> b -> a) -> a -> [b] -> a
+
+foldM's type:
+> foldM :: (Monad m) => (a -> b -> m a) -> a -> [b] -> m a
+
+Here is a simple function that sums a list using fold
+> foldl (\acc x -> acc + x) 0 [2,8,3,1]
+<>14
+
+What if we now want to sum numbers but if any of those numbers are > 9, then
+the whole summation fails?
+
+> binSmalls :: Int -> Int -> Maybe Int
+> binSmalls acc x
+>     | x > 9     = Nothing
+>     | otherwise = Just (acc + x)
+
+The binary function now returns a Maybe monad, so:
+
+> foldM binSmalls 0 [2,8,3,1]
+<>14
+> foldM binSmalls 0 [2,11,3,1]
+<>Nothing
+
+Folding with a Writer would also be useful for such circumstances.
