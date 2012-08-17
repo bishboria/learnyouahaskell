@@ -1051,3 +1051,62 @@ element and return it. If the pattern match fails, we get Nothing returned.
 
 The first failure is due to a stack that's not a single element. The second
 fails as readMaybe returns a Nothing.
+
+
+Composing Monadic Functions
+
+when talking about monad laws in Chapter 13, we learned that <=< is just
+like composition but for monads. E.g.:
+
+> let f = (+1) . (*100)
+> f 4
+<>401
+> g :: (Monad m, Num a) => a -> m a
+> g = (\x -> return (x+1)) <=< (\x -> return (x*100))
+> Just 4 >>= g
+<>Just 401
+(The only way I could get the code to work, due to type ambiguity, was to
+define g's type...)
+
+If you have a bunch of functions in a list you can compose them all into
+one big function by using id as the starting accumulator and the (.)
+function as the binary function:
+
+> let f = foldr (.) id [(+1),(*100),(+2)]
+> f 1
+<>301
+
+f takes a number, adds 2 to it, multiplies by 100 then finally adds 1.
+
+We can compose monadic functions in the same way, but instead of (.) and id
+we use <=< and return
+
+Recall in3, working out which positions a Knight can reach in 3 moves:
+> in3 start = return start >>= moveKnight >>= moveKnight >>= moveKnight
+
+To check if a particular position can be reached in 3 moves:
+> canReachIn3 :: KnightPos -> KnightPos -> Bool
+> canReachIn3 start end = end `elem` in3 start
+
+Using monadic function composition, we can create a function like in3
+except instead of generating all the positions a knight can have after 3
+moves, we can have an arbitrary number:
+
+> import Data.List
+> import Control.Monad
+>
+> inMany :: Int -> KnightPos -> [KnightPos]
+> inMany x start = return start >>= foldr (<=<) return (replicate x moveKnight)
+
+First we use replicate to make x copies of moveKnight in a list. Then we use foldr with <=< to compose the monadic functions and use return as the
+accumulator.
+
+We can also change canReachIn3 to be more general:
+
+> canReachIn :: Int -> KnightPos -> KnightPos -> Bool
+> canReachIn x start end = end `elem` inMany x start
+>
+> canReachIn 5 (1,1) (8,8)
+<>False
+> canReachIn 6 (1,1) (8,8)
+<>True

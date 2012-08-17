@@ -14,3 +14,6 @@ foldingFunction xs numberString = liftM (:xs) (readMaybe numberString)
 readMaybe :: (Read a) => String -> Maybe a
 readMaybe st = case reads st of [(x, "")] -> Just x
                                 _         -> Nothing
+
+g :: (Monad m, Num a) => a -> m a
+g = (\x -> return (x+1)) <=< (\x -> return (x*100))
