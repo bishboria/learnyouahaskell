@@ -966,3 +966,88 @@ The binary function now returns a Maybe monad, so:
 <>Nothing
 
 Folding with a Writer would also be useful for such circumstances.
+
+
+Making a Safe RPN Calculator
+
+The RPN calculator we made in chapter 10 worked as long as the input made
+sense, otherwise it would crash. Let's change it to use Maybes instead.
+
+Recall:
+> import Data.List
+>
+> solveRPN :: String -> Double
+> solveRPN = head . foldl foldingFunction [] . words
+>
+> foldingFunction :: [Double] -> String -> [Double]
+> foldingFunction (x:y:ys) "*" = (y * x):ys
+> foldingFunction (x:y:ys) "+" = (y + x):ys
+> foldingFunction (x:y:ys) "-" = (y - x):ys
+> foldingFunction xs numberString = read numberString:xs
+
+The new foldingFunction is capable of graceful failure, so it's type will
+change to:
+> foldingFunction :: [Double] -> String -> Maybe [Double]
+
+We'll also use reads function: it returns a list with a single element if
+successful. If it fails, it returns an empty list. Apart from the value,
+reads also returns a list of the string it didn't consume. We will say that
+it must always consume the full input to work. We'll wrap it in another
+function for convenience:
+
+> readMaybe :: (Read a) => String -> Maybe a
+> readMaybe st = case reads st of [(x, "")] -> Just x
+>                                 _         -> Nothing
+
+Tesing out readMaybe:
+> readMaybe "1" :: Maybe Int
+<>Just 1
+> readMaybe "GOTO HELL" :: Maybe Int
+<>Nothing
+
+It works, so let's update foldingFunction
+> foldingFunction :: [Double] -> String -> Maybe [Double]
+> foldingFunction (x:y:ys) "*" = return $ (y * x):ys
+> foldingFunction (x:y:ys) "+" = return $ (y + x):ys
+> foldingFunction (x:y:ys) "-" = return $ (y - x):ys
+> foldingFunction xs numberString = liftM (:xs) (readMaybe numberString)
+
+The first 3 cases are the same as the old, except putting the result in a
+minimal context.
+
+> foldingFunction [3,2] "*"
+<>Just [6.0]
+> foldingFunction [3,2] "-"
+<>Just [-1.0]
+> foldingFunction [] "*"
+<>Nothing
+> foldingFunction [] "1"
+<>Just [1.0]
+> foldingFunction [] "1 wawawawa"
+<>Nothing
+
+Now it's time for the new solveRPN:
+
+> import Data.List
+
+> solveRPN :: String -> Maybe Double
+> solveRPN st = do
+>     [result] <- foldM foldingFunction [] (words st)
+>     return result
+
+We turn a string into a list of strings with words. We then use foldM with
+foldingFunction and an empty list as the stack as pass the [String] to it.
+The result of foldM is a Maybe [Double], so we pattern match on the single
+element and return it. If the pattern match fails, we get Nothing returned.
+
+> solveRPN "1 2 * 4 +"
+<>Just 6.0
+> solveRPN "1 2 * 4 + 5 *"
+<>Just 30.0
+> solveRPN "1 2 * 4"
+<>Nothing
+> solveRPN "1 8 wharglbllargh"
+<>Nothing
+
+The first failure is due to a stack that's not a single element. The second
+fails as readMaybe returns a Nothing.
