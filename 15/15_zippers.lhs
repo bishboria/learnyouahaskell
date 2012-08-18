@@ -117,3 +117,63 @@ So we can rewrite the above to be:
 
 > (freeTree, []) -: goRight -: goLeft
 <>(Node 'W' (Node 'C' Empty Empty) (Node 'R' Empty Empty),[L,R])
+
+
+Going Back Up
+
+What if we want to go back up the tree? The breadcrumbs only tell us where
+we went, there is no information about the parent at all.
+
+In general a single breadcrumb should contain all the data needed to
+reconstruct the parent node. We also don't want to duplicate any
+information: If we are editing a value at the bottom of the tree then we
+need to be sure that there are no copies of it elsewhere that will be out of
+date.
+
+The newest breadcrumbs will contain all the information about the directions
+we took and the values we ignored by not going a certain direction:
+
+> data Crumb a =
+>     LeftCrumb a (Tree a) | RightCrumb a (Tree a) deriving (Show)
+
+Now instead of just L, we have LeftCrumb which contains the element in the
+node we moved from and the right subtree we ignored. RightCrumb contains the
+element from the node we moved from and the left subtree we ignored.
+
+We are now storing all the data required to rebuild the tree that we walked
+through.
+
+> type Breadcrumbs a = [Crumb a]
+
+We also need to modify goLeft and goRight to store information about the
+paths that we didn't take, instead of ignoring them as before:
+
+> goLeft :: (Tree a, Breadcrumbs a) -> (Tree a, Breadcrumbs a)
+> goLeft (Node x l r, bs) = (l, LeftCrumb x r:bs)
+
+So now if going left, we make the left subtree the current tree we are
+focussed on and create a new LeftCrumb that remembers the ignored Node
+element and right subtree and puts that as the head of the list. It also
+assumes the current tree under focus isn't empty...
+
+> goRight :: (Tree a, Breadcrumbs a) -> (Tree a, Breadcrumbs a)
+> goRight (Node x l r, bs) = (r, RightCrumb x l:bs)
+
+Going back up is just a case of pattern matching the breadcrumb and putting
+the values back in the correct place and keeping the remaining breadcrumbs:
+
+> goUp :: (Tree a, Breadcrumbs a) -> (Tree a, Breadcrumbs a)
+> goUp (t, LeftCrumb  x r:bs) = (Node x t r, bs)
+> goUp (t, RightCrumb x l:bs) = (Node x l t, bs)
+
+This function will cause an error if we try to move up too far. Later on
+we'll change it to use Maybe to represent possible failure.
+
+Now that we have a pair consisting a Tree and Breadcrumbs, we are able to
+traverse the tree to focus on a subtree and then reconstruct the original
+when we are done.
+
+A pair that contains a part of a data structure and its surroundings is
+called a zipper. We can create a type synonym for this:
+
+> type Zipper a = (Tree a, Breadcrumbs a)
