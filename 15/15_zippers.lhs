@@ -177,3 +177,41 @@ A pair that contains a part of a data structure and its surroundings is
 called a zipper. We can create a type synonym for this:
 
 > type Zipper a = (Tree a, Breadcrumbs a)
+
+
+Manipulating Trees Under Focus
+
+We can move up and down, now let's modify the element in the root of a
+subtree on which the zipper is focusing:
+
+> modify :: (a -> a) -> Zipper a -> Zipper a
+> modify f (Node x l r, bs) = (Node (f x) l r, bs)
+> modify f (Empty, bs) = (Empty, bs)
+
+We modify the value with a function if we are on a Node, we leave it as is
+if Empty.
+
+> newFocus = modify (\_ -> 'P') (goRight (goLeft (freeTree, [])))
+
+Or with -:
+
+> newFocus = (freeTree, []) -: goLeft -: goRight -: modify (\_ -> 'P')
+
+We can then move up and replace another element with 'X'
+
+> newFocus2 = newFocus -: goUp -: modify (\_ -> 'X')
+
+Moving up is easy because of the Breadcrumbs. If we have navigated to an
+Empty subtree, then we would like to be able to replace it with a nonempty
+one
+
+> attach :: Tree a -> Zipper a -> Zipper a
+> attach t (_, bs) = (t, bs)
+
+Not only can we extend trees this way, but we can replace existing subtrees.
+
+> farLeft = (freeTree, []) -: goLeft -: goLeft -: goLeft -: goLeft
+> newFocus' = farLeft -: attach (Node 'Z' Empty Empty)
+
+newFocus' is focussed on the newly attached tree and the rest of the tree is
+stored inverted in the breadcrumbs.
