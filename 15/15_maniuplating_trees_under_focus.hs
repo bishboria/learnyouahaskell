@@ -17,6 +17,10 @@ modify :: (a -> a) -> Zipper a -> Zipper a
 modify f (Node x l r, bs) = (Node (f x) l r, bs)
 modify f (Empty, bs) = (Empty, bs)
 
+topMost :: Zipper a -> Zipper a
+topMost (t, []) = (t, [])
+topMost z       = topMost $ goUp z
+
 x -: f = f x
 
 newFocus  = (freeTree, []) -: goLeft -: goRight -: modify (\_ -> 'P')
