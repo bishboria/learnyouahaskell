@@ -81,3 +81,39 @@ location.
 The directions to the element act as a focus, because it pinpoints one exact
 subtree. This is cool, but can be quite inefficient if you want to
 repeatedly change elements.
+
+
+A Trail of Breadcrumbs
+
+Would it help our structure if we left a "breadcrumb" trail as we traversed
+the structure? A list of directions will be our breadcrumbs, and it will be
+in reverse order.
+
+> type Breadcrumbs = [Direction]
+
+The following function takes a tuple containing a tree and breadcrumbs and
+returns a tuple containing the left subtree and the direction taken at the
+top of new breadcrumbs.
+
+> goLeft :: (Tree a, Breadcrumbs) -> (Tree a, Breadcrumbs)
+> goLeft (Node _ l _, bs) = (l, L:bs)
+
+And also to go right:
+
+> goRight :: (Tree a, Breadcrumbs) -> (Tree a, Breadcrumbs)
+> goRight (Node _ _ r, bs) = (r, R:bs)
+
+Let's take our freeTree and go right then left.
+
+> goLeft $ goRight (freeTree, [])
+<>(Node 'W' (Node 'C' Empty Empty) (Node 'R' Empty Empty),[L,R])
+
+To make walking along the tree clearer we could use the -: function from
+Chapter 13:
+
+> x -: f = f x
+
+So we can rewrite the above to be:
+
+> (freeTree, []) -: goRight -: goLeft
+<>(Node 'W' (Node 'C' Empty Empty) (Node 'R' Empty Empty),[L,R])
