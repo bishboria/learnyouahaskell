@@ -268,3 +268,99 @@ If you are making a text editor, you could use a list of strings to reprsent
 lines of text that are currently opened. You could then use a zipper so that
 you know which line is currently in focus. Using a zipper would also make it
 easy to add new lines of text anywhere and delete existing ones.
+
+
+A Very Simple Filesystem
+
+To demonstrate how zippers work, let's use trees to represent a very simple
+filesystem. Then make a zipper for that filesystem.
+
+We'll assume the usual hierarchical File/Folder structure and create some
+types
+
+> type Name = String
+> type Data = String
+> data FSItem = File Name Data | Folder Name [FSItem] deriving (Show)
+
+Here's an example filesystem:
+
+> sk :: FSItem
+> myDisk =
+>     Folder "root"
+>         [ File "goat_yelling_like_man.wmv" "baaaaaa"
+>         , File "pope_time.avi" "god bless"
+>         , Folder "pics"
+>             [ File "ape_throwing_up.jpg" "bleargh"
+>             , File "watermelon_smash.gif" "smash!!"
+>             , File "skull_man(scary).bmp" "Yikes!"
+>             ]
+>         , File "dijon_poupon.doc" "best mustard"
+>         , Folder "programs"
+>             [ File "fartwizard.exe" "10gotofart"
+>             , File "owl_bandit.dmg" "mov eax, h00t"
+>             , File "not_a_virus.exe" "really not a virus"
+>             , Folder "source code"
+>                 [ File "best_hs_prog.hs" "main = print (fix error)"
+>                 , File "random.hs" "main = print 4"
+>                 ]
+>             ]
+>         ]
+
+Now we have a filesystem, all we need is a zipper to do all the things we
+need to do with a bunch of files and folders.
+
+For the filesystem, a breadcrumb should be like a folder because if we're
+focusing on a file we can't move deeper into the filesystem so it doesn't
+make sense to leave a breadcrumb that says we just came from a file.
+
+If we are focusing on the folder root and then we focus on the file
+"dijon_poupon.doc", the breadcrumb should contain the name of its parent
+folder along with the items that come before and after the file on which
+we're focusing. So all we need is a Name and two lists of items. By keeping
+two lists, we are able to put back the current item of focus back to the
+exact position it was in when we move back up.
+
+> data FSCrumb = FSCrumb Name [FSItem] [FSItem] deriving (Show)
+> type FSZipper = (FSItem, [FSCrumb])
+
+Going back up the hierarchy is quite easy. Take the current breadcrumb and
+assemble a new focus from the current focus and the breadcrumb
+
+> fsUp :: FSZipper -> FSZipper
+> fsUp (item, FSCrumb name ls rs:bs) = (Folder name (ls ++ [item] ++ rs), bs)
+
+Because the zipper knew the name of the parent folder as well as what came
+before and after the item, moving up was easy.
+
+How about going further down the filesystem?
+
+> import Data.List (break)
+>
+> fsTo :: Name -> FSZipper -> FSZipper
+> fsTo name (Folder folderName items, bs) =
+>     let (ls, item:rs) = break (nameIs name) items
+>     in  (item, FSCrumb folderName ls rs:bs)
+>
+> nameIs :: Name -> FSItem -> Bool
+> nameIs name (Folder folderName _) = name == folderName
+> nameIs name (File fileName _)     = name == fileName
+
+We only look at the current folder for the given name.
+
+break takes a predicate and a list and returns a pair of lists. The first
+list holds all the elements for which the predicate is false. The second list contains as its head the first element for which the predicate was true, followed by all the other elements.
+
+If the name wasn't found, item:rs will produce an error due to failed
+pattern matching.
+
+Let's start at the root and walk to file "skul_man(scary).bmp":
+
+> newFocus = (myDisk, []) -: fsTo "pics" -: fsTo "skul_man(scary).bmp"
+> fst newFocus
+<>File "skull_man(scary).bmp" "Yikes!"
+
+Moving up to its neighboring file "watermelon_smash.gif"
+
+> newFocus2 = newFocus -: fsUp -: fsTo "watermelon_smash.gif"
+> fst newFocus2
+<>File "watermelon_smash.gif" "smash!!"
