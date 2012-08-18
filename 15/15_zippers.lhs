@@ -215,3 +215,13 @@ Not only can we extend trees this way, but we can replace existing subtrees.
 
 newFocus' is focussed on the newly attached tree and the rest of the tree is
 stored inverted in the breadcrumbs.
+
+
+Going Straight To The Top
+
+Making a function that walks all the way to the top, regardless of where
+you are currently focusing is quite easy:
+
+> topMost :: Zipper a -> Zipper a
+> topMost (t, []) = (t, [])
+> topMost z = topMost (goUp z)
