@@ -33,3 +33,9 @@ flipThree  = do
 result = getProb flipThree
 -- [(False,1 % 40),(False,9 % 40),(False,1 % 40),(False,9 % 40)
 -- ,(False,1 % 40),(False,9 % 40),(False,1 % 40),(True,9 % 40)]
+
+situation :: Prob (Prob Char)
+situation = Prob
+    [(Prob [('a',1%2),('b',1%2)], 1%4)
+    ,(Prob [('c',1%2),('d',1%2)], 3%4)
+    ]
