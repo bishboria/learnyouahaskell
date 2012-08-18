@@ -225,3 +225,46 @@ you are currently focusing is quite easy:
 > topMost :: Zipper a -> Zipper a
 > topMost (t, []) = (t, [])
 > topMost z = topMost (goUp z)
+
+
+Focusing On Lists
+
+Zippers can be used with pretty much any data structure, so it's no surprise
+that they work with sublists of lists.
+
+Lists are simpler than trees: we don't need to remember left or right,
+there's only one way to go deeper in a list. It seems like all we need to
+remember is the previous element.
+
+Because a single breadcrumb is just a single element, we don't really need
+a new data type:
+
+> type ListZipper a = ([a],[a])
+>
+> goForward :: ListZipper a -> ListZipper a
+> goForward (x:xs, bs) = (xs, x:bs)
+>
+> goBack :: ListZipper a -> ListZipper a
+> goBack (xs, b:bs) = (b:xs, bs)
+
+When we go forward, we focus on the tail of the current list and leave the
+head element as a breadcrumb. When moving back, we put the latest breadcrumb
+back at the beginning of the list.
+
+> xs = [1,2,3,4]
+> goForward (xs, [])
+<>([2,3,4],[1])
+> goForward ([2,3,4], [1])
+<>([3,4],[2,1])
+> goForward ([3,4],[2,1])
+<>([4],[3,2,1])
+> goBack ([4],[3,2,1])
+<>([3,4],[2,1])
+
+You can see that the breadcrumbs are nothing more than the reversed part of
+the list.
+
+If you are making a text editor, you could use a list of strings to reprsent
+lines of text that are currently opened. You could then use a zipper so that
+you know which line is currently in focus. Using a zipper would also make it
+easy to add new lines of text anywhere and delete existing ones.
