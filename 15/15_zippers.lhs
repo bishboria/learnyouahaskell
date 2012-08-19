@@ -348,7 +348,9 @@ How about going further down the filesystem?
 We only look at the current folder for the given name.
 
 break takes a predicate and a list and returns a pair of lists. The first
-list holds all the elements for which the predicate is false. The second list contains as its head the first element for which the predicate was true, followed by all the other elements.
+list holds all the elements for which the predicate is false. The second list
+contains as its head the first element for which the predicate was true,
+followed by all the other elements.
 
 If the name wasn't found, item:rs will produce an error due to failed
 pattern matching.
@@ -364,3 +366,73 @@ Moving up to its neighboring file "watermelon_smash.gif"
 > newFocus2 = newFocus -: fsUp -: fsTo "watermelon_smash.gif"
 > fst newFocus2
 <>File "watermelon_smash.gif" "smash!!"
+
+
+Manipulating A Filesystem
+
+We can navigate the filesystem now. Here's a function that renames the currently
+focused item
+
+> fsRename :: Name -> FSZipper -> FSZipper
+> fsRename newName (Folder name items, bs) = (Folder newName items, bs)
+> fsRename newName (File name data, bs)    = (File newName data, bd)
+
+Let's rename folder "pics" to "cspi"
+
+> newFocus = (myDisk, []) -: fsTo "pics" -: fsRename "cspi" -: fsUp
+
+And a function that makes a new item in the current folder:
+
+> fsNewFile :: FSItem -> FSZipper -> FSZipper
+> fsNewFile item (Folder folderName items, bs) =
+>     (Folder folderName (item: items), bs)
+>
+> (myDisk, []) -: fsTo "pics" -: fsNewFile (File "heh.jpg" "lol") -: fsUp
+
+Remember that this pattern matches a folder only, so will error if focused on a
+file.
+
+And because the structures are immutable, when we modify the filesystem we are
+actually getting a new one back. So we have access to the old filesystem too.
+Versioning for free.
+
+There are lots of cases where this filesystem would fail, such as trying to
+focus on a file or folder that doesn't exist... So a lot more code needs to be
+written for it.
+
+
+Watch Your Step
+
+So far we haven't dealt with errors if we walk around too far in the data
+structures. It seems that if we move left, right, or up we may get a successful
+value or we may get an error. This sounds like a Maybe
+
+> goLeft :: Zipper a -> Maybe (Zipper a)
+> goLeft (Node x l r, bs) = Just (l, LeftCrumb x r:bs)
+> goLeft (Empty, _) = Nothing
+>
+> goRight :: Zipper a -> Maybe (Zipper a)
+> goRight (Node x l r, bs) = Just (r, RightCrumb x l:bs)
+> goRight (Empty, _) = Nothing
+>
+> goLeft (Empty, [])
+<>Nothing
+> goLeft (Node 'A' Empty Empty, [])
+<>Just (Empty, [LeftCrumb 'A' Empty])
+
+How about going up?
+
+> goUp :: Zipper a -> Maybe (Zipper a)
+> goUp (t, LeftCrumb x r:bs)  = Just (Node x t r, bs)
+> goUp (t, RightCrumb x l:bs) = Just (Node x l t, bs)
+> goUp (_, []) = Nothing
+
+Now we can't chain functions together using -: and will instead use >>=
+
+> coolTree = Node 1 Empty (Node 3 Empty Empty)
+> return (coolTree, []) >>= goRight
+<>Just (Node 3 Empty Empty,[RightCrumb 1 Empty])
+> return (coolTree, []) >>= goRight >>= goRight
+<>Just (Empty,[RightCrumb 3 Empty,RightCrumb 1 Empty])
+> return (coolTree, []) >>= goRight >>= goRight >>= goRight
+<>Nothing

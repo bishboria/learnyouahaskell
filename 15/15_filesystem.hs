@@ -17,6 +17,14 @@ fsTo name (Folder folderName items, bs) =
     let (ls, item:rs) = break (nameIs name) items
     in  (item, FSCrumb folderName ls rs:bs)
 
+fsRename :: Name -> FSZipper -> FSZipper
+fsRename newName (Folder name items, bs) = (Folder newName items, bs)
+fsRename newName (File name dat, bs)    = (File newName dat, bs)
+
+fsNewFile :: FSItem -> FSZipper -> FSZipper
+fsNewFile item (Folder folderName items, bs) =
+    (Folder folderName (item: items), bs)
+
 nameIs :: Name -> FSItem -> Bool
 nameIs name (Folder folderName _) = name == folderName
 nameIs name (File fileName _)     = name == fileName
@@ -49,3 +57,5 @@ newFocus  = (myDisk, []) -: fsTo "pics" -: fsTo "skull_man(scary).bmp"
 value     = fst newFocus
 newFocus2 = newFocus -: fsUp -: fsTo "watermelon_smash.gif"
 value2    = fst newFocus2
+newFocus3 = (myDisk, []) -: fsTo "pics" -: fsRename "cspi" -: fsUp
+newFocus4 = (myDisk, []) -: fsTo "pics" -: fsNewFile (File "heh.jpg" "lol") -: fsUp
